@@ -81,3 +81,12 @@ Initial forward testing found that models reliably preserve the semantic boundar
 - Keep commits focused on one behavioral or evidence change.
 - Use Git history as the rollback boundary.
 - Add a changelog only when versioned consumers or releases make curated migration history more useful than the commit log.
+
+## Public release checklist
+
+- Run the structural validator, YAML parser, Markdown parser, and local-link check.
+- Confirm the current tree and new commit contain no credentials, private keys, local absolute paths, internal-only instructions, or confidential artifacts.
+- Keep named-agent examples generic unless a public integration requires an exact published identifier.
+- Confirm README installation guidance matches current public platform behavior and never implies automatic installation.
+- Confirm repository description, topics, license, default branch, and visibility match the intended release.
+- Re-run the negative and boundary cases before claiming a behavioral regression is fixed.

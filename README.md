@@ -4,6 +4,8 @@
 
 It helps the primary agent choose an ordinary execution subagent, a task-specific specialist, or an already-authorized named agent; check capability and permission boundaries; construct a risk-sized task packet; and receive the result without transferring final responsibility.
 
+中文摘要：这是一个供 Codex CLI、Claude Code 和 Agy CLI 共用的 Agent 委派 Skill。它只增强已经决定执行的委派，不替主 Agent 决定任务方向、扩大权限或转移最终责任。
+
 ## What it does not do
 
 - It does not decide that every complex task should be delegated.
@@ -30,6 +32,9 @@ The repository separates three concerns:
 waa-agent-delegation/
 ├── README.md
 ├── MAINTAINING.md
+├── CONTRIBUTING.md
+├── SECURITY.md
+├── LICENSE
 ├── SKILL.md
 ├── agents/openai.yaml
 ├── references/
@@ -41,9 +46,21 @@ waa-agent-delegation/
 └── evals/cases.md
 ```
 
-## Manual installation candidates
+## Install manually
 
 This repository does not include or run an installer. Review the target and manually copy or symbolically link the whole repository directory.
+
+### CC Switch
+
+Add the public repository root and select the `main` branch:
+
+```text
+https://github.com/clearlove7818/waa-agent-delegation
+```
+
+Use the repository root URL without `/tree/main`, `/blob/...`, a trailing slash, or a file path. The root `SKILL.md` is the shared semantic entry point.
+
+### Native Skill discovery candidates
 
 | Platform | User candidate | Project candidate |
 | --- | --- | --- |
@@ -88,3 +105,9 @@ Follow [`MAINTAINING.md`](MAINTAINING.md):
 5. Commit the focused change so Git remains the rollback boundary.
 
 Update platform claims only from official documentation, official repositories, current product files, or direct runtime evidence. Keep unresolved contradictions under `PLATFORM_UNKNOWN`.
+
+Contributions are welcome through [`CONTRIBUTING.md`](CONTRIBUTING.md). Report security-sensitive issues according to [`SECURITY.md`](SECURITY.md).
+
+## License
+
+The source is publicly visible, but no open-source license is granted. See [`LICENSE`](LICENSE).
