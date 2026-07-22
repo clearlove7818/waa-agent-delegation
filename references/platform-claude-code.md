@@ -13,9 +13,9 @@ Use this mapping only when the active harness is Claude Code.
 
 | Delegation action | Claude Code behavior |
 | --- | --- |
-| Create an execution subagent | Use the current `Agent` interface with a suitable available general or built-in agent. |
-| Create a task specialist | Use a task-scoped agent contract or an already available custom subagent with the required tools and restrictions. |
-| Use a named agent | Select or mention the exact agent only after authorization has been established. |
+| `EXECUTION_SUBAGENT` | Use the current `Agent` interface with a suitable available general or built-in agent. |
+| `TASK_SPECIALIST_SUBAGENT` | Use the eight-part task-scoped specialist contract or an already available custom subagent with the required tools and restrictions. |
+| `NAMED_AGENT` | Select or mention the exact agent only after current-task authorization has been established. |
 | Continue or clarify | Use the current Agent continuation mechanism while preserving the original boundary. |
 | Run independently | Use foreground or background execution only when the task and permission behavior support it. |
 
@@ -34,4 +34,4 @@ Place the exact uppercase label on the first line. Do not translate it or replac
 
 ## Result reception
 
-Inspect the agent's response, changed files, commands, and test evidence. Resolve questions in the primary context, then perform proportionate verification. The primary agent remains the user-facing owner.
+Inspect the agent's response, changed files, commands, and test evidence. Resolve questions in the primary context, then perform proportionate verification. The primary agent remains responsible for user-facing integration without automatically changing the delegated artifact owner.

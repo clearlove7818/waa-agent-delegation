@@ -13,9 +13,9 @@ Use this mapping only when the active harness is Codex.
 
 | Delegation action | Codex behavior |
 | --- | --- |
-| Create an execution subagent | Use the current subagent creation interface with one concrete bounded task. |
-| Create a task specialist | Supply a task-specific role, minimum capabilities, prohibitions, and return contract through the current interface; avoid a durable agent definition unless separately requested. |
-| Use a named agent | Select the exact configured agent only after authorization; otherwise return `CAPABILITY_OUT_OF_SCOPE`. |
+| `EXECUTION_SUBAGENT` | Use the current subagent creation interface with one concrete bounded task. |
+| `TASK_SPECIALIST_SUBAGENT` | Supply the eight-part task-scoped specialist contract, minimum capabilities, prohibitions, and return contract through the current interface; avoid a durable agent definition. |
+| `NAMED_AGENT` | Select the exact configured agent only after current-task authorization; otherwise return `CAPABILITY_OUT_OF_SCOPE`. |
 | Send additional context | Use the current follow-up/message mechanism without silently changing the task contract. |
 | Wait for results | Use the current wait/status mechanism and retain primary-agent responsibility. |
 | Stop unsafe work | Interrupt or stop the subagent when authority, scope, or the core contract is violated. |

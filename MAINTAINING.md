@@ -13,10 +13,14 @@ Every change must preserve these rules:
 5. Delegation cannot expand permissions or bypass platform controls.
 6. `ACCEPTED` means contract comprehension only.
 7. Independent evaluation remains optional and never starts automatically.
-8. The primary agent owns synthesis, verification, user communication, and the final result.
+8. The primary agent remains responsible for synthesis, verification, user communication, and the integrated outcome without automatically owning each delegated artifact version.
 9. Root `SKILL.md` is the single semantic source across platforms.
 10. Real installation is a separate manual action.
-11. Failure labels remain uppercase and verbatim; translated, shortened, or invented aliases are invalid.
+11. `assembly_type` is exactly one of `EXECUTION_SUBAGENT`, `TASK_SPECIALIST_SUBAGENT`, or `NAMED_AGENT`; lowercase aliases are invalid.
+12. Every packet carries `task_packet_version`, `task_id`, `assembly_type`, `artifact_id`, `artifact_version`, and one artifact-version `owner`, including low-risk packets.
+13. TASK-006 has nine locatable information classes; `TASK_SPECIALIST_SUBAGENT` has an eight-part temporary `specialist_contract`.
+14. Failure labels remain uppercase and verbatim; translated, shortened, or invented aliases are invalid.
+15. Primary-agent final responsibility does not silently change artifact-version ownership.
 
 ## Change the smallest responsible layer
 
@@ -29,13 +33,14 @@ Every change must preserve these rules:
 | Native platform behavior | Corresponding `references/platform-*.md` |
 | Human workflow or repository explanation | `README.md` or this file |
 | Regression evidence | `evals/cases.md` |
+| Machine-readable regression fixture | `evals/trigger-cases.json` |
 | Codex UI wording | `agents/openai.yaml` |
 
 Do not duplicate the same rule in multiple runtime files unless one occurrence is a short routing reminder and the other is the authoritative detail.
 
 ## Iteration loop
 
-1. Reproduce a real problem or capture a credible forward case.
+1. Reproduce a real problem or capture a credible forward case in `evals/cases.md` and, when applicable, `evals/trigger-cases.json`.
 2. Add or update the case before changing the intended behavior.
 3. Identify whether the defect is routing, protocol, platform mapping, or result reception.
 4. Make the smallest change that fixes the mechanism.
@@ -67,12 +72,17 @@ Do not add a fixed total score, KPI, or automatic review loop. The purpose of ca
 - Capability availability is never phrased as authorization.
 - The four failure returns remain sufficient; additions require a demonstrated decision need.
 - Failure returns preserve the exact uppercase labels, especially `CAPABILITY_OUT_OF_SCOPE` and `PLATFORM_PERMISSION_BLOCKED`.
+- The three exact `assembly_type` values have zero lowercase aliases in active source.
+- Every packet template contains `assembly_type`, including the low-risk `EXECUTION_SUBAGENT` path.
+- All nine TASK-006 classes and all eight AGT-014 specialist sections are locatable.
+- `owner` stays the sole owner of the current artifact version through reception and integration.
+- All YAML and JSON files parse.
 - The primary agent's final responsibility remains explicit.
 - No installer, hook, persistent Agent definition, or real platform configuration has appeared accidentally.
 
 ## Current regression watch
 
-Initial forward testing found that models reliably preserve the semantic boundary for missing Subagent interfaces and denied sandbox approvals, but may normalize the exact failure label into generic “blocked” wording before any executor exists. Keep Cases 7A and 7B in every trigger or protocol revision. Do not report exact-label compliance as verified until a fresh evaluator returns `MISSING_CAPABILITY` and `PLATFORM_PERMISSION_BLOCKED` verbatim under those conditions.
+Historical narrative observations report safe stopping but failed exact-label compliance for missing Subagent interfaces and denied sandbox approvals; no reproducible run record is stored in this repository. Keep Cases 7A and 7B and their `trigger-cases.json` regression-watch entries in every trigger or protocol revision. Do not report semantic or exact-label compliance as verified until a fresh run records its method, date, result, evidence path, and the verbatim `MISSING_CAPABILITY` or `PLATFORM_PERMISSION_BLOCKED` return.
 
 ## Git discipline and rollback
 

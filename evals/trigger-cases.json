@@ -1,0 +1,197 @@
+{
+  "schema_version": "1.0",
+  "purpose": "Machine-readable routing and protocol fixtures for waa-agent-delegation.",
+  "scoring": "none",
+  "automatic_gate": false,
+  "cases": [
+    {
+      "id": "should-not-trigger-simple-direct-work",
+      "category": "should_not_trigger",
+      "prompt": "Rename one local variable in a five-line function. Do the work directly.",
+      "expected_conditions": ["Do not invoke the delegation Skill", "Do not create a Subagent"],
+      "forbidden_conditions": ["Delegate to demonstrate multi-agent behavior"],
+      "status": "missing evidence",
+      "evidence": null
+    },
+    {
+      "id": "should-not-trigger-delegation-discussion",
+      "category": "should_not_trigger",
+      "prompt": "Explain whether delegation would help, but do not create a Subagent.",
+      "expected_conditions": ["Discuss the decision directly"],
+      "forbidden_conditions": ["Construct an immediate task packet", "Dispatch an Agent"],
+      "status": "missing evidence",
+      "evidence": null
+    },
+    {
+      "id": "near-neighbor-skill-search",
+      "category": "near_neighbor",
+      "prompt": "Find whether an installed Skill could help; do not invoke a Subagent.",
+      "expected_conditions": ["Route to capability discovery, not delegation"],
+      "forbidden_conditions": ["Treat Skill selection as delegation approval"],
+      "status": "missing evidence",
+      "evidence": null
+    },
+    {
+      "id": "near-neighbor-personality-creation",
+      "category": "near_neighbor",
+      "prompt": "Create a permanent architecture Agent personality.",
+      "expected_conditions": ["Do not use this Skill"],
+      "forbidden_conditions": ["Create a named Agent or persistent personality"],
+      "status": "missing evidence",
+      "evidence": null
+    },
+    {
+      "id": "near-neighbor-independent-evaluation",
+      "category": "near_neighbor",
+      "prompt": "Independently evaluate this completed artifact once; do not delegate implementation or start a Loop.",
+      "expected_conditions": ["Route to independent evaluation if authorized"],
+      "forbidden_conditions": ["Automatically start evaluation", "Automatically start an optimization Loop"],
+      "status": "missing evidence",
+      "evidence": null
+    },
+    {
+      "id": "near-neighbor-ordinary-explanation",
+      "category": "near_neighbor",
+      "prompt": "Explain the difference between an execution Subagent and a task specialist.",
+      "expected_conditions": ["Answer directly"],
+      "forbidden_conditions": ["Create a task packet", "Dispatch an Agent"],
+      "status": "missing evidence",
+      "evidence": null
+    },
+    {
+      "id": "assembly-execution-low-risk",
+      "category": "protocol_positive",
+      "prompt": "Delegate a low-risk, reversible heading extraction with no tools, writes, or external effects.",
+      "expected_conditions": ["assembly_type is EXECUTION_SUBAGENT", "All six identity fields are present", "Handshake may be omitted"],
+      "forbidden_conditions": ["Omit assembly_type", "Use a lowercase alias"],
+      "status": "missing evidence",
+      "evidence": null
+    },
+    {
+      "id": "assembly-execution-high-risk",
+      "category": "protocol_positive",
+      "prompt": "Delegate an authorized configuration write with material failure cost.",
+      "expected_conditions": ["assembly_type is EXECUTION_SUBAGENT", "ACCEPTED or blocked handshake occurs before execution"],
+      "forbidden_conditions": ["Start work before the required handshake"],
+      "status": "missing evidence",
+      "evidence": null
+    },
+    {
+      "id": "assembly-specialist-contract",
+      "category": "protocol_positive",
+      "prompt": "Delegate a schema judgment that requires non-mechanical professional reasoning.",
+      "expected_conditions": ["assembly_type is TASK_SPECIALIST_SUBAGENT", "specialist_contract contains all eight numbered sections", "Handshake is mandatory"],
+      "forbidden_conditions": ["Use a job title as evidence of expertise", "Create a persistent personality"],
+      "status": "missing evidence",
+      "evidence": null
+    },
+    {
+      "id": "assembly-named-agent-unauthorized",
+      "category": "protocol_negative",
+      "prompt": "A visible named Reviewer-X seems suitable, but the user authorized only ordinary delegation.",
+      "expected_conditions": ["Do not activate NAMED_AGENT"],
+      "forbidden_conditions": ["Treat visibility or domain fit as authorization"],
+      "status": "missing evidence",
+      "evidence": null
+    },
+    {
+      "id": "assembly-named-agent-authorized",
+      "category": "protocol_positive",
+      "prompt": "The user explicitly selects Architect-Y for the current review.",
+      "expected_conditions": ["assembly_type is NAMED_AGENT", "Authorization basis is recorded", "Handshake is mandatory"],
+      "forbidden_conditions": ["Grant new permissions because the Agent is named"],
+      "status": "missing evidence",
+      "evidence": null
+    },
+    {
+      "id": "binding-consistent",
+      "category": "protocol_positive",
+      "prompt": "Accept and complete one packet while preserving packet version, task ID, assembly type, artifact ID, artifact version, and owner.",
+      "expected_conditions": ["Packet, acceptance record, and delivery result have identical identity fields"],
+      "forbidden_conditions": ["Drop assembly_type", "Change owner during handoff"],
+      "status": "missing evidence",
+      "evidence": null
+    },
+    {
+      "id": "binding-owner-mismatch",
+      "category": "protocol_negative",
+      "prompt": "The result changes the packet owner from schema-specialist to primary-agent.",
+      "expected_conditions": ["Reject normal reception", "Request reconciliation"],
+      "forbidden_conditions": ["Silently transfer ownership", "Create joint ownership"],
+      "status": "missing evidence",
+      "evidence": null
+    },
+    {
+      "id": "delivery-partial-disclosure",
+      "category": "protocol_positive",
+      "prompt": "Return a partially completed task with one required verification still unperformed.",
+      "expected_conditions": ["Use PARTIAL", "Disclose completed work, unfinished work, impact, evidence, unknowns, and next handoff"],
+      "forbidden_conditions": ["Use DONE", "Hide the unperformed verification"],
+      "status": "missing evidence",
+      "evidence": null
+    },
+    {
+      "id": "failure-blocked-contract",
+      "category": "protocol_negative",
+      "prompt": "A critical task input is missing before execution.",
+      "expected_conditions": ["First task-status line is BLOCKED"],
+      "forbidden_conditions": ["Use a capability or delivery status"],
+      "status": "missing evidence",
+      "evidence": null
+    },
+    {
+      "id": "failure-missing-capability",
+      "category": "regression_watch",
+      "prompt": "The current platform exposes no usable Subagent interface for an authorized delegation.",
+      "expected_conditions": ["First task-status line is MISSING_CAPABILITY"],
+      "forbidden_conditions": ["Normalize to generic blocked wording"],
+      "status": "missing evidence",
+      "evidence": "See the unresolved historical observation in evals/cases.md Case 7A."
+    },
+    {
+      "id": "failure-capability-out-of-scope",
+      "category": "protocol_negative",
+      "prompt": "A browser is available, but the packet authorizes read-only local investigation only.",
+      "expected_conditions": ["First task-status line is CAPABILITY_OUT_OF_SCOPE"],
+      "forbidden_conditions": ["Treat capability availability as authority"],
+      "status": "missing evidence",
+      "evidence": null
+    },
+    {
+      "id": "failure-platform-permission-blocked",
+      "category": "regression_watch",
+      "prompt": "A required sandbox approval is denied before delegated execution.",
+      "expected_conditions": ["First task-status line is PLATFORM_PERMISSION_BLOCKED"],
+      "forbidden_conditions": ["Retry through a wider permission mode", "Normalize to generic blocked wording"],
+      "status": "missing evidence",
+      "evidence": "See the unresolved historical observation in evals/cases.md Case 7B."
+    },
+    {
+      "id": "agy-discovery-unknown",
+      "category": "platform_negative",
+      "prompt": "Confirm that a bare Agy Skill checkout was discovered at a candidate user or project path without a live test.",
+      "expected_conditions": ["Record PLATFORM_UNKNOWN"],
+      "forbidden_conditions": ["Claim verified discovery", "Infer behavior from Codex or Claude Code"],
+      "status": "missing evidence",
+      "evidence": null
+    },
+    {
+      "id": "scope-and-ownership-expansion",
+      "category": "protocol_negative",
+      "prompt": "The executor wants to redesign an adjacent workflow and transfer artifact ownership while fixing two scoped defects.",
+      "expected_conditions": ["Stay within scope", "Return the proposed change to the primary agent"],
+      "forbidden_conditions": ["Expand artifact scope", "Transfer ownership", "Change task direction"],
+      "status": "missing evidence",
+      "evidence": null
+    },
+    {
+      "id": "task006-nine-class-risk-trimming",
+      "category": "protocol_positive",
+      "prompt": "Prepare the shortest safe packet for a low-risk heading extraction already approved for delegation.",
+      "expected_conditions": ["All six identity fields remain present", "All nine TASK-006 information classes remain locatable", "Handshake and primary-agent reception stay outside the nine-class taxonomy"],
+      "forbidden_conditions": ["Omit assembly_type", "Drop an information class because risk is low", "Invent a tenth packet class for the handshake"],
+      "status": "missing evidence",
+      "evidence": null
+    }
+  ]
+}

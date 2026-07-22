@@ -1,71 +1,57 @@
 ---
 name: waa-agent-delegation
-description: Prepare and govern an actual agent delegation after the primary agent has decided to create or invoke a subagent. Use to select an execution subagent, task-specific specialist, or already-authorized named agent; check capabilities, tools, platform compatibility, permissions, and external effects; build a risk-sized task packet; define acceptance, failure, and handoff behavior; and receive results for primary-agent verification. Do not use merely because a task is complex, while only discussing whether to delegate, for simple work better done directly, to demonstrate multi-agent behavior, to activate named agents without explicit authorization, to expand permissions, or to transfer final responsibility.
+description: Govern an actual agent delegation only after the primary agent has decided to create or invoke a subagent. Use to choose exactly one EXECUTION_SUBAGENT, TASK_SPECIALIST_SUBAGENT, or explicitly authorized NAMED_AGENT; check capability, platform, permission, and external-effect boundaries; build a risk-sized TASK-006 packet; define handshake, failure, delivery, and handoff; and support primary-agent verification. Exclude complexity alone, delegation discussion, simple direct work, multi-agent demonstrations, unauthorized named-agent activation, permission expansion, and responsibility transfer.
 ---
 
 # Agent Delegation
 
-Strengthen an already-chosen delegation without taking ownership of the task direction, permissions, named-agent activation, or final result.
+Govern an already-chosen delegation without taking direction, extra authority, named-agent activation rights, or final responsibility.
 
 <FAILURE-LABEL-CONTRACT>
 
-Before composing any failure response, select one exact label. After any mandatory higher-priority host or governance prefix, put the label on the first task-status line with no translation, explanation, bullet marker, or formatting change:
+Before execution, put one exact root-cause label on the first task-status line:
 
-```text
-BLOCKED
-MISSING_CAPABILITY
-CAPABILITY_OUT_OF_SCOPE
-PLATFORM_PERMISSION_BLOCKED
-```
+- `BLOCKED`: critical task input is missing or the contract conflicts.
+- `MISSING_CAPABILITY`: a required capability is absent, incompatible, or unreliable.
+- `CAPABILITY_OUT_OF_SCOPE`: the capability exists but Rules or current task authorization excludes it.
+- `PLATFORM_PERMISSION_BLOCKED`: platform policy, sandboxing, or approval prevents the action.
 
-Mandatory mappings:
-
-- Missing task input or conflicting contract → `BLOCKED`
-- No usable subagent interface exists → `MISSING_CAPABILITY`
-- A browser can submit, but the user authorized read-only work → `CAPABILITY_OUT_OF_SCOPE`
-- A required sandbox or approval request was denied → `PLATFORM_PERMISSION_BLOCKED`
-
-Classify by cause, not by the generic fact that work stopped. `BLOCKED` is reserved for missing contract input or conflict. Never use `BLOCKED` when a capability is absent, an available capability is unauthorized, or the platform denied permission.
-
-Before returning, scan the first task-status line after any required host prefix. If it contains any other status wording, including `blocked`, `platform_blocked`, `permission_blocked`, `AUTHORITY_BLOCKED`, or a translated label, rewrite it with the exact contract label. Never violate a higher-priority requirement merely to place the label on the absolute first line.
+Preserve these labels verbatim. If a required handshake stops, add `Handshake: BLOCKED` after the root-cause label. Delivery states apply only after execution starts.
 
 </FAILURE-LABEL-CONTRACT>
 
 ## Run the delegation loop
 
-1. **Confirm value.** Verify that the intended delegation has an independent workstream, specialist need, material parallel benefit, or useful independent verification. If direct execution is more reliable, do not dispatch and return control to the primary agent.
-2. **Choose one executor type.** Select an execution subagent, a task-specific specialist subagent, or an already-authorized named agent. Never infer named-agent authorization from availability.
-3. **Check feasibility and authority.** Confirm the required capabilities and tools exist, work on the current platform, fit the task, and remain within current permissions. Identify external effects and approval boundaries before dispatch. If a check fails, return the exact failure label defined above rather than a conversational substitute.
-4. **Build a risk-sized task packet.** Include the unique outcome, owner, deliverables, minimum context and evidence, scope, permissions, prohibitions, quality checks, return shape, failure behavior, and handoff. Read [references/protocol.md](references/protocol.md) for packet and prompt patterns.
-5. **Load only the active platform map.** Read [references/platform-codex.md](references/platform-codex.md), [references/platform-claude-code.md](references/platform-claude-code.md), or [references/platform-agy-cli.md](references/platform-agy-cli.md). Use [references/platform-compatibility.md](references/platform-compatibility.md) when installation, discovery, or platform certainty matters.
-6. **Dispatch through the current native interface.** Preserve the task packet's authority boundary. Require `ACCEPTED / BLOCKED` before execution only when ambiguity, risk, cost, or external effects justify the handshake.
-7. **Receive and verify.** Check the returned evidence, changes, tests, limitations, and failures against the packet. Reconcile conflicts and perform proportionate verification before using the result.
-8. **Retain responsibility.** The primary agent owns synthesis, user communication, final verification, and the outcome. A subagent result is evidence, not acceptance.
+1. Confirm real delegation is already chosen and useful for independent work, professional judgment, parallel benefit, or independent verification; otherwise do not dispatch.
+2. Choose exactly one `EXECUTION_SUBAGENT`, `TASK_SPECIALIST_SUBAGENT`, or authorized `NAMED_AGENT`. Visibility, availability, recommendation, or fit never authorizes a named Agent.
+3. Check capability fitness, platform compatibility, Rules, task authorization, platform permission, prohibitions, exceptions, and external effects.
+4. Build one risk-sized TASK-006 packet with `task_packet_version`, `task_id`, `assembly_type`, `artifact_id`, `artifact_version`, and one `owner`; vary only the depth of its nine information classes. Read [references/protocol.md](references/protocol.md).
+5. Load only the active map: [Codex](references/platform-codex.md), [Claude Code](references/platform-claude-code.md), or [Agy](references/platform-agy-cli.md). Read [platform compatibility](references/platform-compatibility.md) when certainty matters.
+6. Apply the required handshake, dispatch through the current native interface, and preserve the packet boundary.
+7. Reconcile identity and ownership, verify returned evidence, and integrate only what it supports.
 
-## Choose the executor
+## Apply executor rules
 
-- **Execution subagent:** Use for a bounded task that needs ordinary execution capacity and clear instructions.
-- **Task-specific specialist subagent:** Use when the task requires a temporary specialist contract, uncommon expertise, or a deliberately restricted tool set. Define only what this task needs; do not create a persistent persona by default.
-- **Named agent:** Use only when the user directly selected it, or the user explicitly authorized the primary agent to choose and the primary agent then made that choice. Availability, prior use, or a matching description is not authorization.
+- `EXECUTION_SUBAGENT`: use for bounded work following clear rules. Low-risk, reversible, unambiguous work with no external effect may skip the handshake; otherwise require `ACCEPTED / BLOCKED`.
+- `TASK_SPECIALIST_SUBAGENT`: use for non-mechanical professional judgment. Embed the eight-part temporary `specialist_contract`, always require `ACCEPTED / BLOCKED`, and create no persistent personality or tracking/promotion signal.
+- `NAMED_AGENT`: use only after the user selected it, or authorized the primary agent to choose and the choice was recorded. Always require `ACCEPTED / BLOCKED` and confirmation of that authorization basis.
 
-## Preserve permission boundaries
+`ACCEPTED` confirms understanding of the packet version, objective, evidence duty, standard, capability conditions, permissions, prohibitions, and return contract. It proves neither expertise, authority, execution, verification, nor success.
 
-- Treat capability discovery, compatibility, and authorization as separate checks.
-- Do not ask a subagent to perform an action the primary agent could not perform under the same task authority.
-- Do not use delegation to bypass sandboxing, approval prompts, managed policy, or external-impact restrictions.
-- Stop or return a defined failure when the contract is missing a material input or the platform cannot enforce the boundary.
+## Preserve identity, ownership, and authority
 
-## Return one exact failure label
+Every packet has exactly one uppercase `assembly_type` and all six identity fields. The packet, required acceptance record, and result must preserve them; reject mismatches.
 
-When execution cannot proceed, make the first task-status line after any mandatory host prefix exactly one of these uppercase labels, verbatim. Do not translate, lowercase, abbreviate, or invent aliases such as `AUTHORITY_BLOCKED`, `platform_blocked`, or `permission_blocked`.
+`owner` solely owns the current artifact version. The primary agent remains responsible for delegation, reception, verification, coordination, synthesis, user communication, and the integrated outcome without automatically owning each delegated version.
 
-- `BLOCKED`: The task contract lacks a critical input or contains an unresolved conflict.
-- `MISSING_CAPABILITY`: A required capability is absent, incompatible, or not reliably usable.
-- `CAPABILITY_OUT_OF_SCOPE`: The capability exists but lies outside current rules or authorization.
-- `PLATFORM_PERMISSION_BLOCKED`: Platform policy, sandboxing, or approval state prevents execution.
+Every action must pass all three gates: Rules allow it, the packet authorizes it, and the platform permits it. Never switch capability or execution paths to bypass a gate.
 
-Do not invent extra status taxonomies unless the delegated task itself already requires them.
+## Return and evaluate deliberately
 
-## Connect evaluation deliberately
+After execution begins, return exactly one delivery state:
 
-Request independent evaluation only when it will materially improve confidence and the task authority permits it. Keep the evaluator independent from the executor's hidden context. Do not automatically start an evaluator, review chain, or quality loop.
+- `DONE`: the minimum deliverable is complete and evidenced.
+- `PARTIAL`: disclose completed and unfinished work, impact, evidence, unknowns, and next handoff.
+- `FAILED`: the minimum deliverable was not reached; preserve cause, attempted scope, and evidence.
+
+Independent evaluation is optional and separate. Connect it only when authorized and useful; never auto-start evaluation or a Loop. Subagent output remains evidence until the primary agent verifies and integrates it.

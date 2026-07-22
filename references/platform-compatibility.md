@@ -10,14 +10,15 @@ This repository uses one root `SKILL.md` as the semantic source. Platform discov
 | --- | --- | --- | --- | --- | --- |
 | Codex CLI | Yes | `~/.agents/skills/waa-agent-delegation/` | `.agents/skills/waa-agent-delegation/` | Current collaboration/subagent tools | `agents/openai.yaml` for Codex UI metadata only |
 | Claude Code | Yes | `~/.claude/skills/waa-agent-delegation/` | `.claude/skills/waa-agent-delegation/` | Current `Agent` tool and available subagents | None required |
-| Agy CLI | Yes, based on current general Skills docs and Agy 1.1.5 evidence | `~/.gemini/config/skills/waa-agent-delegation/` | `.agents/skills/waa-agent-delegation/` | `invoke_subagent`, session-level `define_subagent`, and authorized agent selection | None required |
+| Agy CLI | `SKILL.md` semantics are usable, but discovery/loading is `PLATFORM_UNKNOWN` | `PLATFORM_UNKNOWN` for a bare Skill path; documented directory candidate is `~/.gemini/config/skills/waa-agent-delegation/` | `PLATFORM_UNKNOWN` | `invoke_subagent`, session-level `define_subagent`, and authorized agent selection (interface details are version-dependent) | None required |
 
-Copy or symbolically link the same repository directory into each chosen discovery path manually. Do not copy the `SKILL.md` body into three maintained variants.
+For Codex and Claude Code, copy or symbolically link the same repository directory into a documented discovery path manually. Treat the Agy directory as an unverified candidate until the active product proves discovery and loading. Do not copy the `SKILL.md` body into three maintained variants.
 
 ## Proven common facts
 
-- All three platforms can consume a directory-based Skill whose entry point is `SKILL.md` with `name` and `description` frontmatter.
-- Discovery and automatic triggering depend on the platform scanning an installed path; a GitHub checkout elsewhere is not enough.
+- The root `SKILL.md` is the shared semantic source; documented discovery support is established for Codex and Claude Code, while Agy discovery/loading remains `PLATFORM_UNKNOWN`.
+- All platform maps use exactly `EXECUTION_SUBAGENT`, `TASK_SPECIALIST_SUBAGENT`, and `NAMED_AGENT`; these are governance values, not native tool names.
+- Where a platform supports Skill discovery, a repository checkout outside a documented discovery path is not automatically installed.
 - Subagents use separate or reduced context. Build self-contained task packets instead of assuming the primary conversation is inherited.
 - Platform availability or tool exposure does not establish task authorization.
 - `ACCEPTED`, the four failure returns, and named-agent authorization are governance protocol, not native cross-platform statuses.
@@ -74,7 +75,7 @@ Accessed 2026-07-22:
 - Automatic Skill and Agent relevance algorithms and thresholds are not public on the three platforms; no description can guarantee identical triggering across models and versions.
 - Native subagent tools do not expose one stable cross-platform parameter schema. Use the current platform interface instead of hard-coding low-level call shapes.
 - Claude managed policy can prohibit user or project Skills even when the documented path is correct.
-- Agy's general Skills documentation describes directory-based `SKILL.md` packages under `~/.gemini/config/skills`, while its CLI Plugins page also describes flat Skill files under other paths. The precedence, merging, and deprecation rules are not sufficiently documented. Current general docs, Agy 1.1.5 product evidence, and the local configuration layout support the directory-based candidate used here.
+- Agy's general Skills documentation describes directory-based `SKILL.md` packages under `~/.gemini/config/skills`, while its CLI Plugins page also describes flat Skill files under other paths. The precedence, merging, and deprecation rules are not sufficiently documented. Therefore bare-path discovery/loading and project-level placement remain `PLATFORM_UNKNOWN`; the directory candidate is an installation hypothesis, not a verified fact.
 - Agy has not documented how arbitrary adjunct files such as `agents/openai.yaml` are handled. Only `SKILL.md` is treated as its entry point here.
 - Agy model-backed discovery and delegation were not live-tested because the local Agy CLI was not authenticated during research.
 - `agents/openai.yaml` is confirmed as Codex metadata; Claude and Agy do not document it as their interface and must not depend on it.

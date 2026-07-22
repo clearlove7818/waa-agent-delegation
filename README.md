@@ -2,9 +2,9 @@
 
 `waa-agent-delegation` is a cross-platform Agent Skill for preparing and governing an actual delegation after a primary agent has decided to create or invoke a subagent.
 
-It helps the primary agent choose an ordinary execution subagent, a task-specific specialist, or an already-authorized named agent; check capability and permission boundaries; construct a risk-sized task packet; and receive the result without transferring final responsibility.
+It helps the primary agent choose exactly one `EXECUTION_SUBAGENT`, `TASK_SPECIALIST_SUBAGENT`, or explicitly authorized `NAMED_AGENT`; check capability and permission boundaries; construct a risk-sized TASK-006 packet; and receive the result without transferring final responsibility.
 
-中文摘要：这是一个供 Codex CLI、Claude Code 和 Agy CLI 共用的 Agent 委派 Skill。它只增强已经决定执行的委派，不替主 Agent 决定任务方向、扩大权限或转移最终责任。
+中文摘要：这是一个以单一语义源适配 Codex CLI、Claude Code 和 Agy CLI 的 Agent 委派 Skill。它只增强已经决定执行的委派，不替主 Agent 决定任务方向、扩大权限或转移最终责任；Agy 的裸 Skill 发现和加载仍未验证。
 
 ## What it does not do
 
@@ -22,9 +22,24 @@ The repository separates three concerns:
 | --- | --- | --- |
 | Shared runtime | [`SKILL.md`](SKILL.md), [`references/protocol.md`](references/protocol.md) | Stable delegation semantics and contract patterns |
 | Platform runtime | [`references/platform-compatibility.md`](references/platform-compatibility.md), platform-specific maps | Discovery facts, native interface mapping, permissions, and known unknowns |
-| Maintenance and evidence | [`MAINTAINING.md`](MAINTAINING.md), [`evals/cases.md`](evals/cases.md) | Human iteration process and forward-case history |
+| Maintenance and evidence | [`MAINTAINING.md`](MAINTAINING.md), [`evals/cases.md`](evals/cases.md), [`evals/trigger-cases.json`](evals/trigger-cases.json) | Human iteration process, case history, and machine-readable fixtures |
 
 `agents/openai.yaml` is Codex UI metadata. It is not an Agent definition and is not required by Claude Code or Agy CLI.
+
+## Protocol identity
+
+Every packet, including a low-risk packet that skips the handshake, carries exactly one `assembly_type` and these identity fields:
+
+```text
+task_packet_version
+task_id
+assembly_type: EXECUTION_SUBAGENT | TASK_SPECIALIST_SUBAGENT | NAMED_AGENT
+artifact_id
+artifact_version
+owner
+```
+
+Risk trimming changes the depth of the nine TASK-006 information classes, not the identity fields. `TASK_SPECIALIST_SUBAGENT` additionally carries the eight-part temporary `specialist_contract`; it never creates a persistent personality. `owner` is the sole owner of the current artifact version, while primary-agent synthesis and final responsibility do not automatically change ownership.
 
 ## Repository map
 
@@ -43,7 +58,9 @@ waa-agent-delegation/
 │   ├── platform-codex.md
 │   ├── platform-claude-code.md
 │   └── platform-agy-cli.md
-└── evals/cases.md
+└── evals/
+    ├── cases.md
+    └── trigger-cases.json
 ```
 
 ## Install manually
@@ -66,7 +83,9 @@ Use the repository root URL without `/tree/main`, `/blob/...`, a trailing slash,
 | --- | --- | --- |
 | Codex CLI | `~/.agents/skills/waa-agent-delegation/` | `<project>/.agents/skills/waa-agent-delegation/` |
 | Claude Code | `~/.claude/skills/waa-agent-delegation/` | `<project>/.claude/skills/waa-agent-delegation/` |
-| Agy CLI | `~/.gemini/config/skills/waa-agent-delegation/` | `<project>/.agents/skills/waa-agent-delegation/` |
+| Agy CLI | `PLATFORM_UNKNOWN` (documented directory is only a candidate) | `PLATFORM_UNKNOWN` |
+
+Do not install to an Agy candidate path on the assumption that Codex or Claude Code behavior transfers. Confirm the active Agy product's discovery contract first; otherwise retain `PLATFORM_UNKNOWN`.
 
 Example manual symlink shape on macOS or Linux:
 
@@ -92,7 +111,7 @@ From this repository:
 python3 /path/to/skill-creator/scripts/quick_validate.py .
 ```
 
-Also parse the YAML files, check local Markdown links, and work through [`evals/cases.md`](evals/cases.md). Cases are regression prompts, not a fixed score or automated quality gate.
+Also parse all YAML and JSON files, check local Markdown links, and work through [`evals/cases.md`](evals/cases.md) and the machine-readable [`evals/trigger-cases.json`](evals/trigger-cases.json). The JSON is a reproducible case fixture, not a scorecard, fixed KPI, or automatic quality gate.
 
 ## Continue improving the Skill
 
