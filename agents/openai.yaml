@@ -1,0 +1,4 @@
+interface:
+  display_name: "waa Agent Delegation"
+  short_description: "Build safe cross-platform agent delegation packages"
+  default_prompt: "Use $waa-agent-delegation to prepare and dispatch this approved delegation safely."
