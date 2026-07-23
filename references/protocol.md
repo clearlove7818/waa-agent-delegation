@@ -223,7 +223,123 @@ Do not collapse the last three conditions into generic `BLOCKED`, and do not add
 
 ## Optional evaluation handoff
 
-Independent evaluation is a separate, optional connection point. Do not start it automatically. If an authorized evaluation record is requested, include the object and record fields required by the current evaluation contract: `evaluation_id`, `evaluation_mode`, `evaluation_output_path`, `task_id`, `artifact_id`, `artifact_version`, `standard_id`, `standard_version`, `evidence_references`, and `evaluation_scope`. Add `run_id`, `segment_id`, `round`, and `previous_evaluation_path` only for an explicitly authorized loop. Missing object, standard, scope, evidence, or output path is `BLOCKED`; the evaluator may not guess, modify the evaluated artifact, or accept the integrated result.
+Independent evaluation is a separate, optional connection point. Use it only after evaluation is independently authorized and useful. Never infer authorization from risk, a low score, keywords, an evaluation file, or evaluator availability; never auto-select Fei or auto-start a Loop.
+
+### Separate participation mode from output mode
+
+Bind one participation mode and one compatible output mode:
+
+```text
+evaluation_mode: INDEPENDENT_EVALUATION | EVALUATOR_OPTIMIZER_LOOP
+evaluation_output_mode: CONVERSATION_ONLY | FILE_BACKED
+```
+
+- A general `INDEPENDENT_EVALUATION` may use either output mode.
+- `CONVERSATION_ONLY` must omit `evaluation_output_path` and grants no file-writing authority.
+- `FILE_BACKED` must name one unique `evaluation_output_path`; the evaluator may write only that evaluation record and legitimate non-overwriting new versions.
+- A formal evaluation by the authorized named Agent Fei must use `FILE_BACKED`.
+- `EVALUATOR_OPTIMIZER_LOOP` must use `FILE_BACKED` and requires separate explicit user authorization for the current task.
+- Do not silently coerce an invalid mode or path combination. Return `BLOCKED` when the contract conflicts.
+
+### Bind the evaluation relationship
+
+Provide at least:
+
+```text
+evaluation_id
+evaluation_mode
+evaluation_output_mode
+evaluation_output_path: <required only for FILE_BACKED; forbidden for CONVERSATION_ONLY>
+task_id
+artifact_id
+artifact_version
+standard_id
+standard_version
+evidence_references
+evaluation_scope
+```
+
+Also state the evaluation objective, exclusions, independence requirements, capability conditions, allowed reads, permitted tools, and external-access boundary. These fields define the evaluation relationship; they do not replace or modify the original delegation packet's six identity fields. Evaluation does not transfer ownership of the delegated artifact version.
+
+### Add Loop comparison fields only when authorized
+
+For an explicitly authorized `EVALUATOR_OPTIMIZER_LOOP`, also provide:
+
+```text
+run_id
+segment_id
+round
+comparison_artifact_version
+change_evidence_references
+previous_evaluation_path: <only when a previous evaluation record exists>
+```
+
+Keep the semantics distinct:
+
+- `artifact_version` is the current candidate being evaluated.
+- `comparison_artifact_version` is the artifact baseline for this round.
+- `change_evidence_references` is the evidence that binds the current candidate to that baseline.
+- `previous_evaluation_path` is evaluation-record lineage, never the artifact comparison baseline.
+
+Do not substitute `previous_evaluation_path` for `comparison_artifact_version` or omit the change evidence.
+
+### Hand off a frozen artifact manifest when required
+
+Add both fields for every authorized Loop and whenever the task explicitly uses a multi-file logical artifact package:
+
+```text
+artifact_manifest_reference
+manifest_sha256
+```
+
+The producer creates and freezes the manifest after producing the artifact version. The evaluator only consumes and checks it; the evaluator must not generate, modify, or repair the manifest. Stop evaluation when the manifest, hash, base-version relation, or file relation conflicts. Files marked unchanged remain part of the current logical artifact version through the frozen manifest and base-version relation. A non-Loop, single-file independent evaluation needs no manifest when the artifact version is otherwise uniquely identifiable.
+
+### Version evaluation records without overwriting
+
+- Create a new `evaluation_id` when the artifact version or standard version changes materially.
+- Under the same artifact version and standard version, keep the same `evaluation_id`; new evidence, an objection, or a factual correction may create a non-overwriting evaluation record `v2`, `v3`, and so on.
+- Never overwrite an earlier evaluation file.
+- Keep evaluation-file version distinct from artifact version.
+
+### Separate pre-evaluation defects from record anomalies
+
+Before evaluation begins, return this status when a missing, conflicting, invalid, or non-unique object, standard, scope, mode, version, evidence, comparison, artifact-package, or output-path relationship can change the evaluation:
+
+```text
+status: BLOCKED
+```
+
+For a standard-contract problem, keep `BLOCKED` as the top-level status and add the anomaly field:
+
+```text
+status: BLOCKED
+anomaly: STANDARD_CONTRACT_ANOMALY
+```
+
+`STANDARD_CONTRACT_ANOMALY` is never a top-level status. The evaluator must not guess, select, modify, or rewrite the standard. Return the defect and its evidence to the primary agent. A conflicting path contract before any write is attempted remains a pre-evaluation `BLOCKED`; do not claim `OUT_OF_SCOPE_WRITE` when no out-of-scope write occurred.
+
+After an evaluation record exists or a write has been attempted, return this status when the record has a missing or mismatched task, artifact, artifact version, standard, standard version, manifest, artifact-package, or output-path binding; overwrites an earlier evaluation version; or omits required record fields:
+
+```text
+status: RECORD_CONTRACT_ANOMALY
+```
+
+`RECORD_CONTRACT_ANOMALY` is not an alias for pre-evaluation `BLOCKED`. Stop normal evaluation and automatic flow, preserve the record, path, and actual evidence, and return the anomaly to the primary agent. The evaluator must not overwrite, delete, clean up, supplement, or repair the anomalous record. Do not add `OUT_OF_SCOPE_WRITE` for an ordinary binding, version, manifest, record-completeness, or overwrite defect.
+
+Only after a write actually occurs outside the task's unique authorized `evaluation_output_path` may the evaluator return:
+
+```text
+status: RECORD_CONTRACT_ANOMALY
+subtype: OUT_OF_SCOPE_WRITE
+```
+
+Stop normal flow and preserve the out-of-scope file and evidence. Do not delete, overwrite, move, or repair the file. The primary agent determines impact and follow-up. A path configuration conflict without an actual write never uses this subtype.
+
+### Keep evaluation advice separate from decisions and repairs
+
+The evaluator may report risks, evidence, gaps, impact, unknowns, and disposition recommendations. It may recommend that the primary agent consider rework, more evidence, or risk acceptance. It must not accept, waive, close, or declare a risk resolved on the primary agent's behalf; decide merge, release, deployment, or final acceptance; assign final repair responsibility; or modify the evaluated artifact to implement a repair.
+
+The prohibition on modifying the artifact and the prohibition on accepting risk are independent constraints. Risk acceptance, risk waiver, risk closure, repair assignment, and final artifact acceptance remain with the primary agent. The evaluator may not guess or rewrite the standard, change task or Loop state, or accept the integrated result. The primary agent receives, verifies, integrates, and remains responsible for the final outcome.
 
 ## Primary-agent reception
 
