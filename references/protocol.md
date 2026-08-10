@@ -53,6 +53,8 @@ List trusted sources, standards, project facts, evidence requirements, source da
 
 State the allowed scope, `permission_boundary`, `forbidden_actions`, `external_effects`, writable targets, approval boundaries, and the fact that every action must pass Rules, current task authorization, and platform permission.
 
+`forbidden_actions` always states, at minimum, that the executor may not dispatch another Agent, subagent, background task, or parallel executor within this task and may not transfer artifact ownership. Add task-specific prohibitions on top of this floor rather than in place of it. A packet that omits the floor is incomplete even if every task-specific prohibition is present. Any separately authorized expansion requires a new packet and a primary-agent decision; it cannot be inferred from the current packet.
+
 ### 7. Capability constraints
 
 State `required_capabilities`, `forbidden_capabilities`, compatibility status, permitted exceptions, and the minimum tools or Skills. Capability visibility never grants authorization, and the executor may not obtain, install, create, fork, upgrade, replace, or delete a capability without a separately authorized task.
@@ -92,6 +94,8 @@ Return and exception protocol: <output, failure, handoff, handshake>
 ### `EXECUTION_SUBAGENT`
 
 Use for bounded work that can follow clear steps or rules. It never receives a persistent personality contract. Even a low-risk packet keeps all six identity fields above; only the detail of the nine classes may be compressed. Require a handshake when ambiguity, writing, external impact, meaningful cost, unclear permission, or high failure cost exists. Low-risk, reversible, unambiguous work with no external effect may proceed without one.
+
+Regardless of risk level, an execution subagent may not dispatch another Agent, subagent, background task, or parallel executor within this task and may not transfer artifact ownership. These prohibitions apply even when the packet omits them or the platform appears to permit the action; an omitted floor makes the packet incomplete rather than granting authority.
 
 ### `TASK_SPECIALIST_SUBAGENT`
 
@@ -145,9 +149,10 @@ Use only after the user directly selected the named Agent, or explicitly authori
 authorization_basis: <specific current-task authorization>
 named_agent: <exact identifier>
 permission_reminder: <naming grants no new authority>
+forbidden_delegation: <no dispatch of another Agent, subagent, background task, or parallel executor within this task; no transfer of artifact ownership>
 ```
 
-`NAMED_AGENT` always returns `ACCEPTED` or `BLOCKED` before execution and must confirm the concrete authorization basis. Availability, domain fit, visibility, or recommendation is not authorization.
+`NAMED_AGENT` always returns `ACCEPTED` or `BLOCKED` before execution and must confirm the concrete authorization basis. Availability, domain fit, visibility, or recommendation is not authorization. A named Agent may not dispatch another Agent, including another instance of itself, within this task; this prohibition holds even when the packet omits it or the platform appears to permit it. Any separately authorized expansion requires a new packet and a primary-agent decision.
 
 ## Execution protocol
 
@@ -168,7 +173,12 @@ Accepted form:
 ```text
 ACCEPTED
 Binding: task_packet_version=<...>; task_id=<...>; assembly_type=<...>; artifact_id=<...>; artifact_version=<...>; owner=<...>
-Confirmed: objective, inputs, evidence, standard, permissions, forbidden boundary, capability conditions, and return contract
+Objective as understood: <restate the one outcome in your own words; do not copy the packet wording>
+Excluded: <what you understand to be outside scope>
+Contract as understood: inputs=<...>; evidence_and_standard=<...>; capability_and_permission_boundary=<...>; forbidden_boundary=<...>; return_contract=<...>
+First actions: <the first two or three concrete actions you will take>
+Taken on faith: <at most five packet-asserted facts you will act on without verifying>
+Filled in: <non-material execution details you resolved and how; "none" only if genuinely none>
 Authorization: <required for NAMED_AGENT; otherwise not applicable>
 Pending platform approval: <none or specific approval>
 ```
@@ -184,7 +194,7 @@ Needed: <minimum information, evidence, authority, capability, or platform chang
 Handoff: <primary agent or specified recipient>
 ```
 
-An `ACCEPTED` record proves understanding of the specified packet version only. It does not prove capability, authorization, execution, verification, or delivery quality. A changed goal, standard, permission, owner, or other material boundary invalidates the old acceptance and requires a new packet version and handshake.
+An `ACCEPTED` record proves understanding of the specified packet version only. It does not prove packet-asserted facts, capability, authorization, execution, verification, or delivery quality. `Taken on faith` exposes assertions that remain unverified; it never waives the evidence duty or converts an assertion into fact. `Filled in` is limited to non-material execution details. If an ambiguity can change the goal, scope, owner, standard, evidence duty, permission, forbidden boundary, capability condition, external effect, or return contract, return `BLOCKED` rather than resolving it silently. A changed goal, standard, permission, owner, or other material boundary invalidates the old acceptance and requires a new packet version and handshake.
 
 ## Completion return
 
