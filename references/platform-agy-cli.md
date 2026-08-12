@@ -33,7 +33,7 @@ Do not hard-code the complete parameters of `invoke_subagent` or `define_subagen
 
 Map absent or incompatible tools to `MISSING_CAPABILITY`, unauthorized available tools to `CAPABILITY_OUT_OF_SCOPE`, and sandbox or approval barriers to `PLATFORM_PERMISSION_BLOCKED`.
 
-Place the exact uppercase label as the first status token on the first line. A mandatory host or project prefix may precede it on the same line; otherwise nothing may appear before it. Put no markup around it and do not translate it or replace it with an Agy task-state name.
+Place the exact uppercase label as the first status token on the first line. Use a mandatory prefix only when the task packet records its exact text, governing source, and applicability to this executor, or when a directly applicable higher-priority runtime rule controls despite a packet defect. Never infer a prefix from an external instruction or resident identity document that does not govern the executor; obey a directly applicable rule and return `BLOCKED` for any packet omission or conflict before execution. Put no markup around the label and do not translate it or replace it with an Agy task-state name.
 
 ## Result reception
 

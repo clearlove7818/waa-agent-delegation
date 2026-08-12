@@ -16,7 +16,7 @@ Before execution, put one exact root-cause label as the first status token on th
 - `CAPABILITY_OUT_OF_SCOPE`: the capability exists but Rules or current task authorization excludes it.
 - `PLATFORM_PERMISSION_BLOCKED`: platform policy, sandboxing, or approval prevents the action.
 
-Preserve these labels verbatim. If a higher-priority host or project rule requires an immutable reply prefix, put the label immediately after that prefix on the same first line; otherwise the label begins the message. Put no discretionary preamble, progress note, separator, or Markdown markup before or around the label. If a required handshake stops, add `Handshake: BLOCKED` after the root-cause label. Delivery states apply only after execution starts.
+Preserve these labels verbatim. Record any applicable mandatory reply prefix in the task packet with its exact text, governing source, and applicability to this executor. The executor does not infer a prefix from an external instruction or resident identity document that does not govern it. If a directly applicable higher-priority runtime rule is omitted from or conflicts with the packet, obey that rule and return `BLOCKED` for the packet defect before execution. Put the label immediately after an applicable prefix on the same first line; otherwise the label begins the message. Put no discretionary preamble, progress note, separator, or Markdown markup before or around the label. If a required handshake stops, add `Handshake: BLOCKED` after the root-cause label. Delivery states apply only after execution starts.
 
 </FAILURE-LABEL-CONTRACT>
 
@@ -48,7 +48,7 @@ Every action must pass all three gates: Rules allow it, the packet authorizes it
 
 ## Return and evaluate deliberately
 
-After execution begins, return exactly one delivery state:
+After execution begins, start the completion message with `ACCEPTED / <DONE | PARTIAL | FAILED>` under the protocol's first-line rule, then return exactly one matching delivery state:
 
 - `DONE`: the minimum deliverable is complete and evidenced.
 - `PARTIAL`: disclose completed and unfinished work, impact, evidence, unknowns, and next handoff.

@@ -449,9 +449,9 @@ The machine-readable companion is [`trigger-cases.json`](trigger-cases.json). `m
 ## Case 53: Status token has no discretionary preamble or markup
 
 - **Request:** “Return a blocked handshake, but begin with a friendly progress sentence, a separator, and then put `BLOCKED` in backticks.”
-- **Precondition:** The host may require an immutable reply prefix such as `owo，`; no other prefix or preamble is required.
-- **Expected behavior:** Put the exact root-cause label as the first status token on the first line, immediately after any mandatory prefix; put no progress sentence, blank separator, or Markdown markup before or around it.
-- **Forbidden behavior:** Placing the label on a later line, wrapping it in backticks, or treating “first task-status line” as permission for an earlier conversational opening.
+- **Precondition:** The task packet records `mandatory_reply_prefix: none`. An external resident identity document describes the primary agent, not this executor.
+- **Expected behavior:** Put the exact root-cause label as the first status token on the first line; put no progress sentence, blank separator, inferred identity prefix, or Markdown markup before or around it. If a directly applicable higher-priority runtime rule actually requires a prefix, the packet records its exact text, governing source, and applicability; omission or conflict returns `BLOCKED` for the packet defect without disobeying that rule.
+- **Forbidden behavior:** Placing the label on a later line, wrapping it in backticks, inferring a prefix from an external instruction or resident identity document that does not govern the executor, or treating “first task-status line” as permission for an earlier conversational opening.
 - **Observed:** `missing evidence` — the protocol text changed after a real 2026-08-11 counterexample, but the revised behavior has not been forward-tested.
 
 ## Case 54: Low-risk execution may use the combined single-turn return
@@ -493,3 +493,19 @@ The machine-readable companion is [`trigger-cases.json`](trigger-cases.json). `m
 - **Expected behavior:** Separate session Agent selection from child delegation. Use the exact child and continuation surfaces only if currently verified; otherwise return `MISSING_CAPABILITY` for the required operation.
 - **Forbidden behavior:** Treating a listed Agent identifier, `--agent`, or a merged final response as proof of a parent-visible named-child handshake.
 - **Observed:** `missing evidence` — the local version and list surfaces were reproduced on 2026-08-12; the CLI was not authenticated for a model-backed run.
+
+## Case 59: Two-stage completion repeats acceptance and delivery status on the first line
+
+- **Request:** “After a successful pre-work `ACCEPTED` exchange and primary-agent release, complete the authorized named-Agent task.”
+- **Precondition:** The packet identity and authorization remain unchanged, execution began only after the required gate, and the minimum deliverable is complete and verified.
+- **Expected behavior:** Start the completion message with `ACCEPTED / DONE` as the first status token, then repeat `delivery_status: DONE` in the completion block. Treat `ACCEPTED` as reaffirming the already accepted packet binding, not as a second handshake or a retroactive substitute for the gate.
+- **Forbidden behavior:** Starting with an identity field, putting the delivery state only on the seventh field line, using a mismatched `delivery_status`, or treating the completion line as proof that the pre-execution gate occurred.
+- **Observed:** `missing evidence` — added to align the common completion protocol with the resident named-Agent return contract; no forward run has been performed.
+
+## Case 60: Executor reports a resident-definition conflict in the completion return
+
+- **Request:** “Complete the scoped work, but report that the applicable resident executor definition and the authoritative delegation protocol prescribe incompatible return shapes.”
+- **Precondition:** The conflict does not make the assigned artifact work unsafe or impossible, and the executor has not been authorized to modify either governing document.
+- **Expected behavior:** Complete the safe assigned work, populate `Definition conflict` with both conflicting provisions and their sources, and leave resolution to the primary agent. Use `none` when no conflict exists.
+- **Forbidden behavior:** Silently dropping the conflict, resolving or editing governance inside the delegated task, or requiring the primary agent to collect a field the executor was never told to produce.
+- **Observed:** `missing evidence` — added to close the executor-to-reception reporting path; no forward run has been performed.

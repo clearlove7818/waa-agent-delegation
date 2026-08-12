@@ -21,6 +21,9 @@ Every change must preserve these rules:
 13. TASK-006 has nine locatable information classes; `TASK_SPECIALIST_SUBAGENT` has an eight-part temporary `specialist_contract`.
 14. Failure labels remain uppercase and verbatim; translated, shortened, or invented aliases are invalid.
 15. Primary-agent final responsibility does not silently change artifact-version ownership.
+16. A mandatory reply prefix is packet-recorded with exact text, source, and executor applicability; an executor never infers it from an identity document that does not govern that executor, and a packet cannot cancel a directly applicable higher-priority runtime rule.
+17. Every post-execution completion message starts with `ACCEPTED / <DONE | PARTIAL | FAILED>`, and the repeated `delivery_status` matches it.
+18. Every completion return includes `Definition conflict`, using `none` or identifying both conflicting provisions for primary-agent reception.
 
 ## Change the smallest responsible layer
 
@@ -72,9 +75,11 @@ Do not add a fixed total score, KPI, or automatic review loop. The purpose of ca
 - Capability availability is never phrased as authorization.
 - The four failure returns remain sufficient; additions require a demonstrated decision need.
 - Failure returns preserve the exact uppercase labels, especially `CAPABILITY_OUT_OF_SCOPE` and `PLATFORM_PERMISSION_BLOCKED`.
-- The first status token has no discretionary preamble, separator, or markup; only a higher-priority mandatory reply prefix may precede it on the same first line.
+- The first status token has no discretionary preamble, separator, or markup; any applicable mandatory prefix is packet-recorded with exact text, source, and executor applicability, while a directly applicable higher-priority runtime rule still controls a defective packet.
 - The combined single-turn return is limited to low-risk `EXECUTION_SUBAGENT` packets that explicitly permit handshake omission.
+- Both combined and two-stage completion returns start with `ACCEPTED / <DONE | PARTIAL | FAILED>`, and the repeated `delivery_status` matches.
 - Every `Taken on faith` item is reconciled in the completion return.
+- Every completion return reports `Definition conflict: none` or identifies both conflicting provisions without resolving them.
 - The three exact `assembly_type` values have zero lowercase aliases in active source.
 - Every packet template contains `assembly_type`, including the low-risk `EXECUTION_SUBAGENT` path.
 - All nine TASK-006 classes and all eight AGT-014 specialist sections are locatable.

@@ -31,7 +31,7 @@ Do not hard-code the low-level `Agent` schema; it is not a stable cross-platform
 
 Return `MISSING_CAPABILITY`, `CAPABILITY_OUT_OF_SCOPE`, or `PLATFORM_PERMISSION_BLOCKED` according to the evidence instead of retrying through a wider permission mode.
 
-Place the exact uppercase label as the first status token on the first line. A mandatory host or project prefix may precede it on the same line; otherwise nothing may appear before it. Put no markup around it and do not translate it or replace it with a Claude-specific status phrase.
+Place the exact uppercase label as the first status token on the first line. Use a mandatory prefix only when the task packet records its exact text, governing source, and applicability to this executor, or when a directly applicable higher-priority runtime rule controls despite a packet defect. Never infer a prefix from an external `CLAUDE.md`, other instruction, or resident identity document that does not govern the executor; obey a directly applicable rule and return `BLOCKED` for any packet omission or conflict before execution. Put no markup around the label and do not translate it or replace it with a Claude-specific status phrase.
 
 ## Result reception
 

@@ -68,7 +68,7 @@ State quality standards, acceptance conditions, evidence to return, verification
 
 ### 9. Return and exception protocol
 
-State `output_contract`, `failure_return`, handoff recipient, required binding fields in the return, and the applicable `ACCEPTED / BLOCKED` rule. Keep execution handshake, primary-agent reception, and final synthesis as execution protocol below rather than treating them as a tenth or eleventh packet class.
+State `output_contract`, `failure_return`, handoff recipient, required binding fields in the return, and the applicable `ACCEPTED / BLOCKED` rule. Record `mandatory_reply_prefix: none` unless a directly applicable higher-priority rule governs this executor; when one does, quote the exact prefix and record its governing source and executor applicability under `mandatory_reply_prefix_source`. A packet omission or conflict cannot cancel a directly applicable higher-priority runtime rule; obey the rule and return `BLOCKED` for the packet defect before execution. Keep execution handshake, primary-agent reception, and final synthesis as execution protocol below rather than treating them as a tenth or eleventh packet class.
 
 ## Packet skeleton
 
@@ -90,6 +90,8 @@ Scope and permissions: <allowed actions, prohibitions, external effects>
 Capability constraints: <required, forbidden, compatibility, exceptions>
 Acceptance and verification: <quality and checks>
 Return and exception protocol: <output, failure, handoff, handshake>
+  mandatory_reply_prefix: <none or exact text>
+  mandatory_reply_prefix_source: <not applicable or governing source and executor applicability>
 ```
 
 ## Executor-specific contract
@@ -199,7 +201,7 @@ Needed: <minimum information, evidence, authority, capability, or platform chang
 Handoff: <primary agent or specified recipient>
 ```
 
-If a higher-priority host or project rule requires an immutable reply prefix, put the label immediately after that prefix on the same first line; otherwise the label begins the message. Put no discretionary preamble, progress note, separator, or Markdown markup before or around the label.
+Any applicable mandatory reply prefix must be recorded in the task packet with its exact text, governing source, and applicability to this executor. The executor does not infer a prefix from an external instruction or resident identity document that does not govern it. If a directly applicable higher-priority runtime rule is omitted from or conflicts with the packet, obey that rule and return `BLOCKED` for the packet defect before execution. Put the label immediately after an applicable prefix on the same first line; otherwise the label begins the message. Put no discretionary preamble, progress note, separator, or Markdown markup before or around the label.
 
 An `ACCEPTED` record proves understanding of the specified packet version only. It does not prove packet-asserted facts, capability, authorization, execution, verification, or delivery quality. `Taken on faith` exposes assertions that remain unverified; it never waives the evidence duty or converts an assertion into fact. `Filled in` is limited to non-material execution details. If an ambiguity can change the goal, scope, owner, standard, evidence duty, permission, forbidden boundary, capability condition, external effect, or return contract, return `BLOCKED` rather than resolving it silently. A changed goal, standard, permission, owner, or other material boundary invalidates the old acceptance and requires a new packet version and handshake.
 
@@ -217,6 +219,14 @@ Apply the same first-line purity rule as the failure contract. `ACCEPTED` record
 
 ## Completion return
 
+The first status token on the completion message's first line is:
+
+```text
+ACCEPTED / <DONE | PARTIAL | FAILED>
+```
+
+Apply the same first-line purity and mandatory-prefix rule as the failure contract. In a two-stage flow, `ACCEPTED` reaffirms the packet binding accepted before execution; it is not a second handshake and does not retroactively replace a required gate. `delivery_status` repeats the value after the slash and must match it exactly.
+
 Return compact evidence, echoing the six identity fields for every task:
 
 ```text
@@ -232,6 +242,7 @@ Deliverables or changes:
 Evidence:
 Verification performed:
 Faith reconciled: <for every Taken on faith item, state verified, still unverified, or found false; use none if there were no items>
+Definition conflict: <none, or quote the conflicting resident-definition text and governing-protocol text with their sources; do not resolve the conflict>
 Concerns or unknowns:
 Handoff to primary agent:
 ```
@@ -240,7 +251,7 @@ Use `DONE` only when the agreed minimum deliverable is complete and evidence sup
 
 ## Failure returns
 
-Choose one exact uppercase root-cause label and put it as the first status token on the message's first line. If a higher-priority host or project rule requires an immutable reply prefix, put the label immediately after that prefix on the same line; otherwise the label begins the message. Put no discretionary preamble, progress note, separator, or Markdown markup before or around it. Do not translate, shorten, or invent aliases:
+Choose one exact uppercase root-cause label and put it as the first status token on the message's first line. Any applicable mandatory reply prefix must be recorded in the task packet with its exact text, governing source, and applicability to this executor. The executor does not infer a prefix from an external instruction or resident identity document that does not govern it. If a directly applicable higher-priority runtime rule is omitted from or conflicts with the packet, obey that rule and return `BLOCKED` for the packet defect before execution. Put the label immediately after an applicable prefix on the same line; otherwise the label begins the message. Put no discretionary preamble, progress note, separator, or Markdown markup before or around it. Do not translate, shorten, or invent aliases:
 
 | Root cause | Exact label |
 | --- | --- |
@@ -380,9 +391,9 @@ Before integrating a result:
 3. Confirm the `TASK_SPECIALIST_SUBAGENT` contract is present and all eight sections are locatable when applicable.
 4. Inspect deliverables, cited artifacts, commands, outputs, and sources.
 5. Confirm the executor stayed within scope, permissions, capability constraints, and ownership.
-6. Check that `DONE`, `PARTIAL`, or `FAILED` is truthful and complete for the evidence.
+6. Check that the first-line `ACCEPTED / <status>` value matches `delivery_status`, and that `DONE`, `PARTIAL`, or `FAILED` is truthful and complete for the evidence. Do not treat the completion line as proof that a required pre-execution gate occurred.
 7. Confirm every `Taken on faith` item is reconciled as verified, still unverified, or found false; preserve unreconciled items as result limitations.
 8. Reproduce or independently verify checks in proportion to risk.
 9. Record limitations, unknowns, residual risk, and any requested next action.
 10. Integrate under primary-agent responsibility without silently changing artifact ownership.
-11. Collect any reported conflict between the executor's resident definition and this protocol or another governing document. Record it as a governance defect with both texts identified; do not resolve it inside the delegated task.
+11. Read the required conflict-report field. When it is not `none`, confirm that both conflicting texts and their sources are identified, record the conflict as a governance defect, and do not resolve it inside the delegated task.
