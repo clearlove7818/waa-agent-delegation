@@ -83,9 +83,9 @@ Use the repository root URL without `/tree/main`, `/blob/...`, a trailing slash,
 | --- | --- | --- |
 | Codex CLI | `~/.agents/skills/waa-agent-delegation/` | `<project>/.agents/skills/waa-agent-delegation/` |
 | Claude Code | `~/.claude/skills/waa-agent-delegation/` | `<project>/.claude/skills/waa-agent-delegation/` |
-| Agy CLI | `PLATFORM_UNKNOWN` (documented directory is only a candidate) | `PLATFORM_UNKNOWN` |
+| Agy CLI | `~/.gemini/config/skills/waa-agent-delegation/` has current local installation evidence and user-reported loading; independent model-backed discovery remains `PLATFORM_UNKNOWN` | `PLATFORM_UNKNOWN` |
 
-Do not install to an Agy candidate path on the assumption that Codex or Claude Code behavior transfers. Confirm the active Agy product's discovery contract first; otherwise retain `PLATFORM_UNKNOWN`.
+Do not generalize one local Agy installation to other machines or project-level discovery. Confirm the active product's discovery and handshake behavior; otherwise retain `PLATFORM_UNKNOWN` for the unverified claim.
 
 Example manual symlink shape on macOS or Linux:
 

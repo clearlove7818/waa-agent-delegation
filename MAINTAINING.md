@@ -72,6 +72,9 @@ Do not add a fixed total score, KPI, or automatic review loop. The purpose of ca
 - Capability availability is never phrased as authorization.
 - The four failure returns remain sufficient; additions require a demonstrated decision need.
 - Failure returns preserve the exact uppercase labels, especially `CAPABILITY_OUT_OF_SCOPE` and `PLATFORM_PERMISSION_BLOCKED`.
+- The first status token has no discretionary preamble, separator, or markup; only a higher-priority mandatory reply prefix may precede it on the same first line.
+- The combined single-turn return is limited to low-risk `EXECUTION_SUBAGENT` packets that explicitly permit handshake omission.
+- Every `Taken on faith` item is reconciled in the completion return.
 - The three exact `assembly_type` values have zero lowercase aliases in active source.
 - Every packet template contains `assembly_type`, including the low-risk `EXECUTION_SUBAGENT` path.
 - All nine TASK-006 classes and all eight AGT-014 specialist sections are locatable.

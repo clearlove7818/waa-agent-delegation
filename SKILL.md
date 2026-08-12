@@ -9,14 +9,14 @@ Govern an already-chosen delegation without taking direction, extra authority, n
 
 <FAILURE-LABEL-CONTRACT>
 
-Before execution, put one exact root-cause label on the first task-status line:
+Before execution, put one exact root-cause label as the first status token on the message's first line:
 
 - `BLOCKED`: critical task input is missing or the contract conflicts.
 - `MISSING_CAPABILITY`: a required capability is absent, incompatible, or unreliable.
 - `CAPABILITY_OUT_OF_SCOPE`: the capability exists but Rules or current task authorization excludes it.
 - `PLATFORM_PERMISSION_BLOCKED`: platform policy, sandboxing, or approval prevents the action.
 
-Preserve these labels verbatim. If a required handshake stops, add `Handshake: BLOCKED` after the root-cause label. Delivery states apply only after execution starts.
+Preserve these labels verbatim. If a higher-priority host or project rule requires an immutable reply prefix, put the label immediately after that prefix on the same first line; otherwise the label begins the message. Put no discretionary preamble, progress note, separator, or Markdown markup before or around the label. If a required handshake stops, add `Handshake: BLOCKED` after the root-cause label. Delivery states apply only after execution starts.
 
 </FAILURE-LABEL-CONTRACT>
 
@@ -34,7 +34,7 @@ Preserve these labels verbatim. If a required handshake stops, add `Handshake: B
 
 - `EXECUTION_SUBAGENT`: use for bounded work following clear rules. Low-risk, reversible, unambiguous work with no external effect may skip the handshake; otherwise require `ACCEPTED / BLOCKED`.
 - `TASK_SPECIALIST_SUBAGENT`: use for non-mechanical professional judgment. Embed the eight-part temporary `specialist_contract`, always require `ACCEPTED / BLOCKED`, and create no persistent personality or tracking/promotion signal.
-- `NAMED_AGENT`: use only after the user selected it, or authorized the primary agent to choose and the choice was recorded. Always require `ACCEPTED / BLOCKED` and confirmation of that authorization basis.
+- `NAMED_AGENT`: use only after the user selected it, or authorized the primary agent to choose and the choice was recorded. Always require `ACCEPTED / BLOCKED` and confirmation of that authorization basis, even for low-risk work, because the handshake binds the named identity to the current-task authorization.
 
 `ACCEPTED` confirms understanding of the packet version, objective, evidence duty, standard, capability conditions, permissions, prohibitions, and return contract. It proves neither expertise, authority, execution, verification, nor success.
 

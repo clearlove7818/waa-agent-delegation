@@ -1,6 +1,6 @@
 # Agy CLI Runtime Map
 
-Discovery status: `PLATFORM_UNKNOWN` for bare Skill paths and project-level Skill discovery. The directory candidate in the compatibility matrix is not a live-verified installation path.
+Discovery status: the user-level directory candidate has current local installation evidence and user-reported successful loading as of 2026-08-12. Independent model-backed discovery is still `PLATFORM_UNKNOWN` because the inspected Agy CLI was not authenticated. Project-level Skill discovery remains `PLATFORM_UNKNOWN`.
 
 Use this mapping only when the active harness is Google Antigravity CLI (`agy`).
 
@@ -9,7 +9,7 @@ Use this mapping only when the active harness is Google Antigravity CLI (`agy`).
 1. Confirm the installed Agy version and the currently exposed subagent tools rather than relying only on documentation. Do not treat a visible directory or `SKILL.md` as proof that Agy discovered or loaded the Skill.
 2. Confirm the current workspace, sandbox, command rules, file scopes, and approval state.
 3. Treat `/agents` session-agent selection and task-level `invoke_subagent` as different operations.
-4. Do not create persistent `.agents/agents` or `~/.gemini/config/agents` definitions merely to adapt this Skill.
+4. Do not create persistent `.agents/agents` or `~/.gemini/config/agents` definitions merely to adapt this Skill. This does not prohibit selecting or using an already-existing definition that is explicitly authorized for the current task.
 
 ## Map semantic actions
 
@@ -17,7 +17,8 @@ Use this mapping only when the active harness is Google Antigravity CLI (`agy`).
 | --- | --- |
 | `EXECUTION_SUBAGENT` | Use `invoke_subagent` with a suitable currently available type and a self-contained task packet. |
 | `TASK_SPECIALIST_SUBAGENT` | When justified and supported, use session-level `define_subagent` to describe the temporary role and minimum tools, then invoke it. Do not persist it automatically. |
-| `NAMED_AGENT` | Use the current authorized agent-selection surface only after user authorization and primary-agent selection. |
+| `NAMED_AGENT` | Agy 1.1.12 exposes `--agent <name>` for selecting the current CLI session Agent and `agy agents` for listing configured identifiers. Use such a current selection surface only after authorization. These surfaces do not by themselves prove that a running primary session can invoke the named Agent as a child task; if that exact delegation surface is absent, return `MISSING_CAPABILITY`. |
+| Required handshake | A parent-visible pre-execution handshake round trip is `PLATFORM_UNKNOWN` in current independent evidence. Do not treat a merged final status as a primary-agent-inspected gate. If the packet requires a gate and no preserving continuation mechanism is verified, return `MISSING_CAPABILITY`. |
 | Run concurrently | Use current background subagent support only for independent work that does not share unsafe state. |
 | Inspect or stop work | Use the current `/agents` or task-management surface without changing the contract. |
 
@@ -32,7 +33,7 @@ Do not hard-code the complete parameters of `invoke_subagent` or `define_subagen
 
 Map absent or incompatible tools to `MISSING_CAPABILITY`, unauthorized available tools to `CAPABILITY_OUT_OF_SCOPE`, and sandbox or approval barriers to `PLATFORM_PERMISSION_BLOCKED`.
 
-Place the exact uppercase label on the first line. Do not translate it or replace it with an Agy task-state name.
+Place the exact uppercase label as the first status token on the first line. A mandatory host or project prefix may precede it on the same line; otherwise nothing may appear before it. Put no markup around it and do not translate it or replace it with an Agy task-state name.
 
 ## Result reception
 

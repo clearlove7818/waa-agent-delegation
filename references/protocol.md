@@ -9,6 +9,7 @@ Use this reference to construct a self-contained, risk-sized TASK-006 packet. Do
 - [Executor-specific contract](#executor-specific-contract)
 - [Execution protocol](#execution-protocol)
 - [Acceptance handshake](#acceptance-handshake)
+- [Combined single-turn return](#combined-single-turn-return)
 - [Completion return](#completion-return)
 - [Failure returns](#failure-returns)
 - [Optional evaluation handoff](#optional-evaluation-handoff)
@@ -44,6 +45,8 @@ List the bounded task items, concrete deliverables, expected artifact shape, and
 ### 4. Minimum context
 
 Provide only the context needed to act without reconstructing the primary conversation: workspace, relevant files, decisions already frozen, dependencies, and local facts.
+
+When an applicable resident executor definition or governing document is available, state any difference in scope, permissions, evidence duty, or return contract. A packet may add stricter task-specific limits, but it may not relax Rules, current-task authorization, governing documents, or a resident non-negotiable boundary. An apparent relaxation is a contract conflict; silent divergence is a defect even when the remaining packet is otherwise correct.
 
 ### 5. Authoritative material and evidence
 
@@ -166,7 +169,7 @@ Apply the executor-specific rule:
 
 - `EXECUTION_SUBAGENT`: optional only for low-risk, reversible, unambiguous work with no external effect; otherwise require it.
 - `TASK_SPECIALIST_SUBAGENT`: always require it before execution.
-- `NAMED_AGENT`: always require it before execution and include the authorization basis.
+- `NAMED_AGENT`: always require it before execution and include the authorization basis. This requirement binds the named identity to current-task authorization and does not scale down merely because the work is low risk.
 
 Accepted form:
 
@@ -183,7 +186,9 @@ Authorization: <required for NAMED_AGENT; otherwise not applicable>
 Pending platform approval: <none or specific approval>
 ```
 
-Blocked form preserves both handshake disposition and root cause. The first line must be the exact root-cause label from the failure contract:
+`ACCEPTED` must be the first status token on the message's first line. Apply the same mandatory-prefix exception and the same prohibition on discretionary preambles, separators, and Markdown markup as the blocked form below.
+
+Blocked form preserves both handshake disposition and root cause. The exact root-cause label must be the first status token on the message's first line:
 
 ```text
 <BLOCKED | MISSING_CAPABILITY | CAPABILITY_OUT_OF_SCOPE | PLATFORM_PERMISSION_BLOCKED>
@@ -194,7 +199,21 @@ Needed: <minimum information, evidence, authority, capability, or platform chang
 Handoff: <primary agent or specified recipient>
 ```
 
+If a higher-priority host or project rule requires an immutable reply prefix, put the label immediately after that prefix on the same first line; otherwise the label begins the message. Put no discretionary preamble, progress note, separator, or Markdown markup before or around the label.
+
 An `ACCEPTED` record proves understanding of the specified packet version only. It does not prove packet-asserted facts, capability, authorization, execution, verification, or delivery quality. `Taken on faith` exposes assertions that remain unverified; it never waives the evidence duty or converts an assertion into fact. `Filled in` is limited to non-material execution details. If an ambiguity can change the goal, scope, owner, standard, evidence duty, permission, forbidden boundary, capability condition, external effect, or return contract, return `BLOCKED` rather than resolving it silently. A changed goal, standard, permission, owner, or other material boundary invalidates the old acceptance and requires a new packet version and handshake.
+
+## Combined single-turn return
+
+Use this form only for an `EXECUTION_SUBAGENT` packet that explicitly permits the handshake to be omitted because the work is low-risk, reversible, unambiguous, and has no external effect. It does not replace a required handshake for a higher-risk execution subagent, a `TASK_SPECIALIST_SUBAGENT`, or a `NAMED_AGENT`.
+
+The first status token is:
+
+```text
+ACCEPTED / <DONE | PARTIAL | FAILED>
+```
+
+Apply the same first-line purity rule as the failure contract. `ACCEPTED` records understanding of the packet version with the same limits as the handshake record; the value after the slash is the delivery state defined below. Then return the six identity fields, `Taken on faith`, `Filled in`, and every completion-return field. If the packet is insufficient or the work encounters a pre-execution failure, use the exact root-cause label instead and do not use the combined form.
 
 ## Completion return
 
@@ -212,15 +231,16 @@ Outcome:
 Deliverables or changes:
 Evidence:
 Verification performed:
+Faith reconciled: <for every Taken on faith item, state verified, still unverified, or found false; use none if there were no items>
 Concerns or unknowns:
 Handoff to primary agent:
 ```
 
-Use `DONE` only when the agreed minimum deliverable is complete and evidence supports it. Use `PARTIAL` only when completed items, unfinished items, impact, evidence, unknowns, and the next handoff are explicit. Use `FAILED` when the minimum deliverable was not reached, preserving cause, attempted scope, and evidence. These are post-execution delivery states and never replace a pre-execution failure label.
+Use `DONE` only when the agreed minimum deliverable is complete and evidence supports it. Use `PARTIAL` only when completed items, unfinished items, impact, evidence, unknowns, and the next handoff are explicit. Use `FAILED` when the minimum deliverable was not reached, preserving cause, attempted scope, and evidence. These are post-execution delivery states and never replace a pre-execution failure label. An item taken on faith and never reconciled remains an unverified premise in the delivered result, not a closed question.
 
 ## Failure returns
 
-Choose one exact uppercase root-cause label and put it on the first task-status line. Do not translate, shorten, or invent aliases:
+Choose one exact uppercase root-cause label and put it as the first status token on the message's first line. If a higher-priority host or project rule requires an immutable reply prefix, put the label immediately after that prefix on the same line; otherwise the label begins the message. Put no discretionary preamble, progress note, separator, or Markdown markup before or around it. Do not translate, shorten, or invent aliases:
 
 | Root cause | Exact label |
 | --- | --- |
@@ -361,6 +381,8 @@ Before integrating a result:
 4. Inspect deliverables, cited artifacts, commands, outputs, and sources.
 5. Confirm the executor stayed within scope, permissions, capability constraints, and ownership.
 6. Check that `DONE`, `PARTIAL`, or `FAILED` is truthful and complete for the evidence.
-7. Reproduce or independently verify checks in proportion to risk.
-8. Record limitations, unknowns, residual risk, and any requested next action.
-9. Integrate under primary-agent responsibility without silently changing artifact ownership.
+7. Confirm every `Taken on faith` item is reconciled as verified, still unverified, or found false; preserve unreconciled items as result limitations.
+8. Reproduce or independently verify checks in proportion to risk.
+9. Record limitations, unknowns, residual risk, and any requested next action.
+10. Integrate under primary-agent responsibility without silently changing artifact ownership.
+11. Collect any reported conflict between the executor's resident definition and this protocol or another governing document. Record it as a governance defect with both texts identified; do not resolve it inside the delegated task.

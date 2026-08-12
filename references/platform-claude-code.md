@@ -16,6 +16,7 @@ Use this mapping only when the active harness is Claude Code.
 | `EXECUTION_SUBAGENT` | Use the current `Agent` interface with a suitable available general or built-in agent. |
 | `TASK_SPECIALIST_SUBAGENT` | Use the eight-part task-scoped specialist contract or an already available custom subagent with the required tools and restrictions. |
 | `NAMED_AGENT` | Select or mention the exact agent only after current-task authorization has been established. |
+| Required handshake | Use one Agent exchange for the handshake only. After the primary agent checks it, use the current Agent continuation mechanism to release execution while preserving the original identity and boundary. If continuation cannot preserve that context, return `MISSING_CAPABILITY`. |
 | Continue or clarify | Use the current Agent continuation mechanism while preserving the original boundary. |
 | Run independently | Use foreground or background execution only when the task and permission behavior support it. |
 
@@ -30,7 +31,7 @@ Do not hard-code the low-level `Agent` schema; it is not a stable cross-platform
 
 Return `MISSING_CAPABILITY`, `CAPABILITY_OUT_OF_SCOPE`, or `PLATFORM_PERMISSION_BLOCKED` according to the evidence instead of retrying through a wider permission mode.
 
-Place the exact uppercase label on the first line. Do not translate it or replace it with a Claude-specific status phrase.
+Place the exact uppercase label as the first status token on the first line. A mandatory host or project prefix may precede it on the same line; otherwise nothing may appear before it. Put no markup around it and do not translate it or replace it with a Claude-specific status phrase.
 
 ## Result reception
 
