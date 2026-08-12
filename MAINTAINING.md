@@ -26,6 +26,7 @@ Every change must preserve these rules:
 18. Every completion return includes `Definition conflict`, using `none` or identifying both conflicting provisions for primary-agent reception.
 19. Every packet declares exactly one `input_boundary`; missing input policy is a packet defect, not an executor-selected default.
 20. Every packet explicitly declares version-control and release/deploy boundaries without creating authority, and no packet may waive the credential-placement prohibition.
+21. Evaluation statuses obey the shared first-line purity rule; `RECORD_CONTRACT_ANOMALY` remains an evaluator-only record status outside the four root-cause labels.
 
 ## Change the smallest responsible layer
 
@@ -77,6 +78,8 @@ Do not add a fixed total score, KPI, or automatic review loop. The purpose of ca
 - Capability availability is never phrased as authorization.
 - The four failure returns remain sufficient; additions require a demonstrated decision need.
 - Failure returns preserve the exact uppercase labels, especially `CAPABILITY_OUT_OF_SCOPE` and `PLATFORM_PERMISSION_BLOCKED`.
+- Evaluation status blocks never use a `status:` prefix; `anomaly` and `subtype` follow the bare first-line status token.
+- `RECORD_CONTRACT_ANOMALY` remains outside the four-label table and is unavailable to ordinary executors.
 - The first status token has no discretionary preamble, separator, or markup; any applicable mandatory prefix is packet-recorded with exact text, source, and executor applicability, while a directly applicable higher-priority runtime rule still controls a defective packet.
 - The combined single-turn return is limited to low-risk `EXECUTION_SUBAGENT` packets that explicitly permit handshake omission.
 - Both combined and two-stage completion returns start with `ACCEPTED / <DONE | PARTIAL | FAILED>`, and the repeated `delivery_status` matches.

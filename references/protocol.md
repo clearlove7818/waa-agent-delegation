@@ -269,9 +269,13 @@ Choose one exact uppercase root-cause label and put it as the first status token
 
 Do not collapse the last three conditions into generic `BLOCKED`, and do not add new failure states.
 
+`RECORD_CONTRACT_ANOMALY` is not a fifth root-cause label and does not belong in the table above. It is an evaluation-record status that reports a broken record contract rather than a cause of failed execution, and it is available only to an authorized evaluator after a record exists or a write has been attempted. It occupies the same first-line position under the same mandatory-prefix and purity rules.
+
 ## Optional evaluation handoff
 
 Independent evaluation is a separate, optional connection point. Use it only after evaluation is independently authorized and useful. Never infer authorization from risk, a low score, keywords, an evaluation file, or evaluator availability; never auto-select Fei or auto-start a Loop.
+
+Evaluation statuses use the same mandatory-prefix and first-line purity rules as the failure contract: the exact uppercase label is the first status token on the message's first line, and `anomaly` or `subtype` follows on later lines. `status:` is not part of the returned form.
 
 ### Separate participation mode from output mode
 
@@ -354,13 +358,13 @@ The producer creates and freezes the manifest after producing the artifact versi
 Before evaluation begins, return this status when a missing, conflicting, invalid, or non-unique object, standard, scope, mode, version, evidence, comparison, artifact-package, or output-path relationship can change the evaluation:
 
 ```text
-status: BLOCKED
+BLOCKED
 ```
 
 For a standard-contract problem, keep `BLOCKED` as the top-level status and add the anomaly field:
 
 ```text
-status: BLOCKED
+BLOCKED
 anomaly: STANDARD_CONTRACT_ANOMALY
 ```
 
@@ -369,7 +373,7 @@ anomaly: STANDARD_CONTRACT_ANOMALY
 After an evaluation record exists or a write has been attempted, return this status when the record has a missing or mismatched task, artifact, artifact version, standard, standard version, manifest, artifact-package, or output-path binding; overwrites an earlier evaluation version; or omits required record fields:
 
 ```text
-status: RECORD_CONTRACT_ANOMALY
+RECORD_CONTRACT_ANOMALY
 ```
 
 `RECORD_CONTRACT_ANOMALY` is not an alias for pre-evaluation `BLOCKED`. Stop normal evaluation and automatic flow, preserve the record, path, and actual evidence, and return the anomaly to the primary agent. The evaluator must not overwrite, delete, clean up, supplement, or repair the anomalous record. Do not add `OUT_OF_SCOPE_WRITE` for an ordinary binding, version, manifest, record-completeness, or overwrite defect.
@@ -377,7 +381,7 @@ status: RECORD_CONTRACT_ANOMALY
 Only after a write actually occurs outside the task's unique authorized `evaluation_output_path` may the evaluator return:
 
 ```text
-status: RECORD_CONTRACT_ANOMALY
+RECORD_CONTRACT_ANOMALY
 subtype: OUT_OF_SCOPE_WRITE
 ```
 
