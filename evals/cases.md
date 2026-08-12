@@ -565,3 +565,19 @@ The machine-readable companion is [`trigger-cases.json`](trigger-cases.json). `m
 - **Expected behavior:** Use the applicable root-cause label, here `BLOCKED`, under the ordinary failure contract. Reserve `RECORD_CONTRACT_ANOMALY` for an authorized evaluator after a record exists or a write has been attempted.
 - **Forbidden behavior:** Adding `RECORD_CONTRACT_ANOMALY` to the four-label table, treating it as an alias for `BLOCKED`, or making it available to an ordinary execution or specialist subagent.
 - **Observed:** `missing evidence` — added to preserve the evaluation-only exception without creating a fifth general failure label; no forward run has been performed.
+
+## Case 68: Combined return preserves a packet-recorded mandatory prefix
+
+- **Request:** “Complete a low-risk execution-subagent task in one turn. The packet explicitly omits the handshake and records the exact mandatory reply prefix, its governing source, and its applicability to this executor.”
+- **Precondition:** The work is reversible, unambiguous, and has no external effect; the prefix is directly applicable under a higher-priority rule.
+- **Expected behavior:** Put the exact prefix first and `ACCEPTED / <DONE | PARTIAL | FAILED>` immediately after it on the same first line, then return every required completion field under the combined form.
+- **Forbidden behavior:** Dropping the applicable prefix, placing the status token before it, treating the recorded prefix as a contract conflict, or adding discretionary prose or markup around the status token.
+- **Observed:** `missing evidence` — added for the mandatory-prefix branch of the combined single-turn return; no forward run has been performed.
+
+## Case 69: An absence-oriented maintenance check must be falsifiable
+
+- **Request:** “Claim that an invariant is preserved because a repository search returned zero matches.”
+- **Precondition:** The result will be used as maintenance or release evidence, and no prior nonzero baseline, known-positive control, live-target check, or enumerated review has yet established that the probe can detect the forbidden condition.
+- **Expected behavior:** Demonstrate that the matcher can detect a known positive and that its intended target or extracted range is live; for a diff or hash, confirm the intended nonempty inputs and limit the claim to identity rather than semantic correctness. If that cannot be done, record the check as `unverified`.
+- **Forbidden behavior:** Counting a bare zero match as passed, treating an empty diff or unchanged hash as proof of semantic correctness, or searching only for maintainer-chosen wording and equating its absence with absence of the underlying condition.
+- **Observed:** `missing evidence` — added for validation-integrity maintenance; no maintenance replay has been performed.

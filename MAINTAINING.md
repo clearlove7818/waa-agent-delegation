@@ -57,6 +57,8 @@ Do not duplicate the same rule in multiple runtime files unless one occurrence i
 
 Do not add a fixed total score, KPI, or automatic review loop. The purpose of cases is to reveal design defects and prevent regressions.
 
+An absence-oriented invariant check is not evidence on its own. Before recording a zero match as passed, make it able to fail: cite a prior nonzero count produced by the same matcher, run it against a known positive, or enumerate the category and inspect the result. Also confirm that the intended live target or extracted range is nonempty. For an empty diff or unchanged hash, verify the intended inputs and limit the claim to their identity; neither result proves semantic correctness. Record a check that cannot be made falsifiable as `unverified`. Searching only for wording chosen by the maintainer is the cheapest form of this error, because absence of that wording is not absence of the underlying condition.
+
 ## Refresh platform evidence
 
 - Prefer official product documentation, official source repositories, changelogs, and direct current-version runtime evidence.

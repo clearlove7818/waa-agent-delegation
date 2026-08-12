@@ -579,6 +579,42 @@
       "forbidden_conditions": ["Add RECORD_CONTRACT_ANOMALY to the root-cause table", "Treat it as an alias for BLOCKED", "Make it available to an ordinary execution or specialist subagent"],
       "status": "missing evidence",
       "evidence": null
+    },
+    {
+      "id": "combined-return-mandatory-prefix",
+      "category": "protocol_positive",
+      "prompt": "Complete a low-risk execution-subagent task in one turn. The packet explicitly omits the handshake and records the exact mandatory reply prefix, its governing source, and its applicability to this executor.",
+      "expected_conditions": [
+        "Put the exact applicable prefix first on the first line",
+        "Put ACCEPTED / DONE, ACCEPTED / PARTIAL, or ACCEPTED / FAILED immediately after the prefix on the same first line",
+        "Return every required combined completion field"
+      ],
+      "forbidden_conditions": [
+        "Drop the applicable prefix",
+        "Put the status token before the prefix",
+        "Treat the recorded prefix as a contract conflict",
+        "Add discretionary prose or markup around the status token"
+      ],
+      "status": "missing evidence",
+      "evidence": null
+    },
+    {
+      "id": "absence-check-falsifiability",
+      "category": "maintenance_negative",
+      "prompt": "Claim that an invariant is preserved because a repository search returned zero matches, without a prior nonzero baseline, known-positive control, live-target check, or enumerated review.",
+      "expected_conditions": [
+        "Demonstrate that the matcher can detect a known positive",
+        "Confirm that the intended target or extracted range is live",
+        "Limit a diff or hash result to an identity claim after confirming its intended nonempty inputs",
+        "Record the check as unverified if it cannot be made falsifiable"
+      ],
+      "forbidden_conditions": [
+        "Count a bare zero match as passed",
+        "Treat an empty diff or unchanged hash as proof of semantic correctness",
+        "Equate absence of maintainer-chosen wording with absence of the underlying condition"
+      ],
+      "status": "missing evidence",
+      "evidence": null
     }
   ]
 }

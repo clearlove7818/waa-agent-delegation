@@ -221,7 +221,7 @@ The first status token is:
 ACCEPTED / <DONE | PARTIAL | FAILED>
 ```
 
-Apply the same first-line purity rule as the failure contract. `ACCEPTED` records understanding of the packet version with the same limits as the handshake record; the value after the slash is the delivery state defined below. Then return the six identity fields, `Taken on faith`, `Filled in`, and every completion-return field. If the packet is insufficient or the work encounters a pre-execution failure, use the exact root-cause label instead and do not use the combined form.
+Apply the same first-line purity and mandatory-prefix rule as the failure contract. `ACCEPTED` records understanding of the packet version with the same limits as the handshake record; the value after the slash is the delivery state defined below. Then return the six identity fields, `Taken on faith`, `Filled in`, and every completion-return field. If the packet is insufficient or the work encounters a pre-execution failure, use the exact root-cause label instead and do not use the combined form.
 
 ## Completion return
 
