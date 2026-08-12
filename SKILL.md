@@ -51,7 +51,7 @@ Every action must pass all three gates: Rules allow it, the packet authorizes it
 After execution begins, start the completion message with `ACCEPTED / <DONE | PARTIAL | FAILED>` under the protocol's first-line rule, then return exactly one matching delivery state:
 
 - `DONE`: the minimum deliverable is complete and evidenced.
-- `PARTIAL`: disclose completed and unfinished work, impact, evidence, unknowns, and next handoff.
+- `PARTIAL`: disclose completed and unfinished work, impact, evidence, unknowns, next handoff, and the safest next action.
 - `FAILED`: the minimum deliverable was not reached; preserve cause, attempted scope, and evidence.
 
 Independent evaluation is optional and separate. Connect it only when authorized and useful; never auto-start evaluation or a Loop. Subagent output remains evidence until the primary agent verifies and integrates it.

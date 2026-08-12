@@ -252,9 +252,10 @@ Outside-list reads: <none, or every source read beyond the packet's listed input
 Definition conflict: <none, or quote the conflicting resident-definition text and governing-protocol text with their sources; do not resolve the conflict>
 Concerns or unknowns:
 Handoff to primary agent:
+Safest next action: <for PARTIAL, the continuation that will not compound the partial state; otherwise not applicable>
 ```
 
-Use `DONE` only when the agreed minimum deliverable is complete and evidence supports it. Use `PARTIAL` only when completed items, unfinished items, impact, evidence, unknowns, and the next handoff are explicit. Use `FAILED` when the minimum deliverable was not reached, preserving cause, attempted scope, and evidence. These are post-execution delivery states and never replace a pre-execution failure label. An item taken on faith and never reconciled remains an unverified premise in the delivered result, not a closed question.
+Use `DONE` only when the agreed minimum deliverable is complete and evidence supports it. Use `PARTIAL` only when completed items, unfinished items, impact, evidence, unknowns, the next handoff, and the safest next action are explicit. The safest next action is a separate disclosure from the handoff: state the continuation that does not compound the partial state, and say so explicitly when the obvious resumption point is not it. Use `FAILED` when the minimum deliverable was not reached, preserving cause, attempted scope, and evidence. These are post-execution delivery states and never replace a pre-execution failure label. An item taken on faith and never reconciled remains an unverified premise in the delivered result, not a closed question.
 
 ## Failure returns
 
