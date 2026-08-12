@@ -44,7 +44,9 @@ List the bounded task items, concrete deliverables, expected artifact shape, and
 
 ### 4. Minimum context
 
-Provide only the context needed to act without reconstructing the primary conversation: workspace, relevant files, decisions already frozen, dependencies, and local facts.
+Provide only the context needed to act without reconstructing the primary conversation: workspace, relevant files, decisions already frozen, dependencies, and local facts. List every input source that defines the executor's reading surface rather than relying on an implied workspace-wide context.
+
+State exactly one `input_boundary`. `LIST_ONLY` means the listed inputs are the whole permitted reading surface; reading anything else requires a new packet. `LIST_IS_START_DISCLOSE_BEYOND` means the executor may read additional material only when it remains inside every independent scope, authorization, permission, and platform boundary, and must disclose each additional source in the completion return. Leaving `input_boundary` unstated is a packet defect, not a default; return `BLOCKED` before execution rather than infer a value from an executor definition or available filesystem surface.
 
 When an applicable resident executor definition or governing document is available, state any difference in scope, permissions, evidence duty, or return contract. A packet may add stricter task-specific limits, but it may not relax Rules, current-task authorization, governing documents, or a resident non-negotiable boundary. An apparent relaxation is a contract conflict; silent divergence is a defect even when the remaining packet is otherwise correct.
 
@@ -56,7 +58,7 @@ List trusted sources, standards, project facts, evidence requirements, source da
 
 State the allowed scope, `permission_boundary`, `forbidden_actions`, `external_effects`, writable targets, approval boundaries, and the fact that every action must pass Rules, current task authorization, and platform permission.
 
-`forbidden_actions` always states, at minimum, that the executor may not dispatch another Agent, subagent, background task, or parallel executor within this task and may not transfer artifact ownership. Add task-specific prohibitions on top of this floor rather than in place of it. A packet that omits the floor is incomplete even if every task-specific prohibition is present. Any separately authorized expansion requires a new packet and a primary-agent decision; it cannot be inferred from the current packet.
+`forbidden_actions` always states, at minimum, that the executor may not dispatch another Agent, subagent, background task, or parallel executor within this task and may not transfer artifact ownership. The floor also requires an explicit version-control boundary (`version_control_boundary`) and release/deploy boundary (`release_deploy_boundary`). `version_control_boundary` states whether stage, commit, merge, push, tag, rebase, reset, content-overwriting checkout, and force push are permitted, naming each permitted action and its exact repository, path, branch, or ref targets. `release_deploy_boundary` states whether release or deploy is permitted and names each permitted environment or target. These declarations record authority already supplied by Rules and the current task; they never create it. Leaving either declaration unstated is a packet defect, not a default; return `BLOCKED` before execution rather than assume permission or prohibition. The packet must also state, without a packet-level exception, that the executor may not place a credential, token, key, or password in a file, reply, log, or version control. Add task-specific prohibitions on top of this floor rather than in place of it. A packet that omits the floor is incomplete even if every task-specific prohibition is present. Any separately authorized expansion requires a new packet and a primary-agent decision; it cannot be inferred from the current packet.
 
 ### 7. Capability constraints
 
@@ -84,9 +86,13 @@ owner: <sole owner>
 
 Purpose and objective: <why delegation is useful and one outcome>
 Task items and deliverables: <bounded work and concrete outputs>
-Minimum context: <trusted task-local context>
+Minimum context: <listed trusted task-local inputs and context>
+  input_boundary: LIST_ONLY | LIST_IS_START_DISCLOSE_BEYOND
 Authoritative material and evidence: <sources, standards, evidence requirements>
 Scope and permissions: <allowed actions, prohibitions, external effects>
+  forbidden_actions: <universal floor plus task-specific prohibitions>
+  version_control_boundary: <permitted actions and exact repository, path, branch, or ref targets; or none>
+  release_deploy_boundary: <permitted release/deploy actions and exact environments or targets; or none>
 Capability constraints: <required, forbidden, compatibility, exceptions>
 Acceptance and verification: <quality and checks>
 Return and exception protocol: <output, failure, handoff, handshake>
@@ -180,7 +186,7 @@ ACCEPTED
 Binding: task_packet_version=<...>; task_id=<...>; assembly_type=<...>; artifact_id=<...>; artifact_version=<...>; owner=<...>
 Objective as understood: <restate the one outcome in your own words; do not copy the packet wording>
 Excluded: <what you understand to be outside scope>
-Contract as understood: inputs=<...>; evidence_and_standard=<...>; capability_and_permission_boundary=<...>; forbidden_boundary=<...>; return_contract=<...>
+Contract as understood: inputs=<...>; input_boundary=<...>; evidence_and_standard=<...>; capability_and_permission_boundary=<...>; version_control_boundary=<...>; release_deploy_boundary=<...>; forbidden_boundary=<...>; return_contract=<...>
 First actions: <the first two or three concrete actions you will take>
 Taken on faith: <at most five packet-asserted facts you will act on without verifying>
 Filled in: <non-material execution details you resolved and how; "none" only if genuinely none>
@@ -201,7 +207,7 @@ Needed: <minimum information, evidence, authority, capability, or platform chang
 Handoff: <primary agent or specified recipient>
 ```
 
-Any applicable mandatory reply prefix must be recorded in the task packet with its exact text, governing source, and applicability to this executor. The executor does not infer a prefix from an external instruction or resident identity document that does not govern it. If a directly applicable higher-priority runtime rule is omitted from or conflicts with the packet, obey that rule and return `BLOCKED` for the packet defect before execution. Put the label immediately after an applicable prefix on the same first line; otherwise the label begins the message. Put no discretionary preamble, progress note, separator, or Markdown markup before or around the label.
+Apply the same mandatory-prefix rule and the same first-line purity rule as the failure contract below.
 
 An `ACCEPTED` record proves understanding of the specified packet version only. It does not prove packet-asserted facts, capability, authorization, execution, verification, or delivery quality. `Taken on faith` exposes assertions that remain unverified; it never waives the evidence duty or converts an assertion into fact. `Filled in` is limited to non-material execution details. If an ambiguity can change the goal, scope, owner, standard, evidence duty, permission, forbidden boundary, capability condition, external effect, or return contract, return `BLOCKED` rather than resolving it silently. A changed goal, standard, permission, owner, or other material boundary invalidates the old acceptance and requires a new packet version and handshake.
 
@@ -242,6 +248,7 @@ Deliverables or changes:
 Evidence:
 Verification performed:
 Faith reconciled: <for every Taken on faith item, state verified, still unverified, or found false; use none if there were no items>
+Outside-list reads: <none, or every source read beyond the packet's listed inputs under LIST_IS_START_DISCLOSE_BEYOND and why it was needed>
 Definition conflict: <none, or quote the conflicting resident-definition text and governing-protocol text with their sources; do not resolve the conflict>
 Concerns or unknowns:
 Handoff to primary agent:
@@ -393,7 +400,8 @@ Before integrating a result:
 5. Confirm the executor stayed within scope, permissions, capability constraints, and ownership.
 6. Check that the first-line `ACCEPTED / <status>` value matches `delivery_status`, and that `DONE`, `PARTIAL`, or `FAILED` is truthful and complete for the evidence. Do not treat the completion line as proof that a required pre-execution gate occurred.
 7. Confirm every `Taken on faith` item is reconciled as verified, still unverified, or found false; preserve unreconciled items as result limitations.
-8. Reproduce or independently verify checks in proportion to risk.
-9. Record limitations, unknowns, residual risk, and any requested next action.
-10. Integrate under primary-agent responsibility without silently changing artifact ownership.
-11. Read the required conflict-report field. When it is not `none`, confirm that both conflicting texts and their sources are identified, record the conflict as a governance defect, and do not resolve it inside the delegated task.
+8. Check `Outside-list reads` against `input_boundary`. Reject any unlisted read under `LIST_ONLY`; under `LIST_IS_START_DISCLOSE_BEYOND`, confirm every disclosed source stayed inside all independent scope, authorization, permission, and platform boundaries.
+9. Reproduce or independently verify checks in proportion to risk.
+10. Record limitations, unknowns, residual risk, and any requested next action.
+11. Integrate under primary-agent responsibility without silently changing artifact ownership.
+12. Read the required conflict-report field. When it is not `none`, confirm that both conflicting texts and their sources are identified, record the conflict as a governance defect, and do not resolve it inside the delegated task.

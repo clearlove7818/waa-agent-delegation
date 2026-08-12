@@ -24,6 +24,8 @@ Every change must preserve these rules:
 16. A mandatory reply prefix is packet-recorded with exact text, source, and executor applicability; an executor never infers it from an identity document that does not govern that executor, and a packet cannot cancel a directly applicable higher-priority runtime rule.
 17. Every post-execution completion message starts with `ACCEPTED / <DONE | PARTIAL | FAILED>`, and the repeated `delivery_status` matches it.
 18. Every completion return includes `Definition conflict`, using `none` or identifying both conflicting provisions for primary-agent reception.
+19. Every packet declares exactly one `input_boundary`; missing input policy is a packet defect, not an executor-selected default.
+20. Every packet explicitly declares version-control and release/deploy boundaries without creating authority, and no packet may waive the credential-placement prohibition.
 
 ## Change the smallest responsible layer
 
@@ -80,6 +82,8 @@ Do not add a fixed total score, KPI, or automatic review loop. The purpose of ca
 - Both combined and two-stage completion returns start with `ACCEPTED / <DONE | PARTIAL | FAILED>`, and the repeated `delivery_status` matches.
 - Every `Taken on faith` item is reconciled in the completion return.
 - Every completion return reports `Definition conflict: none` or identifies both conflicting provisions without resolving them.
+- Every packet contains one exact `input_boundary`, and every out-of-list read is either prohibited by `LIST_ONLY` or individually disclosed under `LIST_IS_START_DISCLOSE_BEYOND`.
+- Every packet declares version-control and release/deploy boundaries with exact targets; omission blocks execution, and the credential floor has no packet exception.
 - The three exact `assembly_type` values have zero lowercase aliases in active source.
 - Every packet template contains `assembly_type`, including the low-risk `EXECUTION_SUBAGENT` path.
 - All nine TASK-006 classes and all eight AGT-014 specialist sections are locatable.
