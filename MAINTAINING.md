@@ -30,6 +30,12 @@ Every change must preserve these rules:
 22. A `PARTIAL` return reports the safest next action separately from the handoff recipient, including when the obvious resumption point would compound the partial state.
 23. A `FAILED` return may still require a safe recovery or diagnostic action when execution may have left residual state or blind retry could cause harm; delivery failure does not prove execution-state cleanliness or imply a valid partial deliverable.
 
+## Placement rule for protocol text
+
+When editing this Skill or any resident executor definition, classify each sentence before writing it. Output form — the field names, field order, and status placement an executor must emit — lives only in this Skill's protocol and reaches the executor through the task packet; a copy inside a resident definition drifts, and the definition's own precedence clause makes it lose to the protocol anyway. A list of fields an executor must check for is a detection duty, not an output form: it may stay in a definition, but it drifts the same way, so keep a check that proves the two sets still match. A floor that must survive a defective packet lives at both ends. How a role thinks lives only in its definition. One exception: the form needed to report a defective packet has to survive one, so the first-line status contract stays in both.
+
+This rule spans all three executor types. An execution subagent or a task specialist has no resident definition — everything it must emit reaches it through the packet, and a `specialist_contract` embedded in a packet is packet content, not a resident definition, so no second copy can exist for them by construction. The rule bites wherever resident text exists: today the named-agent definitions; tomorrow any new resident surface. A definition that supplies a default the protocol says to treat as a packet defect is not a safety net; it silences the report.
+
 ## Change the smallest responsible layer
 
 | Change type | Primary file |
