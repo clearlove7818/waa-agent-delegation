@@ -252,10 +252,10 @@ Outside-list reads: <none, or every source read beyond the packet's listed input
 Definition conflict: <none, or quote the conflicting resident-definition text and governing-protocol text with their sources; do not resolve the conflict>
 Concerns or unknowns:
 Handoff to primary agent:
-Safest next action: <for PARTIAL, the continuation that will not compound the partial state; otherwise not applicable>
+Safest next action: <for PARTIAL, the continuation that will not compound the partial state; for FAILED, a recovery or diagnostic action when residual state or blind retry could cause harm; otherwise not applicable>
 ```
 
-Use `DONE` only when the agreed minimum deliverable is complete and evidence supports it. Use `PARTIAL` only when completed items, unfinished items, impact, evidence, unknowns, the next handoff, and the safest next action are explicit. The safest next action is a separate disclosure from the handoff: state the continuation that does not compound the partial state, and say so explicitly when the obvious resumption point is not it. Use `FAILED` when the minimum deliverable was not reached, preserving cause, attempted scope, and evidence. These are post-execution delivery states and never replace a pre-execution failure label. An item taken on faith and never reconciled remains an unverified premise in the delivered result, not a closed question.
+Use `DONE` only when the agreed minimum deliverable is complete and evidence supports it. Use `PARTIAL` only when completed items, unfinished items, impact, evidence, unknowns, the next handoff, and the safest next action are explicit. The safest next action is a separate disclosure from the handoff: for `PARTIAL`, state the continuation that does not compound the partial state and say so explicitly when the obvious resumption point is not it; for `FAILED`, state the recovery or diagnostic action when execution may have left residual state or a blind retry could cause harm. Use `FAILED` when the minimum deliverable was not reached, preserving cause, attempted scope, evidence, and residual-state uncertainty. A failed delivery may still have changed external state and does not become `PARTIAL` unless a valid partial deliverable exists. These are post-execution delivery states and never replace a pre-execution failure label. An item taken on faith and never reconciled remains an unverified premise in the delivered result, not a closed question.
 
 ## Failure returns
 
@@ -403,7 +403,7 @@ Before integrating a result:
 3. Confirm the `TASK_SPECIALIST_SUBAGENT` contract is present and all eight sections are locatable when applicable.
 4. Inspect deliverables, cited artifacts, commands, outputs, and sources.
 5. Confirm the executor stayed within scope, permissions, capability constraints, and ownership.
-6. Check that the first-line `ACCEPTED / <status>` value matches `delivery_status`, and that `DONE`, `PARTIAL`, or `FAILED` is truthful and complete for the evidence. Do not treat the completion line as proof that a required pre-execution gate occurred.
+6. Check that the first-line `ACCEPTED / <status>` value matches `delivery_status`, and that `DONE`, `PARTIAL`, or `FAILED` is truthful and complete for the evidence. When `delivery_status` is `PARTIAL`, confirm `Safest next action` names a continuation rather than `not applicable`, and that it is not merely a restatement of the handoff recipient. When `delivery_status` is `FAILED`, reject `not applicable` if residual state is possible or blind retry could cause harm; require a recovery or diagnostic action instead. Do not treat the completion line as proof that a required pre-execution gate occurred.
 7. Confirm every `Taken on faith` item is reconciled as verified, still unverified, or found false; preserve unreconciled items as result limitations.
 8. Check `Outside-list reads` against `input_boundary`. Reject any unlisted read under `LIST_ONLY`; under `LIST_IS_START_DISCLOSE_BEYOND`, confirm every disclosed source stayed inside all independent scope, authorization, permission, and platform boundaries.
 9. Reproduce or independently verify checks in proportion to risk.

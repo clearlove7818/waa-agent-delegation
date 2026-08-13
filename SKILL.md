@@ -52,6 +52,6 @@ After execution begins, start the completion message with `ACCEPTED / <DONE | PA
 
 - `DONE`: the minimum deliverable is complete and evidenced.
 - `PARTIAL`: disclose completed and unfinished work, impact, evidence, unknowns, next handoff, and the safest next action.
-- `FAILED`: the minimum deliverable was not reached; preserve cause, attempted scope, and evidence.
+- `FAILED`: the minimum deliverable was not reached; preserve cause, attempted scope, evidence, residual-state uncertainty, and a safe recovery or diagnostic action when blind retry could cause harm.
 
 Independent evaluation is optional and separate. Connect it only when authorized and useful; never auto-start evaluation or a Loop. Subagent output remains evidence until the primary agent verifies and integrates it.
