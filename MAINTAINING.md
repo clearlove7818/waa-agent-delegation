@@ -29,7 +29,7 @@ Every change must preserve these rules:
 21. Evaluation statuses obey the shared first-line purity rule; `RECORD_CONTRACT_ANOMALY` remains an evaluator-only record status outside the four root-cause labels.
 22. A `PARTIAL` return reports the safest next action separately from the handoff recipient, including when the obvious resumption point would compound the partial state.
 23. A `FAILED` return may still require a safe recovery or diagnostic action when execution may have left residual state or blind retry could cause harm; delivery failure does not prove execution-state cleanliness or imply a valid partial deliverable.
-24. A delivery made in a form other than the requested form, because the requested form would have been false, is `PARTIAL` only when the substitute stays within the packet boundary; it names the unproduced form, the reason, and the substitute, and never returns `DONE` or creates authority to change artifact shape or scope.
+24. A delivery made in a form other than the requested form, because the requested form would have been false, is `PARTIAL` only when execution has begun and the substitute stays within the packet boundary; it names the unproduced form, the reason, and the substitute, and never returns `DONE` or creates authority to change artifact shape or scope.
 
 ## Placement rule for protocol text
 
@@ -49,6 +49,7 @@ This rule spans all three executor types. An execution subagent or a task specia
 | Human workflow or repository explanation | `README.md` or this file |
 | Regression evidence | `evals/cases.md` |
 | Machine-readable regression fixture | `evals/trigger-cases.json` |
+| Structural conformance of fixture records | `evals/fixture_conformance_runner.py` |
 | Codex UI wording | `agents/openai.yaml` |
 
 Do not duplicate the same rule in multiple runtime files unless one occurrence is a short routing reminder and the other is the authoritative detail.
@@ -71,6 +72,18 @@ Do not add a fixed total score, KPI, or automatic review loop. The purpose of ca
 An absence-oriented invariant check is not evidence on its own. Before recording a zero match as passed, make it able to fail: cite a prior nonzero count produced by the same matcher, run it against a known positive, or enumerate the category and inspect the result. Also confirm that the intended live target or extracted range is nonempty. For an empty diff or unchanged hash, verify the intended inputs and limit the claim to their identity; neither result proves semantic correctness. Record a check that cannot be made falsifiable as `unverified`. Searching only for wording chosen by the maintainer is the cheapest form of this error, because absence of that wording is not absence of the underlying condition.
 
 An acceptance pattern for a verbatim-text requirement is generated from the text it is meant to detect, never written independently alongside it; a structural requirement instead uses a matcher derived from the claimed numbering, ordering, or placement. For each pattern, record the result it returns against a positive control built from the proposed change as well as against the current file; a pattern that cannot produce a nonzero result against that control is not yet a check. A result that would be identical whether or not the required change landed is recorded as unverified, never as passed.
+
+An evidence string recorded while the behavioral status is still `missing evidence` is context, not a verdict, and says `no forward run of this fixture` in its own text. Without that phrase a later reader cannot tell a bounded observation from a recorded result, and the record cannot be checked mechanically.
+
+## Specification and reception discipline
+
+A producer's completion report lists every difference between the text a specification supplied and the text actually landed, including a difference the producer judges to be a correction or an improvement. Reporting only the changes the producer chose to make leaves the rest to whoever compares bytes, and a specification's phrase-level checks will not find them.
+
+Verbatim text is verified byte for byte. A specification that supplies text states that text's byte length and SHA-256, and reception compares the landed text against them or against a verbatim quote-back. A phrase or substring match is not evidence that the supplied text landed, because it survives a rewrite of everything around the phrase.
+
+A specification that ratifies existing text quotes that text in full. A line reference is not a ratification, because line numbers move with the next insertion and a later reader cannot recover what was ratified.
+
+Every requirement in an acceptance table is checked at reception, and a requirement that will not be checked is removed from the table before the specification is issued. An unchecked requirement reads as a passed one in the record.
 
 ## Refresh platform evidence
 
@@ -100,7 +113,7 @@ An acceptance pattern for a verbatim-text requirement is generated from the text
 - Both combined and two-stage completion returns start with `ACCEPTED / <DONE | PARTIAL | FAILED>`, and the repeated `delivery_status` matches.
 - Every `PARTIAL` completion identifies the safest next action separately from the handoff recipient and warns when the obvious resumption point is unsafe.
 - Every `FAILED` completion discloses residual-state uncertainty and supplies a safe recovery or diagnostic action when `not applicable` would make a harmful retry possible.
-- Every completion delivered in a form other than the requested form is `PARTIAL`, carries the three `Requested-form substitution` disclosures, and does not use substitution to widen artifact shape or scope.
+- Every completion delivered in a form other than the requested form is `PARTIAL` only when execution has begun, carries the three `Requested-form substitution` disclosures, and does not use substitution to widen artifact shape or scope.
 - Every `Taken on faith` item is reconciled in the completion return.
 - Every completion return reports `Definition conflict: none` or identifies both conflicting provisions without resolving them.
 - Every packet contains one exact `input_boundary`, and every out-of-list read is either prohibited by `LIST_ONLY` or individually disclosed under `LIST_IS_START_DISCLOSE_BEYOND`.

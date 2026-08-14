@@ -74,6 +74,8 @@ State `output_contract`, `failure_return`, handoff recipient, required binding f
 
 An executor cannot emit a form it was never given. When `input_boundary` would keep the executor from reading this protocol, the packet carries the completion-return form verbatim; otherwise it lists this protocol among the executor's inputs. Omitting both is a packet defect the executor reports rather than fills from memory.
 
+This holds for every form the packet requires, not the completion return alone. When a handshake is required, the acceptance-record form is carried or referenced on the same terms; a packet that demands a handshake without supplying its form has the same defect one gate earlier.
+
 ## Packet skeleton
 
 Use this compact shape for every packet, expanding the nine classes according to risk:
@@ -101,6 +103,7 @@ Return and exception protocol: <output, failure, handoff, handshake>
   mandatory_reply_prefix: <none or exact text>
   mandatory_reply_prefix_source: <not applicable or governing source and executor applicability>
   completion_return_form: <carried verbatim in this packet, or this protocol listed among the executor's inputs>
+  acceptance_record_form: <carried verbatim in this packet, or this protocol listed among the executor's inputs; not applicable only when this packet permits the handshake to be omitted>
 ```
 
 ## Executor-specific contract
