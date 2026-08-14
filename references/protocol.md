@@ -72,6 +72,8 @@ State quality standards, acceptance conditions, evidence to return, verification
 
 State `output_contract`, `failure_return`, handoff recipient, required binding fields in the return, and the applicable `ACCEPTED / BLOCKED` rule. Record `mandatory_reply_prefix: none` unless a directly applicable higher-priority rule governs this executor; when one does, quote the exact prefix and record its governing source and executor applicability under `mandatory_reply_prefix_source`. A packet omission or conflict cannot cancel a directly applicable higher-priority runtime rule; obey the rule and return `BLOCKED` for the packet defect before execution. Keep execution handshake, primary-agent reception, and final synthesis as execution protocol below rather than treating them as a tenth or eleventh packet class.
 
+An executor cannot emit a form it was never given. When `input_boundary` would keep the executor from reading this protocol, the packet carries the completion-return form verbatim; otherwise it lists this protocol among the executor's inputs. Omitting both is a packet defect the executor reports rather than fills from memory.
+
 ## Packet skeleton
 
 Use this compact shape for every packet, expanding the nine classes according to risk:
@@ -98,6 +100,7 @@ Acceptance and verification: <quality and checks>
 Return and exception protocol: <output, failure, handoff, handshake>
   mandatory_reply_prefix: <none or exact text>
   mandatory_reply_prefix_source: <not applicable or governing source and executor applicability>
+  completion_return_form: <carried verbatim in this packet, or this protocol listed among the executor's inputs>
 ```
 
 ## Executor-specific contract

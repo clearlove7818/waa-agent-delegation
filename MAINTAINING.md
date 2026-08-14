@@ -64,9 +64,13 @@ Do not duplicate the same rule in multiple runtime files unless one occurrence i
 7. Review the diff for accidental permission expansion, named-agent activation, automatic evaluation, or responsibility transfer.
 8. Commit only the files belonging to the change.
 
+Before the producer edits the package, record the SHA-256 of every file in the round's in-scope base artifact package together with its path. Without a base anchor a later freeze check cannot be re-derived, and the corresponding gate stays unverified however complete the content checks look.
+
 Do not add a fixed total score, KPI, or automatic review loop. The purpose of cases is to reveal design defects and prevent regressions.
 
 An absence-oriented invariant check is not evidence on its own. Before recording a zero match as passed, make it able to fail: cite a prior nonzero count produced by the same matcher, run it against a known positive, or enumerate the category and inspect the result. Also confirm that the intended live target or extracted range is nonempty. For an empty diff or unchanged hash, verify the intended inputs and limit the claim to their identity; neither result proves semantic correctness. Record a check that cannot be made falsifiable as `unverified`. Searching only for wording chosen by the maintainer is the cheapest form of this error, because absence of that wording is not absence of the underlying condition.
+
+An acceptance pattern for a verbatim-text requirement is generated from the text it is meant to detect, never written independently alongside it; a structural requirement instead uses a matcher derived from the claimed numbering, ordering, or placement. For each pattern, record the result it returns against a positive control built from the proposed change as well as against the current file; a pattern that cannot produce a nonzero result against that control is not yet a check. A result that would be identical whether or not the required change landed is recorded as unverified, never as passed.
 
 ## Refresh platform evidence
 
