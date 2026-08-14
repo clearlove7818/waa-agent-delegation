@@ -29,6 +29,7 @@ Every change must preserve these rules:
 21. Evaluation statuses obey the shared first-line purity rule; `RECORD_CONTRACT_ANOMALY` remains an evaluator-only record status outside the four root-cause labels.
 22. A `PARTIAL` return reports the safest next action separately from the handoff recipient, including when the obvious resumption point would compound the partial state.
 23. A `FAILED` return may still require a safe recovery or diagnostic action when execution may have left residual state or blind retry could cause harm; delivery failure does not prove execution-state cleanliness or imply a valid partial deliverable.
+24. A delivery made in a form other than the requested form, because the requested form would have been false, is `PARTIAL` only when the substitute stays within the packet boundary; it names the unproduced form, the reason, and the substitute, and never returns `DONE` or creates authority to change artifact shape or scope.
 
 ## Placement rule for protocol text
 
@@ -95,6 +96,7 @@ An absence-oriented invariant check is not evidence on its own. Before recording
 - Both combined and two-stage completion returns start with `ACCEPTED / <DONE | PARTIAL | FAILED>`, and the repeated `delivery_status` matches.
 - Every `PARTIAL` completion identifies the safest next action separately from the handoff recipient and warns when the obvious resumption point is unsafe.
 - Every `FAILED` completion discloses residual-state uncertainty and supplies a safe recovery or diagnostic action when `not applicable` would make a harmful retry possible.
+- Every completion delivered in a form other than the requested form is `PARTIAL`, carries the three `Requested-form substitution` disclosures, and does not use substitution to widen artifact shape or scope.
 - Every `Taken on faith` item is reconciled in the completion return.
 - Every completion return reports `Definition conflict: none` or identifies both conflicting provisions without resolving them.
 - Every packet contains one exact `input_boundary`, and every out-of-list read is either prohibited by `LIST_ONLY` or individually disclosed under `LIST_IS_START_DISCLOSE_BEYOND`.
