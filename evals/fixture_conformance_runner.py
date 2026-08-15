@@ -35,6 +35,13 @@ v2 CHANGE
   reader cannot mistake context for a verdict. v1 checked the first direction
   only and was blind to this one.
 
+v3 CHANGE
+  Adds case_refs. Every fixture names, in a case_refs list, the narrative case
+  it instantiates; chk_case_refs_valid verifies each ref resolves to a real
+  Case heading, and the summary reports narrative coverage with unreferenced
+  cases listed. Coverage is reported, not gated: a case with no fixture is a
+  documented residual, not a structural failure.
+
 USAGE
   python3 fixture_conformance_runner.py <trigger-cases.json> <cases.md>
 
@@ -47,14 +54,14 @@ EXIT CODES
 
 import hashlib, json, re, sys
 
-VERSION = "fixture-conformance-runner v2"
+VERSION = "fixture-conformance-runner v3"
 # Status value meaning "no behavioral result recorded yet". Taken from the
 # vocabulary the fixture file itself uses; update if that vocabulary changes.
 UNRECORDED_STATUS = "missing evidence"
 # Exact phrase an evidence string must carry when it accompanies the unrecorded
 # status, so that context can never be read as a behavioral verdict.
 NO_RUN_MARKER = "no forward run of this fixture"
-CANONICAL_KEYS = ("id","category","prompt","expected_conditions","forbidden_conditions","status","evidence")
+CANONICAL_KEYS = ("id","category","prompt","expected_conditions","forbidden_conditions","status","evidence","case_refs")
 # Protocol tokens that cannot occur as ordinary English prose because they carry
 # an underscore. Single-word labels (BLOCKED, ACCEPTED, DONE, PARTIAL, FAILED)
 # are deliberately excluded: they appear as ordinary words in fixture text, so a
@@ -94,6 +101,14 @@ def chk_field_types(c, x):
                 for i, item in enumerate(v):
                     if not _ne(item):
                         out.append(k + "[" + str(i) + "]: expected non-empty string, got " + _d(item))
+    if "case_refs" in c:
+        v = c["case_refs"]
+        if not isinstance(v, list):
+            out.append("case_refs: expected list, got " + _d(v))
+        else:
+            for i, item in enumerate(v):
+                if not _ne(item):
+                    out.append("case_refs[" + str(i) + "]: expected non-empty string, got " + _d(item))
     if "evidence" in c and c["evidence"] is not None and not _ne(c["evidence"]):
         out.append("evidence: expected null or non-empty string, got " + _d(c["evidence"]))
     return (out, True)
@@ -169,6 +184,17 @@ def chk_bounded_evidence_declares_no_run(c, x):
         return ([], True)
     return (["status is " + repr(UNRECORDED_STATUS) + " and evidence is present, but the evidence does not state " + repr(NO_RUN_MARKER) + "; context is indistinguishable from a behavioral result: " + _snip(ev)], True)
 
+def chk_case_refs_valid(c, x):
+    # A fixture's case_refs bind it to the narrative case it instantiates. Every
+    # ref must resolve to a real Case heading and the list may not be empty: an
+    # unbound fixture is invisible to any coverage question asked of the corpus.
+    v = c.get("case_refs")
+    if v is None:
+        return (["case_refs: missing; every fixture names the case it instantiates"], True)
+    if not isinstance(v, list) or not v:
+        return (["case_refs: expected a non-empty list, got " + _d(v)], True)
+    return ([("case_refs: " + repr(r) + " has no matching Case heading") for r in v if isinstance(r, str) and r not in x["case_headings"]], True)
+
 def chk_evidence_crossref(c, x):
     ev = c.get("evidence")
     if not isinstance(ev, str):
@@ -178,7 +204,7 @@ def chk_evidence_crossref(c, x):
         return ([], False)
     return ([("evidence references cases.md Case " + r + ", which has no matching heading") for r in refs if r not in x["case_headings"]], True)
 
-CASE_CHECKS = (("schema_keys", chk_schema_keys),("field_types", chk_field_types),("id_unique", chk_id_unique),("conditions_present", chk_conditions_present),("conditions_consistent", chk_conditions_consistent),("label_token_case", chk_label_token_case),("evidence_status_coherence", chk_evidence_status_coherence),("bounded_evidence_declares_no_run", chk_bounded_evidence_declares_no_run),("evidence_crossref", chk_evidence_crossref))
+CASE_CHECKS = (("schema_keys", chk_schema_keys),("field_types", chk_field_types),("id_unique", chk_id_unique),("conditions_present", chk_conditions_present),("conditions_consistent", chk_conditions_consistent),("label_token_case", chk_label_token_case),("evidence_status_coherence", chk_evidence_status_coherence),("bounded_evidence_declares_no_run", chk_bounded_evidence_declares_no_run),("evidence_crossref", chk_evidence_crossref),("case_refs_valid", chk_case_refs_valid))
 
 def fchk_regression_watch(cases, x):
     # MAINTAINING.md: keep Cases 7A and 7B and their regression-watch entries.
@@ -204,7 +230,7 @@ def fchk_top_level(doc, x):
     return out
 
 def _base():
-    return {"id":"control-clean","category":"control","prompt":"A control prompt without protocol tokens.","expected_conditions":["Control condition A"],"forbidden_conditions":["Control condition B"],"status":UNRECORDED_STATUS,"evidence":None}
+    return {"id":"control-clean","category":"control","prompt":"A control prompt without protocol tokens.","expected_conditions":["Control condition A"],"forbidden_conditions":["Control condition B"],"status":UNRECORDED_STATUS,"evidence":None,"case_refs":["7A"]}
 
 CTRL_CTX = {"id_counts":{"control-clean":1,"control-duplicate":2},"case_headings":set(["7A","7B"])}
 
@@ -224,6 +250,8 @@ def _controls():
     p = _base(); p["evidence"] = "Environment facts were reproduced on a dated observation."
     n = _base(); n["evidence"] = "Environment facts were reproduced on a dated observation; no forward run of this fixture has been performed."
     o["bounded_evidence_declares_no_run"] = (p, n)
+    p = _base(); p["case_refs"] = ["99"]
+    o["case_refs_valid"] = (p, _base())
     p = _base(); p["evidence"] = "See evals/cases.md Case 99."
     n = _base(); n["evidence"] = "See evals/cases.md Case 7A."
     o["evidence_crossref"] = (p, n)
@@ -296,6 +324,8 @@ def main(argv):
     if not live:
         verified["evidence_crossref"] = False
         reasons["evidence_crossref"] += "; LIVE-TARGET FAIL: no Case headings extracted"
+        verified["case_refs_valid"] = False
+        reasons["case_refs_valid"] += "; LIVE-TARGET FAIL: no Case headings extracted"
     fv = {}
     fpf = fchk_regression_watch([GOOD_WATCH[0]], CTRL_CTX)
     fnf = fchk_regression_watch(GOOD_WATCH, CTRL_CTX)
@@ -364,6 +394,14 @@ def main(argv):
             s = c.get("status")
             st[s] = st.get(s, 0) + 1
     print("behavioral status untouched : " + ", ".join([str(v) + " x " + repr(k) for k, v in sorted(st.items(), key=lambda kv: str(kv[0]))]))
+    refs = set()
+    for c in cases:
+        if isinstance(c, dict) and isinstance(c.get("case_refs"), list):
+            refs.update([x2 for x2 in c["case_refs"] if isinstance(x2, str)])
+    unref = sorted(headings - refs, key=lambda u: (int(re.match(r"[0-9]+", u).group()), u))
+    print("narrative coverage          : " + str(len(refs & headings)) + "/" + str(len(headings)) + " case headings referenced by at least one fixture")
+    if unref:
+        print("cases with no fixture       : " + ", ".join(unref) + "  (reported, not gated)")
     print("")
     if unverified:
         print("RESULT: NOT EVIDENCE. These checks failed their own control: " + ", ".join(unverified))
