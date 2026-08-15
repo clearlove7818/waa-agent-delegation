@@ -76,6 +76,8 @@ An executor cannot emit a form it was never given. When `input_boundary` would k
 
 This holds for every form the packet requires, not the completion return alone. When a handshake is required, the acceptance-record form is carried or referenced on the same terms; a packet that demands a handshake without supplying its form has the same defect one gate earlier.
 
+The reporting duty itself travels with the packet: the skeleton's `required_form_defect_rule` line is carried verbatim in every packet, because the executor it most protects — one whose only readable input is the packet — has no other way to learn that a missing form is a defect to report rather than a gap to fill. In either branch, an executor that assembles a structure in place of a form it was never given labels the structure as composed and names what it was derived from; an unlabeled composition is indistinguishable from an issued form.
+
 ## Packet skeleton
 
 Use this compact shape for every packet, expanding the nine classes according to risk:
@@ -104,6 +106,7 @@ Return and exception protocol: <output, failure, handoff, handshake>
   mandatory_reply_prefix_source: <not applicable or governing source and executor applicability>
   completion_return_form: <carried verbatim in this packet, or this protocol listed among the executor's inputs>
   acceptance_record_form: <carried verbatim in this packet, or this protocol listed among the executor's inputs; not applicable only when this packet permits the handshake to be omitted>
+  required_form_defect_rule: A form this packet requires but neither carries nor lists among your readable inputs is a packet defect. Discovered before execution: return `BLOCKED` naming it, and do not start. Discovered only after execution has begun: do not claim `BLOCKED` retroactively; disclose the defect and return `PARTIAL`. If you compose anything in place of a form you were not given, label it as composed and name what it was derived from.
 ```
 
 ## Executor-specific contract

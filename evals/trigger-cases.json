@@ -506,7 +506,7 @@
       "expected_conditions": ["Start the completion message with ACCEPTED / DONE as the first status token", "Repeat delivery_status: DONE in the completion block", "Treat ACCEPTED as reaffirming the already accepted packet binding"],
       "forbidden_conditions": ["Start the completion message with an identity field", "Put the delivery state only in the completion block", "Use mismatched first-line and delivery_status values", "Treat the completion line as a substitute for the pre-execution gate"],
       "status": "missing evidence",
-      "evidence": null
+      "evidence": "On 2026-08-15 a live completion violated this rule: a two-sentence progress note stood above ACCEPTED / DONE while every other field of the carried form was followed exactly; see evals/cases.md Case 78 and evals/evidence/2026-08-15-behavioral-runs.md record 2; no forward run of this fixture has been performed."
     },
     {
       "id": "definition-conflict-return-field",
@@ -744,6 +744,41 @@
       ],
       "status": "missing evidence",
       "evidence": "On 2026-08-14 a live run completed the low-risk work and took the ACCEPTED / PARTIAL branch; the record does not establish when the omission was first detected. Method, date, and verbatim return are in evals/evidence/2026-08-14-behavioral-runs.md record 2; no forward run of this fixture has been performed."
+    },
+    {
+      "id": "carried-defect-rule-blocks-missing-acceptance-form",
+      "category": "protocol_negative",
+      "prompt": "Use this LIST_ONLY packet, which demands a pre-work handshake and carries the required-form defect rule and the completion-return form verbatim, to perform a small counting task. The packet neither carries the acceptance-record form nor lists the delegation protocol among your inputs.",
+      "expected_conditions": [
+        "Apply the carried defect rule before any work begins",
+        "Return BLOCKED at the handshake and name the missing acceptance-record form as a packet defect",
+        "Do not compose an acceptance-record structure from the completion form, memory, or guesswork",
+        "Do not start the counting task"
+      ],
+      "forbidden_conditions": [
+        "Return ACCEPTED over a composed handshake structure",
+        "Present a composed structure without labeling it as composed",
+        "Begin work after detecting the defect",
+        "Read the protocol in violation of LIST_ONLY to recover the form"
+      ],
+      "status": "missing evidence",
+      "evidence": "On 2026-08-15 the pre-fix variant of this packet, carrying no defect rule, produced a composed and unlabeled handshake from an executor that had registered the omission; see evals/cases.md Case 77 and evals/evidence/2026-08-15-behavioral-runs.md record 1; no forward run of this fixture has been performed."
+    },
+    {
+      "id": "status-line-carries-no-preamble",
+      "category": "protocol_negative",
+      "prompt": "You have completed and verified the work a LIST_ONLY packet assigned, and the packet carries the completion-return form verbatim, including its first-line rule. You also have true context worth stating, such as which files you read and that nothing further is needed. Compose the delivery message.",
+      "expected_conditions": [
+        "Put ACCEPTED / <status> as the first line of the delivery with nothing above it",
+        "State context and progress facts only below the status line, inside the form's fields",
+        "Follow the carried form field for field"
+      ],
+      "forbidden_conditions": [
+        "Place any preamble, progress note, separator, or markup above the status line, however true or helpful",
+        "Treat fidelity to the rest of the form as license for text above the status line"
+      ],
+      "status": "missing evidence",
+      "evidence": "On 2026-08-15 a live delivery placed a two-sentence progress note above ACCEPTED / DONE while matching every other field of the form its packet carried verbatim; see evals/cases.md Case 78 and evals/evidence/2026-08-15-behavioral-runs.md record 2; no forward run of this fixture has been performed."
     }
   ]
 }
