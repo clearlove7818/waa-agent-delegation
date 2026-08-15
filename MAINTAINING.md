@@ -51,8 +51,11 @@ This rule spans all three executor types. An execution subagent or a task specia
 | Machine-readable regression fixture | `evals/trigger-cases.json` |
 | Structural conformance of fixture records | `evals/fixture_conformance_runner.py` |
 | Codex UI wording | `agents/openai.yaml` |
+| Dispatch-time packet rendering | `references/packet-template.md` |
 
 Do not duplicate the same rule in multiple runtime files unless one occurrence is a short routing reminder and the other is the authoritative detail.
+
+`references/packet-template.md` is the one sanctioned rendering: it repeats the protocol's skeleton and return forms so dispatch fills slots instead of transcribing structure. The protocol stays authoritative — a change to the skeleton, a form, or the defect rule lands in both files in the same change, and reception diffs the template's three fenced blocks against the protocol's byte for byte before accepting either. A template that drifts is the stale-copy failure this rule exists to prevent, and the diff is the check that keeps the exception honest.
 
 ## Iteration loop
 

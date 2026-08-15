@@ -40,13 +40,13 @@ State why delegation is valuable, the core problem, the objective, and the one i
 
 ### 3. Task items and deliverables
 
-List the bounded task items, concrete deliverables, expected artifact shape, and exclusions. Keep one outcome owner even when several files or observations are returned.
+List the bounded task items, concrete deliverables, expected artifact shape, and exclusions. Keep one outcome owner even when several files or observations are returned. State each output path's current state — absent, existing and empty, or existing with content — rather than leaving the executor to probe it.
 
 ### 4. Minimum context
 
 Provide only the context needed to act without reconstructing the primary conversation: workspace, relevant files, decisions already frozen, dependencies, and local facts. List every input source that defines the executor's reading surface rather than relying on an implied workspace-wide context.
 
-State exactly one `input_boundary`. `LIST_ONLY` means the listed inputs are the whole permitted reading surface; reading anything else requires a new packet. `LIST_IS_START_DISCLOSE_BEYOND` means the executor may read additional material only when it remains inside every independent scope, authorization, permission, and platform boundary, and must disclose each additional source in the completion return. Leaving `input_boundary` unstated is a packet defect, not a default; return `BLOCKED` before execution rather than infer a value from an executor definition or available filesystem surface.
+State exactly one `input_boundary`. `LIST_ONLY` means the listed inputs are the whole permitted reading surface; reading anything else requires a new packet. `LIST_IS_START_DISCLOSE_BEYOND` means the executor may read additional material only when it remains inside every independent scope, authorization, permission, and platform boundary, and must disclose each additional source in the completion return. Leaving `input_boundary` unstated is a packet defect, not a default; return `BLOCKED` before execution rather than infer a value from an executor definition or available filesystem surface. A content hash carried for a listed input is carried in full; a truncated hash supports only prefix matching and is labeled as such wherever it appears.
 
 When an applicable resident executor definition or governing document is available, state any difference in scope, permissions, evidence duty, or return contract. A packet may add stricter task-specific limits, but it may not relax Rules, current-task authorization, governing documents, or a resident non-negotiable boundary. An apparent relaxation is a contract conflict; silent divergence is a defect even when the remaining packet is otherwise correct.
 
