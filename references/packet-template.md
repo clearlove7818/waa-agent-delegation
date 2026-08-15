@@ -8,6 +8,8 @@ Usage:
 2. Carry input content hashes in full; a truncated hash supports only prefix matching and is labeled as such.
 3. State each output path's current state — absent, existing and empty, or existing with content.
 4. When a handshake is required, carry the acceptance-record form verbatim from the block below; always carry the completion-return form. The `required_form_defect_rule` line travels in every packet exactly as the skeleton writes it.
+5. State the packet's scratch policy: name the one permitted scratch path for temporary files, or prohibit them outright; a packet silent on scratch space makes every helper file a boundary breach.
+6. Copy every closed-set token — an `assembly_type` value, a status word, a boundary mode — from its defining source; a retyped token is how a closed set gains a misspelled member.
 
 ## Skeleton (byte-identical to the protocol's)
 
