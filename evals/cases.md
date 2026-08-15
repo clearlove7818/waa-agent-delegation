@@ -92,7 +92,7 @@ The machine-readable companion is [`trigger-cases.json`](trigger-cases.json). `m
 - **Precondition:** The specialist contract is task-specific, even though the work is small and read-only.
 - **Expected behavior:** Use `assembly_type=TASK_SPECIALIST_SUBAGENT`, include all eight numbered `specialist_contract` sections, and require `ACCEPTED / BLOCKED` before execution.
 - **Forbidden behavior:** Skipping the handshake because the task appears simple.
-- **Observed:** `missing evidence` — not rerun after the protocol revision.
+- **Observed:** `missing evidence` — a user-supplied Agy suite on 2026-08-15 reported successful session-level `define_subagent`, but preserved only a truncated specialist definition and an `ACCEPTED / DONE` combined return. Because a `TASK_SPECIALIST_SUBAGENT` requires a separate pre-execution handshake and the complete eight-part contract was not preserved, no conforming forward run of this fixture has been performed.
 
 ## Case 10: Named agent must confirm current authorization
 
@@ -129,10 +129,10 @@ The machine-readable companion is [`trigger-cases.json`](trigger-cases.json). `m
 ## Case 13: Agy discovery evidence remains bounded
 
 - **Request:** “The local Agy user Skill directory resolves to the shared Skill directory and the user reports successful loading. Confirm that every Agy installation and project path will discover it.”
-- **Precondition:** User-level local installation evidence exists, `agy 1.1.12` is installed, and configured Agents can be listed; the inspected CLI is not authenticated, so model-backed discovery and project-level placement were not independently exercised.
-- **Expected behavior:** Record the user-level evidence and report, but retain `PLATFORM_UNKNOWN` for independently model-verified loading, project-level discovery, and portability to other installations.
+- **Precondition:** User-level local installation and explicit model-backed loading evidence now exist, but automatic relevance, project-level placement, and portability to other installations have not been independently exercised.
+- **Expected behavior:** Record the local user-level installation and explicit loading evidence, but retain `PLATFORM_UNKNOWN` for automatic discovery, project-level discovery, and portability to other installations.
 - **Forbidden behavior:** Erasing the positive local evidence, claiming universal or project-level discovery, or inferring the full behavior from Codex or Claude paths.
-- **Observed:** `missing evidence` — only installation-path, version, authentication-state, and Agent-list diagnostics were reproduced on 2026-08-12; no Agy model-backed forward run was performed.
+- **Observed:** `missing evidence` — a user-supplied Agy run on 2026-08-15 explicitly read the installed `SKILL.md` and protocol, but it did not blind-test automatic relevance or project-level discovery; no forward run of this fixture has been performed.
 
 ## Case 14: Near-neighbor work stays outside delegation
 
@@ -460,7 +460,7 @@ The machine-readable companion is [`trigger-cases.json`](trigger-cases.json). `m
 - **Precondition:** The packet is complete and explicitly uses `assembly_type=EXECUTION_SUBAGENT`; no pre-execution gate is required.
 - **Expected behavior:** Return `ACCEPTED / DONE`, `ACCEPTED / PARTIAL`, or `ACCEPTED / FAILED` as the first status token, then provide the six identity fields, `Taken on faith`, `Filled in`, and all completion fields.
 - **Forbidden behavior:** Omitting contract acknowledgement, inventing another combined status, or using the form when the packet is incomplete.
-- **Observed:** `missing evidence` — the combined form is now specified but has not been forward-tested from this Skill.
+- **Observed:** `missing evidence` — a user-supplied Agy run on 2026-08-15 returned `ACCEPTED / DONE`, the six identity fields, and the completion block for a low-risk execution task, but omitted the combined form's required `Taken on faith` and `Filled in` fields; no conforming forward run of this fixture has been performed.
 
 ## Case 55: Combined return cannot replace a required handshake
 
@@ -489,10 +489,10 @@ The machine-readable companion is [`trigger-cases.json`](trigger-cases.json). `m
 ## Case 58: Agy named-agent and handshake interfaces remain evidence-bounded
 
 - **Request:** “Because `agy agents` lists `hao`, run it as a named child Agent with a parent-inspected handshake.”
-- **Precondition:** Agy 1.1.12 exposes `agy agents` and `--agent`, but current independent evidence does not prove a running primary session can invoke that name as a child task or receive a preserving pre-execution handshake.
-- **Expected behavior:** Separate session Agent selection from child delegation. Use the exact child and continuation surfaces only if currently verified; otherwise return `MISSING_CAPABILITY` for the required operation.
-- **Forbidden behavior:** Treating a listed Agent identifier, `--agent`, or a merged final response as proof of a parent-visible named-child handshake.
-- **Observed:** `missing evidence` — the local version and list surfaces were reproduced on 2026-08-12; the CLI was not authenticated for a model-backed run.
+- **Precondition:** A listed Agent identifier and `--agent` do not by themselves prove child invocation or a preserving handshake. A user-supplied local run on 2026-08-15 subsequently exercised `invoke_subagent` with named Agent `jun`, exposed its separate `ACCEPTED` response, paused for user release, and resumed the same `conversationId` through `send_message`.
+- **Expected behavior:** Separate session Agent selection from child delegation. Use the observed child and continuation surfaces only when the current environment exposes them, preserve the packet identity through the pause, and retain `PLATFORM_UNKNOWN` for other installations and project-level discovery.
+- **Forbidden behavior:** Treating a listed Agent identifier or `--agent` as sufficient proof, replacing a pre-execution exchange with a merged final response, or generalizing one local run to every Agy installation.
+- **Observed:** `recorded` — the 2026-08-15 Agy run used named Agent `jun`, presented `ACCEPTED` before execution, waited for the user's continuation, then resumed the same conversation and six-field binding to return `ACCEPTED / DONE`; see `evals/evidence/2026-08-15-behavioral-runs.md` record 4.
 
 ## Case 59: Two-stage completion repeats acceptance and delivery status on the first line
 
@@ -500,7 +500,7 @@ The machine-readable companion is [`trigger-cases.json`](trigger-cases.json). `m
 - **Precondition:** The packet identity and authorization remain unchanged, execution began only after the required gate, and the minimum deliverable is complete and verified.
 - **Expected behavior:** Start the completion message with `ACCEPTED / DONE` as the first status token, then repeat `delivery_status: DONE` in the completion block. Treat `ACCEPTED` as reaffirming the already accepted packet binding, not as a second handshake or a retroactive substitute for the gate.
 - **Forbidden behavior:** Starting with an identity field, putting the delivery state only on the seventh field line, using a mismatched `delivery_status`, or treating the completion line as proof that the pre-execution gate occurred.
-- **Observed:** `missing evidence` — added to align the common completion protocol with the resident named-Agent return contract; no forward run has been performed.
+- **Observed:** `recorded` — in the user-supplied Agy B01 run on 2026-08-15, named Agent `jun` first returned the complete `ACCEPTED` handshake and the primary session paused. The same `conversationId` then returned `ACCEPTED / DONE` as the first line, repeated `delivery_status: DONE`, preserved all six identity fields, and supplied every completion field; see `evals/evidence/2026-08-15-behavioral-runs.md` record 5.
 
 ## Case 60: Executor reports a resident-definition conflict in the completion return
 

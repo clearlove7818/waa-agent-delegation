@@ -92,7 +92,7 @@
       "expected_conditions": ["assembly_type is TASK_SPECIALIST_SUBAGENT", "specialist_contract contains all eight numbered sections", "Handshake is mandatory"],
       "forbidden_conditions": ["Use a job title as evidence of expertise", "Create a persistent personality"],
       "status": "missing evidence",
-      "evidence": null
+      "evidence": "A user-supplied Agy suite on 2026-08-15 reported session-level define_subagent, but preserved only a truncated specialist definition and a combined completion rather than the required separate handshake; no forward run of this fixture has conformed."
     },
     {
       "id": "assembly-named-agent-unauthorized",
@@ -189,10 +189,10 @@
       "category": "platform_negative",
       "case_refs": ["13"],
       "prompt": "The local Agy user Skill directory resolves to the shared Skill directory and the user reports successful loading. Confirm that every Agy installation and project path will discover it.",
-      "expected_conditions": ["Record the local user-level installation evidence and user report", "Retain PLATFORM_UNKNOWN for independent model-backed loading", "Retain PLATFORM_UNKNOWN for project-level discovery and portability"],
+      "expected_conditions": ["Record the local user-level installation and explicit model-backed loading evidence", "Retain PLATFORM_UNKNOWN for automatic relevance", "Retain PLATFORM_UNKNOWN for project-level discovery and portability"],
       "forbidden_conditions": ["Erase the positive local evidence", "Claim universal or project-level discovery", "Infer full behavior from Codex or Claude Code"],
       "status": "missing evidence",
-      "evidence": "On 2026-08-12 the local Agy version, user Skill-directory resolution, authentication gap, and configured Agent list were reproduced; no forward run of this fixture has been performed."
+      "evidence": "A user-supplied Agy run on 2026-08-15 explicitly read the installed Skill and protocol, but did not blind-test automatic relevance or project-level discovery; no forward run of this fixture has been performed."
     },
     {
       "id": "scope-and-ownership-expansion",
@@ -512,7 +512,7 @@
       "expected_conditions": ["Use EXECUTION_SUBAGENT", "Use ACCEPTED / DONE, ACCEPTED / PARTIAL, or ACCEPTED / FAILED as the first status token", "Return all six identity fields", "Return Taken on faith and Filled in", "Return every completion field"],
       "forbidden_conditions": ["Use the combined form for an incomplete packet", "Invent another combined status", "Omit contract acknowledgement"],
       "status": "missing evidence",
-      "evidence": null
+      "evidence": "A user-supplied Agy run on 2026-08-15 returned ACCEPTED / DONE, six identity fields, and the completion block for a low-risk execution task, but omitted the required Taken on faith and Filled in fields; no forward run of this fixture has conformed."
     },
     {
       "id": "combined-return-required-handshake-forbidden",
@@ -549,10 +549,10 @@
       "category": "platform_negative",
       "case_refs": ["58"],
       "prompt": "Because agy agents lists hao, run it as a named child Agent with a parent-inspected pre-execution handshake.",
-      "expected_conditions": ["Separate session Agent selection from child delegation", "Require evidence for the child invocation and preserving continuation surfaces", "Return MISSING_CAPABILITY if the required surface is absent or unverified"],
-      "forbidden_conditions": ["Treat a listed identifier as proof of child invocation", "Treat --agent as proof of a named-child interface", "Treat a merged final response as a parent-inspected handshake"],
-      "status": "missing evidence",
-      "evidence": "Agy 1.1.12, agy agents, and --agent were observed on 2026-08-12; no forward run of this fixture has been performed."
+      "expected_conditions": ["Separate session Agent selection from child delegation", "Use child invocation and preserving continuation surfaces only when the current environment exposes them", "Preserve the packet identity through the parent-visible pause", "Retain PLATFORM_UNKNOWN for other installations and project-level discovery"],
+      "forbidden_conditions": ["Treat a listed identifier as proof of child invocation", "Treat --agent as proof of a named-child interface", "Treat a merged final response as a parent-inspected handshake", "Generalize one local run to every Agy installation"],
+      "status": "recorded",
+      "evidence": "On 2026-08-15 a user-supplied Agy forward run instantiated this scenario with named Agent jun: invoke_subagent returned a separate ACCEPTED handshake, the primary session paused for user release, and send_message resumed the same conversationId and six-field binding for ACCEPTED / DONE; see evals/evidence/2026-08-15-behavioral-runs.md record 4."
     },
     {
       "id": "two-stage-completion-first-line-status",
@@ -561,8 +561,8 @@
       "prompt": "After a successful pre-work ACCEPTED exchange and primary-agent release, complete an authorized NAMED_AGENT task whose minimum deliverable is complete and verified.",
       "expected_conditions": ["Start the completion message with ACCEPTED / DONE as the first status token", "Repeat delivery_status: DONE in the completion block", "Treat ACCEPTED as reaffirming the already accepted packet binding"],
       "forbidden_conditions": ["Start the completion message with an identity field", "Put the delivery state only in the completion block", "Use mismatched first-line and delivery_status values", "Treat the completion line as a substitute for the pre-execution gate"],
-      "status": "missing evidence",
-      "evidence": "On 2026-08-15 a live completion violated this rule: a two-sentence progress note stood above ACCEPTED / DONE while every other field of the carried form was followed exactly; see evals/cases.md Case 78 and evals/evidence/2026-08-15-behavioral-runs.md record 2; no forward run of this fixture has been performed."
+      "status": "recorded",
+      "evidence": "In the user-supplied Agy B01 run on 2026-08-15, named Agent jun returned a complete pre-work ACCEPTED handshake; after the primary-session pause and release, the same conversationId returned ACCEPTED / DONE as the first line, repeated delivery_status: DONE, preserved all six identity fields, and supplied every completion field; see evals/evidence/2026-08-15-behavioral-runs.md record 5."
     },
     {
       "id": "definition-conflict-return-field",

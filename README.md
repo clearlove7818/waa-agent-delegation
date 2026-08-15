@@ -4,7 +4,7 @@
 
 It helps the primary agent choose exactly one `EXECUTION_SUBAGENT`, `TASK_SPECIALIST_SUBAGENT`, or explicitly authorized `NAMED_AGENT`; check capability and permission boundaries; construct a risk-sized TASK-006 packet; and receive the result without transferring final responsibility.
 
-中文摘要：这是一个以单一语义源适配 Codex CLI、Claude Code 和 Agy CLI 的 Agent 委派 Skill。它只增强已经决定执行的委派，不替主 Agent 决定任务方向、扩大权限或转移最终责任；Agy 的裸 Skill 发现和加载仍未验证。
+中文摘要：这是一个以单一语义源适配 Codex CLI、Claude Code 和 Agy CLI 的 Agent 委派 Skill。它只增强已经决定执行的委派，不替主 Agent 决定任务方向、扩大权限或转移最终责任。各平台的发现路径、原生子代理接口和权限行为由对应的平台说明处理。
 
 ## What it does not do
 
@@ -20,9 +20,9 @@ The repository separates three concerns:
 
 | Layer | Files | Purpose |
 | --- | --- | --- |
-| Shared runtime | [`SKILL.md`](SKILL.md), [`references/protocol.md`](references/protocol.md) | Stable delegation semantics and contract patterns |
+| Shared runtime | [`SKILL.md`](SKILL.md), [`references/protocol.md`](references/protocol.md), [`references/packet-template.md`](references/packet-template.md) | Stable delegation semantics, authoritative contracts, and dispatch-time packet rendering |
 | Platform runtime | [`references/platform-compatibility.md`](references/platform-compatibility.md), platform-specific maps | Discovery facts, native interface mapping, permissions, and known unknowns |
-| Maintenance and evidence | [`MAINTAINING.md`](MAINTAINING.md), [`evals/cases.md`](evals/cases.md), [`evals/trigger-cases.json`](evals/trigger-cases.json) | Human iteration process, case history, and machine-readable fixtures |
+| Maintenance | [`MAINTAINING.md`](MAINTAINING.md), [`CONTRIBUTING.md`](CONTRIBUTING.md), [`SECURITY.md`](SECURITY.md) | Change ownership, contribution workflow, and security reporting |
 
 `agents/openai.yaml` is Codex UI metadata. It is not an Agent definition and is not required by Claude Code or Agy CLI.
 
@@ -41,7 +41,7 @@ owner
 
 Risk trimming changes the depth of the nine TASK-006 information classes, not the identity fields. `TASK_SPECIALIST_SUBAGENT` additionally carries the eight-part temporary `specialist_contract`; it never creates a persistent personality. `owner` is the sole owner of the current artifact version, while primary-agent synthesis and final responsibility do not automatically change ownership.
 
-## Repository map
+## Runtime-facing repository map
 
 ```text
 waa-agent-delegation/
@@ -52,16 +52,26 @@ waa-agent-delegation/
 ├── LICENSE
 ├── SKILL.md
 ├── agents/openai.yaml
-├── references/
+└── references/
 │   ├── protocol.md
+│   ├── packet-template.md
 │   ├── platform-compatibility.md
 │   ├── platform-codex.md
 │   ├── platform-claude-code.md
 │   └── platform-agy-cli.md
-└── evals/
-    ├── cases.md
-    └── trigger-cases.json
 ```
+
+## Usage
+
+Use this Skill only after the primary agent has already decided that an actual delegation is useful and authorized.
+
+1. Select exactly one executor type.
+2. Confirm capability, task authority, platform permission, prohibited actions, and external effects.
+3. Build one self-contained task packet from [`references/packet-template.md`](references/packet-template.md).
+4. Require the executor-specific handshake when applicable, then continue the same executor without changing the accepted boundary.
+5. Inspect the returned artifact and verification material before integrating the result.
+
+[`references/protocol.md`](references/protocol.md) is authoritative when any summary, platform mapping, or packet rendering differs from it.
 
 ## Install manually
 
@@ -83,9 +93,9 @@ Use the repository root URL without `/tree/main`, `/blob/...`, a trailing slash,
 | --- | --- | --- |
 | Codex CLI | `~/.agents/skills/waa-agent-delegation/` | `<project>/.agents/skills/waa-agent-delegation/` |
 | Claude Code | `~/.claude/skills/waa-agent-delegation/` | `<project>/.claude/skills/waa-agent-delegation/` |
-| Agy CLI | `~/.gemini/config/skills/waa-agent-delegation/` has current local installation evidence and user-reported loading; independent model-backed discovery remains `PLATFORM_UNKNOWN` | `PLATFORM_UNKNOWN` |
+| Agy CLI | `~/.gemini/config/skills/waa-agent-delegation/` | `PLATFORM_UNKNOWN` |
 
-Do not generalize one local Agy installation to other machines or project-level discovery. Confirm the active product's discovery and handshake behavior; otherwise retain `PLATFORM_UNKNOWN` for the unverified claim.
+Discovery paths and native delegation interfaces can vary by product version and configuration. Confirm the active platform before dispatch and follow the corresponding file under [`references/`](references/).
 
 Example manual symlink shape on macOS or Linux:
 
@@ -103,29 +113,9 @@ Do not run both methods for the same destination. Confirm the destination is abs
 
 To uninstall, remove only the exact copy or symbolic link that you created manually after verifying its resolved target. To switch versions, update the source checkout or replace the exact installed copy deliberately.
 
-## Validate locally
+## Contributing
 
-From this repository:
-
-```bash
-python3 /path/to/skill-creator/scripts/quick_validate.py .
-```
-
-Also parse all YAML and JSON files, check local Markdown links, and work through [`evals/cases.md`](evals/cases.md) and the machine-readable [`evals/trigger-cases.json`](evals/trigger-cases.json). The JSON is a reproducible case fixture, not a scorecard, fixed KPI, or automatic quality gate.
-
-## Continue improving the Skill
-
-Follow [`MAINTAINING.md`](MAINTAINING.md):
-
-1. Capture a real routing, contract, platform, or result-reception problem as a case.
-2. Update the smallest responsible layer.
-3. Run structural validation and the affected cases.
-4. Record actual observations without inventing evidence.
-5. Commit the focused change so Git remains the rollback boundary.
-
-Update platform claims only from official documentation, official repositories, current product files, or direct runtime evidence. Keep unresolved contradictions under `PLATFORM_UNKNOWN`.
-
-Contributions are welcome through [`CONTRIBUTING.md`](CONTRIBUTING.md). Report security-sensitive issues according to [`SECURITY.md`](SECURITY.md).
+Maintenance rules live in [`MAINTAINING.md`](MAINTAINING.md). Contributions are welcome through [`CONTRIBUTING.md`](CONTRIBUTING.md). Report security-sensitive issues according to [`SECURITY.md`](SECURITY.md).
 
 ## License
 
