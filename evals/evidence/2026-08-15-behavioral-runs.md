@@ -63,7 +63,8 @@ Handoff to waa. Nothing was started, so there is no residual state and a reissue
 
 - Method: the primary Agy session (`waa`) used `invoke_subagent` to dispatch a two-stage, read-only `NAMED_AGENT` packet to the explicitly authorized Agent `jun`. Stage 1 required a handshake only. The primary session exposed the returned `ACCEPTED` message and paused. After the user released Stage 2, the primary session used `send_message` with the original child conversation ID to resume the same task and identity binding.
 - Date: 2026-08-15 local time.
-- Platform: Google Antigravity CLI (Agy) 1.1.13.
+- Platform: Google Antigravity CLI (Agy).
+- Amendment (2026-08-16): owo confirmed these 2026-08-15 runs executed on Agy CLI 1.1.13; the confirmation and source-report hash are recorded in `2026-08-16-platform-facts.md`. The platform line above preserves the record-time state.
 - Conversation ID: `fd914b88-c74e-4049-bf54-cbdb3fd7e46f`.
 - Fixed identity: `task_packet_version=agy-handshake-test-v1`; `task_id=agy-parent-visible-handshake-2026-08-15`; `assembly_type=NAMED_AGENT`; `artifact_id=agy-handshake-probe`; `artifact_version=v1`; `owner=jun`.
 - Result: conforming for the local platform-capability question. Stage 1 returned a separate handshake without the requested count; the primary session stopped for user continuation; Stage 2 resumed the same conversation and six-field identity, then returned the correct count of two ASCII hyphens. The user reports no file, Git, network, configuration, or external-state changes.
@@ -146,7 +147,8 @@ owner: jun
 
 - Method: the primary Agy session explicitly loaded the installed Skill and protocol, invoked the authorized named Agent `jun`, received the complete acceptance form as a separate Stage 1 message, displayed it, and paused. After the user's release, the primary session resumed the original `conversationId` through `send_message` and received the complete two-stage completion form.
 - Date: 2026-08-15 local time.
-- Platform: Google Antigravity CLI (Agy) 1.1.13.
+- Platform: Google Antigravity CLI (Agy); the transfer report did not record the exact Agy version, so this evidence is version-unpinned.
+- Amendment (2026-08-16): owo confirmed these 2026-08-15 runs executed on Agy CLI 1.1.13; the confirmation and source-report hash are recorded in `2026-08-16-platform-facts.md`. The platform line above preserves the record-time state.
 - Conversation ID: `2737b10a-47a9-4282-a136-b445db5fdfbb`.
 - Source transfer report: user-supplied text, 18,559 bytes, SHA-256 `70b97096e53f6233138f9e63cd080a38b8cddf08ea68628eeac3ba2cd74fad61`.
 - Result: conforming for Cases 58 and 59. Stage 1 begins with bare `ACCEPTED`, preserves the six-field binding on one `Binding` line, supplies every acceptance field, and does not disclose the count. Stage 2 begins with `ACCEPTED / DONE`, repeats `delivery_status: DONE`, preserves the same six identity values, and supplies every completion field.

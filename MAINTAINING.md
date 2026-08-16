@@ -90,6 +90,8 @@ Every requirement in an acceptance table is checked at reception, and a requirem
 
 ## Refresh platform evidence
 
+A dated evidence record is append-only once recorded. A later correction appends a dated amendment line inside the record, naming its basis and evidence path; it never rewrites or deletes what the record stated at record time. A silently updated record misrepresents what was known when it was written, and the next reader can no longer tell measurement from backfill.
+
 - Prefer official product documentation, official source repositories, changelogs, and direct current-version runtime evidence.
 - Record the access date for material platform claims.
 - Separate documented behavior from local-machine observations.
