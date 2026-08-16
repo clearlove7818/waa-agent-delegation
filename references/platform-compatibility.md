@@ -1,6 +1,6 @@
 # Platform Compatibility
 
-Last reviewed: 2026-08-15.
+Last reviewed: 2026-08-16.
 
 This repository uses one root `SKILL.md` as the semantic source. Platform discovery paths and delegation interfaces remain platform-specific. A repository checkout is not automatically installed on any platform.
 
@@ -10,7 +10,7 @@ This repository uses one root `SKILL.md` as the semantic source. Platform discov
 | --- | --- | --- | --- | --- | --- |
 | Codex CLI | Yes | `~/.agents/skills/waa-agent-delegation/` | `.agents/skills/waa-agent-delegation/` | Current collaboration/subagent tools | `agents/openai.yaml` for Codex UI metadata only |
 | Claude Code | Yes | `~/.claude/skills/waa-agent-delegation/` | `.claude/skills/waa-agent-delegation/` | Current `Agent` tool and available subagents | None required |
-| Agy CLI | Explicit `SKILL.md` loading and complete two-stage named-Agent protocol forms were verified by user-supplied local runs on 2026-08-15 | `~/.gemini/config/skills/waa-agent-delegation/` has current local installation evidence and working-use evidence | `PLATFORM_UNKNOWN` | Verified locally: `invoke_subagent` and preserving `send_message` continuation. Observed but not fully protocol-verified: session-level `define_subagent`. Agy 1.1.12 previously exposed `--agent` and `agy agents`; the comprehensive suite did not record its exact version. | None required |
+| Agy CLI | Explicit `SKILL.md` loading and complete two-stage named-Agent protocol forms were verified by user-supplied local runs on Agy 1.1.13 on 2026-08-15 | `~/.gemini/config/skills/waa-agent-delegation/` has current local installation evidence and working-use evidence | `PLATFORM_UNKNOWN` | Verified locally on 1.1.13: `invoke_subagent` and same-conversation `send_message` continuation. Observed but not fully protocol-verified: session-level `define_subagent`. | None required |
 
 For Codex and Claude Code, copy or symbolically link the same repository directory into a documented discovery path manually. The inspected Agy installation resolves `~/.gemini/config/skills` to the shared Skill directory. User-supplied local runs verified explicit Skill loading plus a complete named-Agent handshake and continuation, but project-level Agy placement, automatic relevance, and portable discovery claims remain `PLATFORM_UNKNOWN`. Do not copy the `SKILL.md` body into three maintained variants.
 
@@ -40,7 +40,7 @@ Install, update, switch, or remove the Skill manually after reviewing the target
 
 ## Official sources
 
-Accessed 2026-07-22:
+Unless noted otherwise, accessed 2026-07-22.
 
 ### Agent Skills standard
 
@@ -52,6 +52,8 @@ Accessed 2026-07-22:
 - <https://developers.openai.com/codex/skills>
 - <https://developers.openai.com/codex/plugins/build>
 - <https://github.com/openai/plugins>
+- Rechecked 2026-08-16: <https://developers.openai.com/codex/multi-agent/>
+- Rechecked 2026-08-16: <https://github.com/openai/codex/blob/main/codex-rs/core/src/tools/handlers/multi_agents_spec.rs>
 
 ### Claude Code
 
@@ -69,14 +71,15 @@ Accessed 2026-07-22:
 - <https://antigravity.google/docs/cli/commands/agents>
 - <https://antigravity.google/docs/cli/permissions>
 - <https://antigravity.google/docs/cli/sandbox>
-- <https://github.com/google-antigravity/antigravity-cli>
+- Rechecked 2026-08-16: <https://antigravity.google/docs/subagents>
+- Rechecked 2026-08-16: <https://github.com/google-antigravity/antigravity-cli>
 
 ## PLATFORM_UNKNOWN
 
 - Automatic Skill and Agent relevance algorithms and thresholds are not public on the three platforms; no description can guarantee identical triggering across models and versions.
 - Native subagent tools do not expose one stable cross-platform parameter schema. Use the current platform interface instead of hard-coding low-level call shapes.
 - Claude managed policy can prohibit user or project Skills even when the documented path is correct.
-- Agy's current local configuration resolves `~/.gemini/config/skills` to the shared Skill directory. User-supplied runs on 2026-08-15 verified explicit Skill loading, named-Agent child invocation, complete parent-visible pre-execution acceptance, and complete same-conversation delivery on that installation. Project-level placement, portability to other installations, precedence among documented locations, automatic relevance behavior, and cross-version stability remain `PLATFORM_UNKNOWN`.
+- Agy's current local configuration resolves `~/.gemini/config/skills` to the shared Skill directory. User-supplied runs on Agy 1.1.13 on 2026-08-15 verified explicit Skill loading, named-Agent child invocation, complete parent-visible pre-execution acceptance, and complete same-conversation delivery. User-confirmed 1.1.13 tests also bounded idle lifetime by explicit kill, service or backend restart, headless-wrapper timeout, context pressure, and per-turn step limits. Project-level placement, portability to other installations, precedence among documented locations, automatic relevance behavior, exact retention duration, and cross-version stability remain `PLATFORM_UNKNOWN`.
 - Agy has not documented how arbitrary adjunct files such as `agents/openai.yaml` are handled. Only `SKILL.md` is treated as its entry point here.
-- The Agy evidence consists of user-supplied observations on one installation and named Agent. It does not establish a distribution across versions, Agents, accounts, or environments; the comprehensive suite also omitted its exact Agy version.
+- The Agy evidence consists of user-supplied observations on Agy 1.1.13, one installation, and one named Agent. It does not establish a distribution across versions, Agents, accounts, or environments.
 - `agents/openai.yaml` is confirmed as Codex metadata; Claude and Agy do not document it as their interface and must not depend on it.
