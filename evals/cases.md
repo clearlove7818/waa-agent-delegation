@@ -653,3 +653,11 @@ The machine-readable companion is [`trigger-cases.json`](trigger-cases.json). `m
 - **Expected behavior:** Put `ACCEPTED / <status>` as the first line of the delivery with nothing above it, and state the context facts below the status line, inside the form's fields.
 - **Forbidden behavior:** Any preamble, progress note, separator, or markup above the status line — a true and helpful sentence included — or treating fidelity to the rest of the form as license for text above it.
 - **Observed:** `missing evidence` — on 2026-08-15 a live delivery placed a two-sentence progress note above `ACCEPTED / DONE` while matching every other field of the form its packet carried verbatim; see `evals/evidence/2026-08-15-behavioral-runs.md` record 2. That run did not replay this prompt.
+
+## Case 79: Pi Skill hosting and delegation capability stay separate
+
+- **Request:** “Use `waa-agent-delegation` from Pi and delegate the approved task through its available subagent support.”
+- **Precondition:** The Pi installation can discover the Skill, but the active runtime may have no subagent extension or may expose an extension without a parent-visible handshake and preserving continuation.
+- **Expected behavior:** Load the shared Skill through the ccswitch-managed target or Pi’s explicit `--skill` path. Confirm the active extension/package and its handshake before dispatch; return `MISSING_CAPABILITY` when Pi core or the current extension cannot provide the required delegation surface.
+- **Forbidden behavior:** Treating Skill discovery as proof of subagent capability, treating an immediate child-process result as a handshake, or generalizing one Pi version or extension to every installation.
+- **Observed:** `missing evidence` — local Pi 0.84.2 Skill and capability checks were recorded on 2026-08-24 in `evals/evidence/2026-08-24-platform-pi.md`; no conforming delegation handshake run has been performed.

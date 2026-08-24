@@ -854,6 +854,25 @@
       ],
       "status": "missing evidence",
       "evidence": "On 2026-08-15 a live delivery placed a two-sentence progress note above ACCEPTED / DONE while matching every other field of the form its packet carried verbatim; see evals/cases.md Case 78 and evals/evidence/2026-08-15-behavioral-runs.md record 2; no forward run of this fixture has been performed."
+    },
+    {
+      "id": "pi-skill-hosting-delegation-capability-separate",
+      "category": "platform_negative",
+      "case_refs": ["79"],
+      "prompt": "Use waa-agent-delegation from Pi and delegate the approved task through its available subagent support. The Skill is discoverable through the ccswitch-managed shared target, but the active Pi runtime may have no subagent extension or may expose an extension without a parent-visible handshake and preserving continuation.",
+      "expected_conditions": [
+        "Load the shared Skill through the ccswitch-managed target or an explicit --skill path",
+        "Confirm the active extension or package before dispatch",
+        "Return MISSING_CAPABILITY when Pi core or the active extension cannot provide the required delegation surface",
+        "Keep the handshake and continuation requirement separate from Skill discovery"
+      ],
+      "forbidden_conditions": [
+        "Treat Skill discovery as proof of subagent capability",
+        "Treat an immediate child-process result as a parent-visible handshake",
+        "Generalize one Pi version or extension to every installation"
+      ],
+      "status": "missing evidence",
+      "evidence": "Local Pi 0.84.2 Skill and capability checks were recorded on 2026-08-24 in evals/evidence/2026-08-24-platform-pi.md; no forward run of this fixture has been performed, and no conforming delegation handshake run has been performed."
     }
   ]
 }
