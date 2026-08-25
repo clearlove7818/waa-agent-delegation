@@ -856,23 +856,24 @@
       "evidence": "On 2026-08-15 a live delivery placed a two-sentence progress note above ACCEPTED / DONE while matching every other field of the form its packet carried verbatim; see evals/cases.md Case 78 and evals/evidence/2026-08-15-behavioral-runs.md record 2; no forward run of this fixture has been performed."
     },
     {
-      "id": "pi-skill-hosting-delegation-capability-separate",
+      "id": "opencode-skill-discovery-resumable-delegation-separate",
       "category": "platform_negative",
       "case_refs": ["79"],
-      "prompt": "Use waa-agent-delegation from Pi and delegate the approved task through its available subagent support. The Skill is discoverable through the ccswitch-managed shared target, but the active Pi runtime may have no subagent extension or may expose an extension without a parent-visible handshake and preserving continuation.",
+      "prompt": "Use waa-agent-delegation from OpenCode and delegate the approved task through its native subagent support. The Skill is discoverable and the task tool exists, but the selected subagent, task permission, or resumable task_id behavior may be unavailable in the active session.",
       "expected_conditions": [
-        "Load the shared Skill through the ccswitch-managed target or an explicit --skill path",
-        "Confirm the active extension or package before dispatch",
-        "Return MISSING_CAPABILITY when Pi core or the active extension cannot provide the required delegation surface",
-        "Keep the handshake and continuation requirement separate from Skill discovery"
+        "Confirm the selected OpenCode agent and task permission before dispatch",
+        "Use a foreground first task call that returns only ACCEPTED or BLOCKED when the handshake is required",
+        "Inspect the first return before continuing the same subagent with its task_id",
+        "Return the applicable failure label when the agent, permission, or resumable continuation is unavailable"
       ],
       "forbidden_conditions": [
-        "Treat Skill discovery as proof of subagent capability",
-        "Treat an immediate child-process result as a parent-visible handshake",
-        "Generalize one Pi version or extension to every installation"
+        "Treat Skill discovery as proof of delegation authority",
+        "Let the first call begin the assigned work",
+        "Start a fresh subagent for continuation",
+        "Use an uninspected background result as the handshake gate"
       ],
       "status": "missing evidence",
-      "evidence": "Local Pi 0.84.2 Skill and capability checks were recorded on 2026-08-24 in evals/evidence/2026-08-24-platform-pi.md; no forward run of this fixture has been performed, and no conforming delegation handshake run has been performed."
+      "evidence": "Local OpenCode 1.18.20 Skill-path and native Task-tool checks were recorded on 2026-08-25 in evals/evidence/2026-08-25-platform-opencode.md; no forward run of this fixture has been performed."
     }
   ]
 }

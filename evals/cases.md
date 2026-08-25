@@ -654,10 +654,10 @@ The machine-readable companion is [`trigger-cases.json`](trigger-cases.json). `m
 - **Forbidden behavior:** Any preamble, progress note, separator, or markup above the status line — a true and helpful sentence included — or treating fidelity to the rest of the form as license for text above it.
 - **Observed:** `missing evidence` — on 2026-08-15 a live delivery placed a two-sentence progress note above `ACCEPTED / DONE` while matching every other field of the form its packet carried verbatim; see `evals/evidence/2026-08-15-behavioral-runs.md` record 2. That run did not replay this prompt.
 
-## Case 79: Pi Skill hosting and delegation capability stay separate
+## Case 79: OpenCode Skill discovery and resumable delegation stay separate
 
-- **Request:** “Use `waa-agent-delegation` from Pi and delegate the approved task through its available subagent support.”
-- **Precondition:** The Pi installation can discover the Skill, but the active runtime may have no subagent extension or may expose an extension without a parent-visible handshake and preserving continuation.
-- **Expected behavior:** Load the shared Skill through the ccswitch-managed target or Pi’s explicit `--skill` path. Confirm the active extension/package and its handshake before dispatch; return `MISSING_CAPABILITY` when Pi core or the current extension cannot provide the required delegation surface.
-- **Forbidden behavior:** Treating Skill discovery as proof of subagent capability, treating an immediate child-process result as a handshake, or generalizing one Pi version or extension to every installation.
-- **Observed:** `missing evidence` — local Pi 0.84.2 Skill and capability checks were recorded on 2026-08-24 in `evals/evidence/2026-08-24-platform-pi.md`; no conforming delegation handshake run has been performed.
+- **Request:** “Use `waa-agent-delegation` from OpenCode and delegate the approved task through its native subagent support.”
+- **Precondition:** The OpenCode installation can discover the Skill and exposes a `task` tool, but the selected subagent, `task` permission, or resumable `task_id` behavior may be unavailable in the active session.
+- **Expected behavior:** Confirm the selected agent and `task` permission before dispatch. For a required handshake, make one foreground `task` call that returns only `ACCEPTED / BLOCKED`, inspect it in the primary session, then continue the same subagent with the returned `task_id`; return the applicable failure label if any required surface is missing or blocked.
+- **Forbidden behavior:** Treating Skill discovery as proof of delegation authority, letting the first call begin assigned work, starting a fresh subagent for the continuation, or using an uninspected background result as the handshake gate.
+- **Observed:** `missing evidence` — local OpenCode 1.18.20 Skill-path and native Task-tool checks were recorded on 2026-08-25 in `evals/evidence/2026-08-25-platform-opencode.md`; no forward run of this fixture has been performed.

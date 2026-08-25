@@ -4,7 +4,7 @@
 
 It helps the primary agent choose exactly one `EXECUTION_SUBAGENT`, `TASK_SPECIALIST_SUBAGENT`, or explicitly authorized `NAMED_AGENT`; check capability and permission boundaries; construct a risk-sized TASK-006 packet; and receive the result without transferring final responsibility.
 
-中文摘要：这是一个以单一语义源适配 Codex CLI、Claude Code、Agy CLI 和 Pi CLI 的 Agent 委派 Skill。它只增强已经决定执行的委派，不替主 Agent 决定任务方向、扩大权限或转移最终责任。各平台的发现路径、原生或扩展子代理接口和权限行为由对应的平台说明处理。
+中文摘要：这是一个以单一语义源适配 Codex CLI、Claude Code、Agy CLI 和 OpenCode 的 Agent 委派 Skill。它只增强已经决定执行的委派，不替主 Agent 决定任务方向、扩大权限或转移最终责任。各平台的发现路径、原生子代理接口和权限行为由对应的平台说明处理。
 
 ## What it does not do
 
@@ -12,7 +12,7 @@ It helps the primary agent choose exactly one `EXECUTION_SUBAGENT`, `TASK_SPECIA
 - It does not activate named agents without explicit authorization.
 - It does not grant tools, permissions, sandbox exceptions, or external authority.
 - It does not automatically start independent evaluation or a review loop.
-- It does not install itself into Codex, Claude Code, Agy CLI, or Pi CLI.
+- It does not install itself into Codex, Claude Code, Agy CLI, or OpenCode.
 
 ## Architecture
 
@@ -59,7 +59,7 @@ waa-agent-delegation/
 │   ├── platform-codex.md
 │   ├── platform-claude-code.md
 │   ├── platform-agy-cli.md
-│   └── platform-pi.md
+│   └── platform-opencode.md
 ```
 
 ## Usage
@@ -95,7 +95,7 @@ Use the repository root URL without `/tree/main`, `/blob/...`, a trailing slash,
 | Codex CLI | `~/.agents/skills/waa-agent-delegation/` | `<project>/.agents/skills/waa-agent-delegation/` |
 | Claude Code | `~/.claude/skills/waa-agent-delegation/` | `<project>/.claude/skills/waa-agent-delegation/` |
 | Agy CLI | `~/.gemini/config/skills/waa-agent-delegation/` | `PLATFORM_UNKNOWN` |
-| Pi CLI | `~/.pi/agent/skills/waa-agent-delegation/` or `~/.agents/skills/waa-agent-delegation/` (ccswitch-managed shared target) | `.pi/skills/waa-agent-delegation/` or `.agents/skills/waa-agent-delegation/` in a trusted project |
+| OpenCode | `~/.config/opencode/skills/waa-agent-delegation/` or `~/.agents/skills/waa-agent-delegation/` | `.opencode/skills/waa-agent-delegation/` or `.agents/skills/waa-agent-delegation/` |
 
 Discovery paths and native delegation interfaces can vary by product version and configuration. Confirm the active platform before dispatch and follow the corresponding file under [`references/`](references/).
 
