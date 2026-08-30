@@ -53,9 +53,9 @@ Use this Skill only after the primary agent has already decided that an actual d
 
 [`references/protocol.md`](references/protocol.md) is authoritative when any summary, platform mapping, or packet rendering differs from it.
 
-## Install manually
+## Install with CC Switch
 
-This repository does not include or run an installer. Review the target and manually copy or symbolically link the whole repository directory.
+This repository does not include or run an installer. Configure the repository source through CC Switch; the repository itself does not modify the shared Skill link.
 
 ### CC Switch
 
@@ -67,32 +67,15 @@ https://github.com/clearlove7818/waa-agent-delegation
 
 Use the repository root URL without `/tree/main`, `/blob/...`, a trailing slash, or a file path. The root `SKILL.md` is the shared semantic entry point.
 
-### Native Skill discovery candidates
+### Shared Skill location
 
-| Platform | User candidate | Project candidate |
-| --- | --- | --- |
-| Codex CLI | `~/.agents/skills/waa-agent-delegation/` | `<project>/.agents/skills/waa-agent-delegation/` |
-| Claude Code | `~/.claude/skills/waa-agent-delegation/` | `<project>/.claude/skills/waa-agent-delegation/` |
-| Agy CLI | `~/.gemini/config/skills/waa-agent-delegation/` | `PLATFORM_UNKNOWN` |
-| OpenCode | `~/.config/opencode/skills/waa-agent-delegation/` or `~/.agents/skills/waa-agent-delegation/` | `.opencode/skills/waa-agent-delegation/` or `.agents/skills/waa-agent-delegation/` |
+CC Switch maintains the shared source for all supported platforms at:
 
-Discovery paths and native delegation interfaces can vary by product version and configuration. Confirm the active platform before dispatch and follow the corresponding file under [`references/`](references/).
-
-Example manual symlink shape on macOS or Linux:
-
-```bash
-ln -s /absolute/path/to/waa-agent-delegation /chosen/discovery/path/waa-agent-delegation
+```text
+~/.agents/skills/waa-agent-delegation/
 ```
 
-Example manual copy shape:
-
-```bash
-cp -R /absolute/path/to/waa-agent-delegation /chosen/discovery/path/waa-agent-delegation
-```
-
-Do not run both methods for the same destination. Confirm the destination is absent or intentionally replaceable before acting. Restart or refresh the platform if it does not detect the Skill automatically.
-
-To uninstall, remove only the exact copy or symbolic link that you created manually after verifying its resolved target. To switch versions, update the source checkout or replace the exact installed copy deliberately.
+The repository does not create or modify that link. After switching the source, load the root `SKILL.md` and use the active runtime map under [`references/`](references/) for native delegation and continuation behavior.
 
 ## Contributing
 

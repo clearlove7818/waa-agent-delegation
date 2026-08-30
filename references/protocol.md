@@ -151,6 +151,10 @@ forbidden_delegation: <no dispatch of another Agent, subagent, background task, 
 
 The loop is: select one executor after the primary decision → check capability, compatibility, authority, permission, and effects → build the packet → execute → receive, verify, and integrate. Optional evaluation is a separate authorized branch. The primary agent owns coordination, verification, synthesis, and final communication; `owner` remains the packet's artifact-version owner.
 
+## Dependency handoff
+
+If an executor discovers additional Agent work, it does not dispatch it. It returns the dependency to the primary agent with the current packet identity and the reason it is needed. The primary agent may create a separate packet for a new executor, receive and verify that result, then continue the original executor through its native continuation interface with the original identity, ownership, and boundary unchanged. The new packet is a primary-agent dispatch, not nested delegation by the executor; the original executor remains responsible only for its assigned artifact version.
+
 ## Acceptance handshake
 
 Apply the executor-specific rule:

@@ -1,44 +1,24 @@
 # Claude Code Runtime Map
 
-Use this mapping only when the active harness is Claude Code.
+Use this map only when the active harness is Claude Code. Apply the shared dependency handoff and task contract from [protocol.md](protocol.md); this file maps them to the active native delegation interface.
 
-## Before dispatch
+Keep the packet self-contained because the executor has an independent context. Use only delegation and continuation names actually exposed by the active surface.
 
-1. Confirm the active native delegation interface and the intended built-in or custom subagent are available.
-2. Check user, project, plugin, and managed settings that affect Skills, tools, agents, permission modes, and worktrees.
-3. Assume the subagent has an independent context. Put all material requirements and evidence into the task packet.
-4. Do not create `.claude/agents` files merely to adapt this Skill. A persistent custom agent is a separate deliverable and authority decision.
-
-## Dynamic unnamed-subagent child block
-
-At dynamic subagent creation, enumerate the exact child tools exposed by the active Claude surface. Exclude exact `Agent`; if legacy `Task` is also exposed, exclude exact `Task` too. If only one is exposed, describe only that observed name. Exclude `ListAgents`, `SendMessage`, and exposed `Task*` or `Cron*` controls only when present and needed for strict management blocking. Keep `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1` as a backstop. Treat the block as proven only when every observed child route is actually excluded; prompts, Skills, packets, and file bodies are not enforcement.
-
-The parent session must retain its observed native delegation tool (`Agent` or `Task`) so waa can create, continue, receive, and integrate subagents. If the active Claude surface cannot remove every exposed child delegation and management route, return `MISSING_CAPABILITY`; if a configured permission rule denies the child route, return `PLATFORM_PERMISSION_BLOCKED`. Indirect shell, SDK, MCP, or externally managed session routes are not proven by this adapter; if they remain reachable and strict blocking is required, do not claim the block.
-
-## Map semantic actions
+## Native flow
 
 | Delegation action | Claude Code behavior |
 | --- | --- |
-| `EXECUTION_SUBAGENT` | Use the active native delegation interface with a suitable available general or built-in agent. |
-| `TASK_SPECIALIST_SUBAGENT` | Use the eight-part task-scoped specialist contract or an already available custom subagent with the required tools and restrictions. |
-| `NAMED_AGENT` | Select or mention the exact agent only after current-task authorization has been established. |
-| Required handshake | Use one exchange on the active native delegation interface for the handshake only. After the primary agent checks it, use the current continuation mechanism to release execution while preserving the original identity and boundary. If continuation cannot preserve that context, return `MISSING_CAPABILITY`. |
-| Continue or clarify | Use the active continuation mechanism while preserving the original boundary. |
-| Run independently | Use foreground or background execution only when the task and permission behavior support it. |
+| `EXECUTION_SUBAGENT` | Create one bounded executor through the active native delegation interface. |
+| `TASK_SPECIALIST_SUBAGENT` | Send the task-scoped specialist contract or select an already available suitable custom subagent. |
+| `NAMED_AGENT` | Select the exact Agent only after current-task authorization; otherwise return `CAPABILITY_OUT_OF_SCOPE`. |
+| Required handshake | When the shared protocol requires a handshake, use one foreground delegation exchange for `ACCEPTED` or a blocked return. After primary-agent inspection, continue or resume the same Agent through the active native interface. If identity and context cannot be preserved, return `MISSING_CAPABILITY`. |
+| Run independently | Start foreground or background work only after any required handshake and only when its result returns to the primary session. |
+| Stop unsafe work | Use the active cancellation or stop control and confirm that execution stopped. |
 
-Do not hard-code the low-level tool schema; it is not a stable cross-platform contract. Enumerate the active interface before describing or filtering any exposed delegation or management control, including `Agent` or `Task` when present.
+Continue the original Agent after a dependency result is verified. If the original target cannot be resumed, create a new packet rather than claim continuation.
 
-## Permission behavior
+## Runtime failures
 
-- Subagents normally inherit the parent session's available tools, MCP context, and permission environment, subject to configured restrictions.
-- Inheritance proves availability, not authorization for this task.
-- Approval requests can return to the primary session. Do not interpret an agent message as user approval.
-- Managed policy can prevent a documented Skill or custom agent from loading.
-
-Return `MISSING_CAPABILITY`, `CAPABILITY_OUT_OF_SCOPE`, or `PLATFORM_PERMISSION_BLOCKED` according to the evidence instead of retrying through a wider permission mode.
-
-This adapter is not a standalone contract: use [protocol.md](protocol.md) for exact failure-label, mandatory-prefix, and first-line rules, and use this map for Claude-specific behavior.
-
-## Result reception
-
-Inspect the agent's response, changed files, commands, and test evidence. Resolve questions in the primary context, then perform proportionate verification. The primary agent remains responsible for user-facing integration without automatically changing the delegated artifact owner.
+- Missing delegation or continuation interface: `MISSING_CAPABILITY`.
+- Platform permission or approval denial: `PLATFORM_PERMISSION_BLOCKED`.
+- Available action outside current-task authorization: `CAPABILITY_OUT_OF_SCOPE`.

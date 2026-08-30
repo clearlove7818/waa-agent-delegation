@@ -50,7 +50,7 @@ Do not add fixed scores, KPIs, automatic review loops, or checks that cannot fai
 
 ## Refresh platform evidence
 
-Use official documentation, official source, or direct runtime evidence for platform claims. Record access dates, separate documented behavior from local observation, and keep unresolved conflicts as `PLATFORM_UNKNOWN`. Do not turn an undocumented low-level schema into a stable contract.
+Refresh platform claims only when they affect creation, handshake, continuation, reception, stopping, or runtime permission outcomes. Use official documentation, official source, or direct runtime evidence, and separate documented behavior from local observation. Do not maintain alternate discovery-path tables or undocumented low-level schemas.
 
 ## Validation checklist
 

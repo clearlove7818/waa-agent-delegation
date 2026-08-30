@@ -126,13 +126,13 @@ The machine-readable companion is [`trigger-cases.json`](trigger-cases.json). `m
 - **Forbidden behavior:** Using `PARTIAL` as a label while hiding material omissions or their effects.
 - **Observed:** `missing evidence` — not rerun after the protocol revision.
 
-## Case 13: Agy discovery evidence remains bounded
+## Case 13: Shared Skill loading does not add a dispatch gate
 
-- **Request:** “The local Agy user Skill directory resolves to the shared Skill directory and the user reports successful loading. Confirm that every Agy installation and project path will discover it.”
-- **Precondition:** User-level local installation and explicit model-backed loading evidence now exist, but automatic relevance, project-level placement, and portability to other installations have not been independently exercised.
-- **Expected behavior:** Record the local user-level installation and explicit loading evidence, but retain `PLATFORM_UNKNOWN` for automatic discovery, project-level discovery, and portability to other installations.
-- **Forbidden behavior:** Erasing the positive local evidence, claiming universal or project-level discovery, or inferring the full behavior from Codex or Claude paths.
-- **Observed:** `missing evidence` — a user-supplied Agy run on 2026-08-15 explicitly read the installed `SKILL.md` and protocol, but it did not blind-test automatic relevance or project-level discovery; no forward run of this fixture has been performed.
+- **Request:** “CC Switch exposes the shared `waa-agent-delegation` source to all four supported platforms. Use it for an approved delegation.”
+- **Precondition:** The user has tested Skill loading on Codex, Claude Code, Agy, and OpenCode through the shared `~/.agents/skills/waa-agent-delegation/` source.
+- **Expected behavior:** Treat the shared loading setup as the active baseline, load only the current platform map, and proceed through that platform's native delegation flow without adding another installation-path gate.
+- **Forbidden behavior:** Requiring a second platform-specific Skill copy, blocking dispatch on an alternate discovery path, or treating loading as task authorization.
+- **Observed:** `missing evidence` — on 2026-08-31 the user confirmed successful loading on all four supported platforms; no forward run of this fixture has been performed.
 
 ## Case 14: Near-neighbor work stays outside delegation
 
@@ -486,12 +486,12 @@ The machine-readable companion is [`trigger-cases.json`](trigger-cases.json). `m
 - **Forbidden behavior:** Treating packet silence as an override, silently narrowing a governing boundary, or resolving the conflict inside the delegated task.
 - **Observed:** `missing evidence` — added for resident-definition and packet-divergence handling.
 
-## Case 58: Agy named-agent and handshake interfaces remain evidence-bounded
+## Case 58: Agy named-agent delegation preserves the handshake conversation
 
 - **Request:** “Because `agy agents` lists `hao`, run it as a named child Agent with a parent-inspected handshake.”
 - **Precondition:** A listed Agent identifier and `--agent` do not by themselves prove child invocation or a preserving handshake. A user-supplied local run on 2026-08-15 subsequently exercised `invoke_subagent` with named Agent `jun`, exposed its separate `ACCEPTED` response, paused for user release, and resumed the same `conversationId` through `send_message`.
-- **Expected behavior:** Separate session Agent selection from child delegation. Use the observed child and continuation surfaces only when the current environment exposes them, preserve the packet identity through the pause, and retain `PLATFORM_UNKNOWN` for other installations and project-level discovery.
-- **Forbidden behavior:** Treating a listed Agent identifier or `--agent` as sufficient proof, replacing a pre-execution exchange with a merged final response, or generalizing one local run to every Agy installation.
+- **Expected behavior:** Separate session Agent selection from child delegation, use the task-level child and continuation surfaces, and preserve the packet identity and conversation through the parent-visible pause.
+- **Forbidden behavior:** Treating a listed Agent identifier or `--agent` as sufficient proof, replacing a pre-execution exchange with a merged final response, or resuming a different conversation as though it were the original target.
 - **Observed:** `recorded` — the 2026-08-15 Agy run used named Agent `jun`, presented `ACCEPTED` before execution, waited for the user's continuation, then resumed the same conversation and six-field binding to return `ACCEPTED / DONE`; see `evals/evidence/2026-08-15-behavioral-runs.md` record 4.
 
 ## Case 59: Two-stage completion repeats acceptance and delivery status on the first line
@@ -654,42 +654,42 @@ The machine-readable companion is [`trigger-cases.json`](trigger-cases.json). `m
 - **Forbidden behavior:** Any preamble, progress note, separator, or markup above the status line — a true and helpful sentence included — or treating fidelity to the rest of the form as license for text above it.
 - **Observed:** `missing evidence` — on 2026-08-15 a live delivery placed a two-sentence progress note above `ACCEPTED / DONE` while matching every other field of the form its packet carried verbatim; see `evals/evidence/2026-08-15-behavioral-runs.md` record 2. That run did not replay this prompt.
 
-## Case 79: OpenCode Skill discovery and resumable delegation stay separate
+## Case 79: OpenCode handshake resumes the same task
 
 - **Request:** “Use `waa-agent-delegation` from OpenCode and delegate the approved task through its native subagent support.”
-- **Precondition:** The OpenCode installation can discover the Skill and exposes a `task` tool, but the selected subagent, `task` permission, or resumable `task_id` behavior may be unavailable in the active session.
-- **Expected behavior:** Confirm the selected agent and `task` permission before dispatch. For a required handshake, make one foreground `task` call that returns only `ACCEPTED / BLOCKED`, inspect it in the primary session, then continue the same subagent with the returned `task_id`; return the applicable failure label if any required surface is missing or blocked.
-- **Forbidden behavior:** Treating Skill discovery as proof of delegation authority, letting the first call begin assigned work, starting a fresh subagent for the continuation, or using an uninspected background result as the handshake gate.
-- **Observed:** `missing evidence` — local OpenCode 1.18.20 Skill-path and native Task-tool checks were recorded on 2026-08-25 in `evals/evidence/2026-08-25-platform-opencode.md`; no forward run of this fixture has been performed.
+- **Precondition:** OpenCode loads the shared Skill and the active native `task` interface returns a resumable `task_id`.
+- **Expected behavior:** For a required handshake, make one foreground `task` call that returns only `ACCEPTED / BLOCKED`, inspect it in the primary session, then continue the same subagent with the returned `task_id`.
+- **Forbidden behavior:** Treating Skill loading as task authorization, letting the first call begin assigned work, starting a fresh subagent for the continuation, or using an uninspected background result as the handshake gate.
+- **Observed:** `missing evidence` — shared Skill loading and native Task checks were recorded on 2026-08-25 in `evals/evidence/2026-08-25-platform-opencode.md`; no forward run of this fixture has been performed.
 
-## Case 80: Codex dynamic unnamed child blocking is not proven
+## Case 80: Codex dependency returns to waa for a new dispatch
 
-- **Request:** “On Codex, create an ordinary unnamed Subagent for the approved task, but it must be unable to create, invoke, define, manage or interrupt, send messages, fork, background-start, or parallel-start another Agent while waa keeps its own delegation tools.”
-- **Precondition:** The active Codex surface exposes the global multi-agent switch, but no child-only tool deny or nesting-depth control has been verified.
-- **Expected behavior:** Inspect `references/platform-codex.md` and the active native collaboration surface. Do not disable the global multi-agent switch. If no child-only native control covers create/invoke, define, manage/interrupt, send/message, fork, background, and parallel routes, return `MISSING_CAPABILITY` before dispatch; if such a managed control is present, verify it while retaining waa’s parent delegation surface.
-- **Forbidden behavior:** Treating a Skill, prompt, task packet, or custom-agent body as enforcement; disabling global multi-agent support; claiming child blocking without a native control; or changing the shared failure taxonomy.
-- **Observed:** `missing evidence` — on 2026-08-30 local `codex --version` returned `codex-cli 0.151.0-alpha.7.2`; `references/platform-codex.md` was rechecked and no child-only hard block was verified; no forward run of this fixture has been performed.
+- **Request:** “On Codex, create an ordinary unnamed Subagent for the approved task. It must not self-delegate; if it needs another Agent, return the dependency to waa so waa can issue a new packet while keeping its own delegation tools.”
+- **Precondition:** The active Codex surface exposes its current collaboration interface.
+- **Expected behavior:** Use the native Codex creation path, such as `spawn_agent`, for the first bounded task. If the executor needs additional work, it returns the dependency to waa; waa creates a separate packet through the same parent surface and uses `followup_task` or the current continuation path to return the verified result to the original executor.
+- **Forbidden behavior:** Letting the child create or invoke another Agent, using a Skill, prompt, task packet, or custom-agent body as a permission mechanism, or changing the shared failure taxonomy.
+- **Observed:** `missing evidence` — on 2026-08-30 the active Codex collaboration interface was inspected; no forward run of this fixture has been performed.
 
-## Case 81: Claude Code dynamic child excludes observed Agent and Task aliases
+## Case 81: Claude Code dependency returns to waa for a new dispatch
 
-- **Request:** “On Claude Code, create an ordinary unnamed Subagent for the approved task, but it must be unable to reach any exposed Agent or Task child-delegation route while waa keeps its own parent delegation ability.”
-- **Precondition:** The active Claude surface may expose current `Agent`, legacy `Task` compatibility alias, or only one of those names; the actual exposed names must be enumerated before filtering.
-- **Expected behavior:** Inspect `references/platform-claude-code.md` and the active child tool surface. Exclude exact `Agent` and exact `Task` when both are actually exposed; if only one is exposed, describe and exclude only that observed name. Exclude `ListAgents`, `SendMessage`, and exposed `Task*` or `Cron*` controls only when present and needed for strict management blocking. Retain the parent’s observed delegation tool and return `MISSING_CAPABILITY` if native child-only exclusion cannot be proven; a configured permission denial uses `PLATFORM_PERMISSION_BLOCKED`.
-- **Forbidden behavior:** Inventing an unavailable tool name; omitting an actually exposed alias; using a prompt, Skill, task packet, or Agent body as enforcement; disabling the parent delegation tool; or claiming a behavior result without a forward run.
-- **Observed:** `missing evidence` — on 2026-08-30 local `claude --version` returned `2.1.236` and `claude --help` was inspected; `references/platform-claude-code.md` was rechecked, but active child-tool exposure and behavior were not run; no forward run of this fixture has been performed.
+- **Request:** “On Claude Code, create an ordinary unnamed Subagent for the approved task. It must not self-delegate; if it needs another Agent, return the dependency to waa while waa keeps its own parent delegation ability.”
+- **Precondition:** The active Claude surface exposes its native delegation and continuation interfaces.
+- **Expected behavior:** Use the observed native interface for the first bounded task. If the executor needs additional work, it returns the dependency to waa; waa creates a separate packet through the observed parent interface, then continues the original target through the active continuation path after verifying the new result.
+- **Forbidden behavior:** Inventing an unavailable tool name, letting the child create or invoke another Agent, using a prompt, Skill, task packet, or Agent body as a permission mechanism, disabling the parent delegation tool, or claiming a behavior result without a forward run.
+- **Observed:** `missing evidence` — on 2026-08-30 the active Claude delegation interface was inspected; no forward run of this fixture has been performed.
 
-## Case 82: Agy dynamic child-tool blocking remains evidence-bounded
+## Case 82: Agy dependency returns to waa for a new dispatch
 
-- **Request:** “On Agy, create an ordinary unnamed Subagent for the approved task, but it must be unable to use any native child-delegation or agent-management route while waa keeps its own delegation tools.”
-- **Precondition:** The active Agy `define_subagent` schema may expose a per-agent tool list or another child-tool control, but a complete native deny has not yet been verified for this installation.
-- **Expected behavior:** Inspect `references/platform-agy-cli.md` and the actual `define_subagent` schema. Record the child block as usable only if the active schema and a runtime check prove removal of `invoke_subagent`, `define_subagent`, `send_message`, `manage_subagents`, and every exposed fork or team-control route. Otherwise return `MISSING_CAPABILITY`; a platform rejection of an otherwise requested boundary uses `PLATFORM_PERMISSION_BLOCKED`. Preserve waa’s parent tools.
-- **Forbidden behavior:** Treating a nesting limit, a named flag, a tools-list example, or Skill/prompt/task-packet/Agent text as proof; inventing an unexposed fork control; claiming a universal Agy guarantee; or claiming a behavior result without a forward run.
-- **Observed:** `missing evidence` — on 2026-08-30 local `agy --version` returned `1.1.22` and `agy --help` was inspected; `references/platform-agy-cli.md` was rechecked, but complete child-tool schema and runtime enforcement were not run; no forward run of this fixture has been performed.
+- **Request:** “On Agy, create an ordinary unnamed Subagent for the approved task. It must not self-delegate; if it needs another Agent, return the dependency to waa while waa keeps its own delegation tools.”
+- **Precondition:** The active Agy session exposes its current subagent invocation and continuation surfaces.
+- **Expected behavior:** Use the native Agy subagent interface for the first bounded task. If the executor needs additional work, it returns the dependency to waa; waa creates a separate packet through the parent surface, then continues the original target through the active continuation path after verifying the new result.
+- **Forbidden behavior:** Letting the child create or invoke another Agent, using a Skill, prompt, task packet, or Agent body as a permission mechanism, inventing an unavailable control, or claiming a behavior result without a forward run.
+- **Observed:** `missing evidence` — on 2026-08-30 the active Agy subagent interface was inspected; no forward run of this fixture has been performed.
 
-## Case 83: OpenCode dynamic child uses depth and task-permission guards
+## Case 83: OpenCode dependency returns to waa for a new dispatch
 
-- **Request:** “On OpenCode, create an ordinary unnamed Subagent for the approved task, but a child must not create or invoke another subagent while waa keeps its own task delegation ability.”
-- **Precondition:** The active OpenCode path uses the native `task` tool. The resolved configuration must provide `subagent_depth=1` and deny the child’s `permission.task`; current behavior has not yet been run in this fixture.
-- **Expected behavior:** Inspect `references/platform-opencode.md` and resolve both controls before dispatch. Verify that waa’s first `task` call remains allowed, while a nested `task` call from that child is rejected or blocked. If depth or child `permission.task` is unavailable, overridable, or bypassed by another native agent route, return `MISSING_CAPABILITY`; if the resolved permission policy denies the requested child route, return `PLATFORM_PERMISSION_BLOCKED`.
-- **Forbidden behavior:** Treating a Skill, prompt, task packet, or Agent body as enforcement; disabling the parent `task` permission; claiming behavior success from static documentation or the fixture runner; or starting a fresh child instead of continuing the same task identity.
-- **Observed:** `missing evidence` — on 2026-08-30 local `opencode --version` returned `1.18.20` and `opencode debug paths` was inspected; `references/platform-opencode.md` was rechecked, but effective depth/permission resolution and nested behavior were not run; no forward run of this fixture has been performed.
+- **Request:** “On OpenCode, create an ordinary unnamed Subagent for the approved task. It must not self-delegate; if it needs another Agent, return the dependency to waa while waa keeps its own task delegation ability.”
+- **Precondition:** The active OpenCode path exposes the native `task` tool and resumable `task_id`.
+- **Expected behavior:** Use a foreground `task` call for the first bounded task. If the executor needs additional work, it returns the dependency to waa; waa creates a separate packet through a new `task` call, verifies that result, and resumes the original target with its exact `task_id`.
+- **Forbidden behavior:** Letting the child create or invoke another Agent, disabling the parent `task` path, using a Skill, prompt, task packet, or Agent body as a permission mechanism, claiming behavior success from static documentation or the fixture runner, or starting a fresh target instead of continuing the same task identity.
+- **Observed:** `missing evidence` — on 2026-08-30 the active OpenCode Task interface was inspected; no forward run of this fixture has been performed.
