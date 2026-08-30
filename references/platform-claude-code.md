@@ -11,9 +11,9 @@ Use this mapping only when the active harness is Claude Code.
 
 ## Dynamic unnamed-subagent child block
 
-At dynamic subagent creation, apply the native tool boundary to the child: omit `Agent` (the current name; `Task` remains its compatibility alias) from the child `tools` allowlist, or add `Agent` to `disallowedTools`. Also exclude `ListAgents`, `SendMessage`, and any exposed `Task*` or `Cron*` agent-team controls when strict management blocking is required. Keep `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1` as a depth backstop; at the limit, a normal Agent call is withheld and a fork call returns an error instead of spawning. These controls block native child creation, invocation, definition, management, background, parallel, and fork routes that the active surface exposes. Do not rely on a prompt, Skill, task packet, or file body.
+At dynamic subagent creation, first enumerate the exact child tool names exposed by the active Claude surface. Exclude `Agent` when it is exposed; if that same surface also exposes the legacy `Task` compatibility alias, exclude exact `Task` as well — the alias does not make one exclusion sufficient. If only one name is exposed, describe and exclude only that observed name; do not invent the other. Exclude `ListAgents`, `SendMessage`, and any exposed `Task*` or `Cron*` agent-team controls only when they are actually present and strict management blocking requires it. Keep `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1` as a depth backstop; at the limit, a normal Agent call is withheld and a fork call returns an error instead of spawning. These controls block native child creation, invocation, definition, management, background, parallel, and fork routes that the active surface exposes. Do not rely on a prompt, Skill, task packet, or file body.
 
-The parent session must retain `Agent` so waa can create, continue, receive, and integrate subagents. If the active Claude surface cannot remove the child Agent/Task surface, return `MISSING_CAPABILITY`; if a configured permission rule denies the child route, return `PLATFORM_PERMISSION_BLOCKED`. Indirect shell, SDK, MCP, or externally managed session routes are not proven by this adapter; if they remain reachable and strict blocking is required, do not claim the block.
+The parent session must retain its observed native delegation tool (`Agent` or `Task`) so waa can create, continue, receive, and integrate subagents. If the active Claude surface cannot remove every exposed child delegation and management route, return `MISSING_CAPABILITY`; if a configured permission rule denies the child route, return `PLATFORM_PERMISSION_BLOCKED`. Indirect shell, SDK, MCP, or externally managed session routes are not proven by this adapter; if they remain reachable and strict blocking is required, do not claim the block.
 
 ## Map semantic actions
 
@@ -26,7 +26,7 @@ The parent session must retain `Agent` so waa can create, continue, receive, and
 | Continue or clarify | Use the current Agent continuation mechanism while preserving the original boundary. |
 | Run independently | Use foreground or background execution only when the task and permission behavior support it. |
 
-Do not hard-code the low-level `Agent` schema; it is not a stable cross-platform contract. Older Claude Code material may call this the `Task` tool, but current instructions should use the active interface.
+Do not hard-code the low-level tool schema; it is not a stable cross-platform contract. Enumerate the active interface before describing or filtering `Agent`, `Task`, or any related control.
 
 ## Permission behavior
 

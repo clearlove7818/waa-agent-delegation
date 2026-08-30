@@ -874,6 +874,98 @@
       ],
       "status": "missing evidence",
       "evidence": "Local OpenCode 1.18.20 Skill-path and native Task-tool checks were recorded on 2026-08-25 in evals/evidence/2026-08-25-platform-opencode.md; no forward run of this fixture has been performed."
+    },
+    {
+      "id": "codex-dynamic-unnamed-child-block",
+      "category": "platform_negative",
+      "case_refs": [
+        "80"
+      ],
+      "prompt": "On Codex, create an ordinary unnamed Subagent for the approved task, but it must be unable to create, invoke, define, manage, fork, background-start, or parallel-start another Agent while waa keeps its own delegation tools.",
+      "expected_conditions": [
+        "Inspect references/platform-codex.md and the active native collaboration surface",
+        "Do not disable the global multi-agent switch because waa must retain parent delegation",
+        "When no child-only native control covers every listed route, return MISSING_CAPABILITY before dispatch",
+        "If a child-only control is exposed, verify it while retaining waa's parent create, continue, receive, and integrate ability"
+      ],
+      "forbidden_conditions": [
+        "Treat a Skill, prompt, task packet, or custom-agent body as enforcement",
+        "Disable global multi-agent support as the child-only solution",
+        "Claim child blocking without a verified native control",
+        "Change the shared failure taxonomy"
+      ],
+      "status": "missing evidence",
+      "evidence": "Local Codex 0.151.0-alpha.7.2 inspection found no verified child-only hard block; no forward run of this fixture has been performed."
+    },
+    {
+      "id": "claude-dynamic-unnamed-child-block",
+      "category": "platform_negative",
+      "case_refs": [
+        "81"
+      ],
+      "prompt": "On Claude Code, create an ordinary unnamed Subagent for the approved task, but it must be unable to reach any exposed Agent or Task child-delegation route while waa keeps its own parent delegation ability.",
+      "expected_conditions": [
+        "Inspect references/platform-claude-code.md and enumerate the active child tool surface",
+        "Exclude exact Agent and exact Task when both are actually exposed, or exclude only the observed name when one is exposed",
+        "Exclude ListAgents, SendMessage, Task*, or Cron* only when each is actually exposed and strict management blocking requires it",
+        "Retain the parent's observed delegation tool and return MISSING_CAPABILITY when native child-only exclusion is unproven",
+        "Use PLATFORM_PERMISSION_BLOCKED when a configured permission rule denies the requested child route"
+      ],
+      "forbidden_conditions": [
+        "Invent an unavailable Agent or Task name",
+        "Omit an actually exposed Agent or Task alias",
+        "Use a prompt, Skill, task packet, or Agent body as enforcement",
+        "Disable the parent's delegation tool",
+        "Claim a behavior result without a forward run"
+      ],
+      "status": "missing evidence",
+      "evidence": "Claude Code 2.1.236 local CLI surface was inspected, but no forward run of this fixture has been performed."
+    },
+    {
+      "id": "agy-dynamic-unnamed-child-block",
+      "category": "platform_negative",
+      "case_refs": [
+        "82"
+      ],
+      "prompt": "On Agy, create an ordinary unnamed Subagent for the approved task, but it must be unable to use any native child-delegation or agent-management route while waa keeps its own delegation tools.",
+      "expected_conditions": [
+        "Inspect references/platform-agy-cli.md and the actual define_subagent schema",
+        "Only treat the child block as usable when the active schema and runtime check prove removal of invoke_subagent, define_subagent, send_message, manage_subagents, and every exposed fork or team-control route",
+        "Otherwise return MISSING_CAPABILITY and preserve waa's parent tools",
+        "Use PLATFORM_PERMISSION_BLOCKED when the platform rejects an otherwise requested child boundary"
+      ],
+      "forbidden_conditions": [
+        "Treat a nesting limit, flag name, or tools-list example as proof of complete child blocking",
+        "Use Skill, prompt, task-packet, or Agent text as enforcement",
+        "Invent an unexposed fork or team control",
+        "Claim a universal Agy guarantee",
+        "Claim a behavior result without a forward run"
+      ],
+      "status": "missing evidence",
+      "evidence": "Local Agy 1.1.22 schema and tool availability were not run through a complete child-boundary fixture; no forward run of this fixture has been performed."
+    },
+    {
+      "id": "opencode-dynamic-unnamed-child-block",
+      "category": "platform_negative",
+      "case_refs": [
+        "83"
+      ],
+      "prompt": "On OpenCode, create an ordinary unnamed Subagent for the approved task, but a child must not create or invoke another subagent while waa keeps its own task delegation ability.",
+      "expected_conditions": [
+        "Inspect references/platform-opencode.md and resolve subagent_depth=1 and the child permission.task boundary before dispatch",
+        "Verify waa's first native task call remains allowed while a nested task call from that child is rejected or blocked",
+        "Return MISSING_CAPABILITY when depth or child permission.task is unavailable, overridable, or bypassed by another native agent route",
+        "Use PLATFORM_PERMISSION_BLOCKED when the resolved permission policy denies the requested child route"
+      ],
+      "forbidden_conditions": [
+        "Use a Skill, prompt, task packet, or Agent body as enforcement",
+        "Disable the parent task permission",
+        "Claim behavior success from static documentation or the fixture runner",
+        "Start a fresh child instead of continuing the same task identity",
+        "Claim a behavior result without a forward run"
+      ],
+      "status": "missing evidence",
+      "evidence": "Local OpenCode 1.18.20 configuration resolution was not behaviorally run for this boundary; no forward run of this fixture has been performed."
     }
   ]
 }
