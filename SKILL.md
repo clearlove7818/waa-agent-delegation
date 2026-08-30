@@ -9,14 +9,7 @@ Govern an already-chosen delegation without taking direction, extra authority, n
 
 <FAILURE-LABEL-CONTRACT>
 
-Before execution, put one exact root-cause label as the first status token on the message's first line:
-
-- `BLOCKED`: critical task input is missing or the contract conflicts.
-- `MISSING_CAPABILITY`: a required capability is absent, incompatible, or unreliable.
-- `CAPABILITY_OUT_OF_SCOPE`: the capability exists but Rules or current task authorization excludes it.
-- `PLATFORM_PERMISSION_BLOCKED`: platform policy, sandboxing, or approval prevents the action.
-
-Preserve these labels verbatim. Record any applicable mandatory reply prefix in the task packet with its exact text, governing source, and applicability to this executor. The executor does not infer a prefix from an external instruction or resident identity document that does not govern it. If a directly applicable higher-priority runtime rule is omitted from or conflicts with the packet, obey that rule and return `BLOCKED` for the packet defect before execution. Put the label immediately after an applicable prefix on the same first line; otherwise the label begins the message. Put no discretionary preamble, progress note, separator, or Markdown markup before or around the label. If a required handshake stops, add `Handshake: BLOCKED` after the root-cause label. Delivery states apply only after execution starts.
+Before execution, put one exact root-cause label first: `BLOCKED`, `MISSING_CAPABILITY`, `CAPABILITY_OUT_OF_SCOPE`, or `PLATFORM_PERMISSION_BLOCKED`. Preserve the labels verbatim and use the packet-recorded mandatory-prefix rule; do not infer a prefix from unrelated instructions. Put no preamble or markup around the label. If a required handshake stops, add `Handshake: BLOCKED`; delivery states apply only after execution starts. The full mappings and prefix exceptions live in [references/protocol.md](references/protocol.md).
 
 </FAILURE-LABEL-CONTRACT>
 

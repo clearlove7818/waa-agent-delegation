@@ -39,7 +39,7 @@ OpenCode documents global Skills under `~/.config/opencode/skill/` or `~/.config
 - Map an approval denial or resolved permission block to `PLATFORM_PERMISSION_BLOCKED`.
 - Map an available Agent or Task action excluded by current-task authorization to `CAPABILITY_OUT_OF_SCOPE`.
 
-Place the exact uppercase label as the first status token on the first line of the failure return. Use a mandatory prefix only when the task packet records its exact text, governing source, and applicability to this executor, or when a directly applicable higher-priority runtime rule controls despite a packet defect. Never infer a prefix from an OpenCode Agent definition or instruction file that does not govern the executor; obey a directly applicable rule and return `BLOCKED` for any packet omission or conflict before execution. Put no markup around the label and do not replace it with a platform-native status.
+This adapter is not a standalone contract: use [protocol.md](protocol.md) for exact failure-label, mandatory-prefix, and first-line rules, and use this map for OpenCode-specific behavior.
 
 ## Result reception
 

@@ -46,7 +46,7 @@ Map absent or incompatible tools to `MISSING_CAPABILITY`, unauthorized available
 
 The 2026-08-15 suite preserved correctly shaped `BLOCKED`, `MISSING_CAPABILITY`, and `CAPABILITY_OUT_OF_SCOPE` returns, but not the complete parent task packets used to establish each root cause. Treat those observations as output-shape evidence, not independent proof of the capability or authority facts. A real, harmless Agy permission denial was not available, so `PLATFORM_PERMISSION_BLOCKED` remains unverified.
 
-Place the exact uppercase label as the first status token on the first line. Use a mandatory prefix only when the task packet records its exact text, governing source, and applicability to this executor, or when a directly applicable higher-priority runtime rule controls despite a packet defect. Never infer a prefix from an external instruction or resident identity document that does not govern the executor; obey a directly applicable rule and return `BLOCKED` for any packet omission or conflict before execution. Put no markup around the label and do not translate it or replace it with an Agy task-state name.
+This adapter is not a standalone contract: use [protocol.md](protocol.md) for exact failure-label, mandatory-prefix, and first-line rules, and use this map for Agy-specific behavior.
 
 ## Result reception
 
