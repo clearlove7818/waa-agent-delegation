@@ -21,7 +21,7 @@ Before execution, put one exact root-cause label first: `BLOCKED`, `MISSING_CAPA
 4. Build one risk-sized TASK-006 packet with `task_packet_version`, `task_id`, `assembly_type`, `artifact_id`, `artifact_version`, and one `owner`; vary only the depth of its nine information classes. Read [references/protocol.md](references/protocol.md), then render the packet from [references/packet-template.md](references/packet-template.md) rather than transcribing its fenced blocks.
 5. Load only the active map: [Codex](references/platform-codex.md), [Claude Code](references/platform-claude-code.md), [Agy](references/platform-agy-cli.md), or [OpenCode](references/platform-opencode.md). Read [platform compatibility](references/platform-compatibility.md) when certainty matters.
 6. Apply the required handshake, dispatch through the current native interface, and preserve the packet boundary.
-7. Reconcile identity and ownership, verify returned evidence, and integrate only what it supports.
+7. Reconcile identity and ownership, verify returned evidence, and integrate only what it supports. If independent evaluation is authorized, read [references/evaluation.md](references/evaluation.md).
 
 ## Apply executor rules
 

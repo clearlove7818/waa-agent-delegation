@@ -664,11 +664,11 @@ The machine-readable companion is [`trigger-cases.json`](trigger-cases.json). `m
 
 ## Case 80: Codex dynamic unnamed child blocking is not proven
 
-- **Request:** “On Codex, create an ordinary unnamed Subagent for the approved task, but it must be unable to create, invoke, define, manage, fork, background-start, or parallel-start another Agent while waa keeps its own delegation tools.”
+- **Request:** “On Codex, create an ordinary unnamed Subagent for the approved task, but it must be unable to create, invoke, define, manage or interrupt, send messages, fork, background-start, or parallel-start another Agent while waa keeps its own delegation tools.”
 - **Precondition:** The active Codex surface exposes the global multi-agent switch, but no child-only tool deny or nesting-depth control has been verified.
-- **Expected behavior:** Inspect `references/platform-codex.md` and the active native collaboration surface. Do not disable the global multi-agent switch. If no child-only native control covers every listed route, return `MISSING_CAPABILITY` before dispatch; if such a managed control is present, verify it while retaining waa’s parent delegation surface.
+- **Expected behavior:** Inspect `references/platform-codex.md` and the active native collaboration surface. Do not disable the global multi-agent switch. If no child-only native control covers create/invoke, define, manage/interrupt, send/message, fork, background, and parallel routes, return `MISSING_CAPABILITY` before dispatch; if such a managed control is present, verify it while retaining waa’s parent delegation surface.
 - **Forbidden behavior:** Treating a Skill, prompt, task packet, or custom-agent body as enforcement; disabling global multi-agent support; claiming child blocking without a native control; or changing the shared failure taxonomy.
-- **Observed:** `missing evidence` — no forward run of this fixture has been performed.
+- **Observed:** `missing evidence` — on 2026-08-30 local `codex --version` returned `codex-cli 0.151.0-alpha.7.2`; `references/platform-codex.md` was rechecked and no child-only hard block was verified; no forward run of this fixture has been performed.
 
 ## Case 81: Claude Code dynamic child excludes observed Agent and Task aliases
 
@@ -676,7 +676,7 @@ The machine-readable companion is [`trigger-cases.json`](trigger-cases.json). `m
 - **Precondition:** The active Claude surface may expose current `Agent`, legacy `Task` compatibility alias, or only one of those names; the actual exposed names must be enumerated before filtering.
 - **Expected behavior:** Inspect `references/platform-claude-code.md` and the active child tool surface. Exclude exact `Agent` and exact `Task` when both are actually exposed; if only one is exposed, describe and exclude only that observed name. Exclude `ListAgents`, `SendMessage`, and exposed `Task*` or `Cron*` controls only when present and needed for strict management blocking. Retain the parent’s observed delegation tool and return `MISSING_CAPABILITY` if native child-only exclusion cannot be proven; a configured permission denial uses `PLATFORM_PERMISSION_BLOCKED`.
 - **Forbidden behavior:** Inventing an unavailable tool name; omitting an actually exposed alias; using a prompt, Skill, task packet, or Agent body as enforcement; disabling the parent delegation tool; or claiming a behavior result without a forward run.
-- **Observed:** `missing evidence` — no forward run of this fixture has been performed.
+- **Observed:** `missing evidence` — on 2026-08-30 local `claude --version` returned `2.1.236` and `claude --help` was inspected; `references/platform-claude-code.md` was rechecked, but active child-tool exposure and behavior were not run; no forward run of this fixture has been performed.
 
 ## Case 82: Agy dynamic child-tool blocking remains evidence-bounded
 
@@ -684,7 +684,7 @@ The machine-readable companion is [`trigger-cases.json`](trigger-cases.json). `m
 - **Precondition:** The active Agy `define_subagent` schema may expose a per-agent tool list or another child-tool control, but a complete native deny has not yet been verified for this installation.
 - **Expected behavior:** Inspect `references/platform-agy-cli.md` and the actual `define_subagent` schema. Record the child block as usable only if the active schema and a runtime check prove removal of `invoke_subagent`, `define_subagent`, `send_message`, `manage_subagents`, and every exposed fork or team-control route. Otherwise return `MISSING_CAPABILITY`; a platform rejection of an otherwise requested boundary uses `PLATFORM_PERMISSION_BLOCKED`. Preserve waa’s parent tools.
 - **Forbidden behavior:** Treating a nesting limit, a named flag, a tools-list example, or Skill/prompt/task-packet/Agent text as proof; inventing an unexposed fork control; claiming a universal Agy guarantee; or claiming a behavior result without a forward run.
-- **Observed:** `missing evidence` — no forward run of this fixture has been performed.
+- **Observed:** `missing evidence` — on 2026-08-30 local `agy --version` returned `1.1.22` and `agy --help` was inspected; `references/platform-agy-cli.md` was rechecked, but complete child-tool schema and runtime enforcement were not run; no forward run of this fixture has been performed.
 
 ## Case 83: OpenCode dynamic child uses depth and task-permission guards
 
@@ -692,4 +692,4 @@ The machine-readable companion is [`trigger-cases.json`](trigger-cases.json). `m
 - **Precondition:** The active OpenCode path uses the native `task` tool. The resolved configuration must provide `subagent_depth=1` and deny the child’s `permission.task`; current behavior has not yet been run in this fixture.
 - **Expected behavior:** Inspect `references/platform-opencode.md` and resolve both controls before dispatch. Verify that waa’s first `task` call remains allowed, while a nested `task` call from that child is rejected or blocked. If depth or child `permission.task` is unavailable, overridable, or bypassed by another native agent route, return `MISSING_CAPABILITY`; if the resolved permission policy denies the requested child route, return `PLATFORM_PERMISSION_BLOCKED`.
 - **Forbidden behavior:** Treating a Skill, prompt, task packet, or Agent body as enforcement; disabling the parent `task` permission; claiming behavior success from static documentation or the fixture runner; or starting a fresh child instead of continuing the same task identity.
-- **Observed:** `missing evidence` — no forward run of this fixture has been performed.
+- **Observed:** `missing evidence` — on 2026-08-30 local `opencode --version` returned `1.18.20` and `opencode debug paths` was inspected; `references/platform-opencode.md` was rechecked, but effective depth/permission resolution and nested behavior were not run; no forward run of this fixture has been performed.

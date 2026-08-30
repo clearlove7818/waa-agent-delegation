@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-fixture-conformance-runner v2
+fixture-conformance-runner v3
 
 Structural conformance runner for the waa-agent-delegation regression fixtures.
 

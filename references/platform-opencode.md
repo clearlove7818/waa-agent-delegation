@@ -2,7 +2,7 @@
 
 Use this mapping only when the active harness is OpenCode.
 
-Evidence reviewed: 2026-08-25. OpenCode 1.18.20 was installed locally and its native `task` tool includes resumable subagent sessions. Discovery, configured agents, permissions, model access, and running-session refresh remain conditions to verify on the active installation.
+Verify the active OpenCode version, configured agents, permissions, model access, and session refresh before dispatch.
 
 ## Before dispatch
 
@@ -29,13 +29,9 @@ The parent retains its `task` permission and can create, continue, receive, and 
 | Wait for results | Foreground Task calls return one result to the primary agent. Treat that result as evidence, not acceptance of the integrated outcome. |
 | Stop unsafe work | Withhold the continuation after a blocked or defective handshake. During execution, use only interruption or cancellation controls actually exposed by the active surface; never claim a stop that was not confirmed. |
 
-Each fresh Task call creates a separate subagent context unless `task_id` resumes the prior session. Reusing the exact identifier preserves the conversation but does not create new authority or excuse restating a binding change. The first call in a two-stage handshake must finish without executing the assignment; a single final result that combines acceptance and work is not a pre-execution gate.
+Each fresh Task call creates a separate context unless `task_id` resumes the prior session. Reuse the exact identifier for continuation, and keep the first handshake call separate from execution.
 
 Do not hard-code the current Task JSON schema into the shared protocol. OpenCode transport names and parameters can change; this map records only the semantic mapping needed to preserve the protocol.
-
-## Skill and Agent discovery
-
-OpenCode documents global Skills under `~/.config/opencode/skill/` or `~/.config/opencode/skills/`, project Skills under `.opencode/skill/` or `.opencode/skills/`, and compatible external Skills under `.agents/skills/` locations. Agent definitions may be global, project-local, or inline in OpenCode configuration. Confirm the active session has loaded the intended Skill and Agent after any installation or configuration change.
 
 ## Permission behavior
 
@@ -50,14 +46,3 @@ This adapter is not a standalone contract: use [protocol.md](protocol.md) for ex
 ## Result reception
 
 Inspect the subagent's returned text, changed files, commands, and evidence from the primary OpenCode session. Re-run proportionate checks in the primary context. A returned `task_id`, completed Task call, or claimed test result does not transfer artifact ownership or final responsibility.
-
-## Evidence sources
-
-Accessed 2026-08-25:
-
-- <https://opencode.ai/docs/skills/>
-- <https://opencode.ai/docs/agents/>
-- <https://opencode.ai/docs/permissions/>
-- <https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/tool/task.ts>
-- [Local OpenCode platform evidence](../evals/evidence/2026-08-25-platform-opencode.md).
-- Rechecked 2026-08-30: local OpenCode `1.18.20`; effective `subagent_depth` and child `permission.task` resolution were not run because the local debug command could not open its log under the current sandbox.

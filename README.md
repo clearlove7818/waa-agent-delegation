@@ -16,30 +16,9 @@ It helps the primary agent choose exactly one `EXECUTION_SUBAGENT`, `TASK_SPECIA
 
 ## Architecture
 
-The repository separates three concerns:
+`SKILL.md` is the shared entry point. `references/protocol.md` and `references/packet-template.md` define packet and return contracts; one active `references/platform-*.md` maps the native surface; `references/evaluation.md` is loaded only for an authorized evaluation. `MAINTAINING.md`, `CONTRIBUTING.md`, and `SECURITY.md` are human-facing.
 
-| Layer | Files | Purpose |
-| --- | --- | --- |
-| Shared runtime | [`SKILL.md`](SKILL.md), [`references/protocol.md`](references/protocol.md), [`references/packet-template.md`](references/packet-template.md) | Stable delegation semantics, authoritative contracts, and dispatch-time packet rendering |
-| Platform runtime | [`references/platform-compatibility.md`](references/platform-compatibility.md), platform-specific maps | Discovery facts, native interface mapping, permissions, and known unknowns |
-| Maintenance | [`MAINTAINING.md`](MAINTAINING.md), [`CONTRIBUTING.md`](CONTRIBUTING.md), [`SECURITY.md`](SECURITY.md) | Change ownership, contribution workflow, and security reporting |
-
-`agents/openai.yaml` is Codex UI metadata. It is not an Agent definition and is not required by Claude Code or Agy CLI.
-
-## Protocol identity
-
-Every packet, including a low-risk packet that skips the handshake, carries exactly one `assembly_type` and these identity fields:
-
-```text
-task_packet_version
-task_id
-assembly_type: EXECUTION_SUBAGENT | TASK_SPECIALIST_SUBAGENT | NAMED_AGENT
-artifact_id
-artifact_version
-owner
-```
-
-Risk trimming changes the depth of the nine TASK-006 information classes, not the identity fields. `TASK_SPECIALIST_SUBAGENT` additionally carries the eight-part temporary `specialist_contract`; it never creates a persistent personality. `owner` is the sole owner of the current artifact version, while primary-agent synthesis and final responsibility do not automatically change ownership.
+`agents/openai.yaml` is Codex UI metadata only.
 
 ## Runtime-facing repository map
 
@@ -67,10 +46,10 @@ waa-agent-delegation/
 Use this Skill only after the primary agent has already decided that an actual delegation is useful and authorized.
 
 1. Select exactly one executor type.
-2. Confirm capability, task authority, platform permission, prohibited actions, and external effects.
-3. Build one self-contained task packet from [`references/packet-template.md`](references/packet-template.md).
-4. Require the executor-specific handshake when applicable, then continue the same executor without changing the accepted boundary.
-5. Inspect the returned artifact and verification material before integrating the result.
+2. Check capability, authority, platform permission, prohibited actions, and external effects.
+3. Build one self-contained packet from [`references/packet-template.md`](references/packet-template.md).
+4. Use the applicable handshake and continuation mechanism.
+5. Inspect returned artifacts and evidence before integration.
 
 [`references/protocol.md`](references/protocol.md) is authoritative when any summary, platform mapping, or packet rendering differs from it.
 

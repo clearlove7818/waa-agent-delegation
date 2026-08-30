@@ -881,11 +881,11 @@
       "case_refs": [
         "80"
       ],
-      "prompt": "On Codex, create an ordinary unnamed Subagent for the approved task, but it must be unable to create, invoke, define, manage, fork, background-start, or parallel-start another Agent while waa keeps its own delegation tools.",
+      "prompt": "On Codex, create an ordinary unnamed Subagent for the approved task, but it must be unable to create, invoke, define, manage or interrupt, send messages, fork, background-start, or parallel-start another Agent while waa keeps its own delegation tools.",
       "expected_conditions": [
         "Inspect references/platform-codex.md and the active native collaboration surface",
         "Do not disable the global multi-agent switch because waa must retain parent delegation",
-        "When no child-only native control covers every listed route, return MISSING_CAPABILITY before dispatch",
+        "When no child-only native control covers create/invoke, define, manage/interrupt, send/message, fork, background, and parallel routes, return MISSING_CAPABILITY before dispatch",
         "If a child-only control is exposed, verify it while retaining waa's parent create, continue, receive, and integrate ability"
       ],
       "forbidden_conditions": [
@@ -895,7 +895,7 @@
         "Change the shared failure taxonomy"
       ],
       "status": "missing evidence",
-      "evidence": "Local Codex 0.151.0-alpha.7.2 inspection found no verified child-only hard block; no forward run of this fixture has been performed."
+      "evidence": "On 2026-08-30 local codex --version returned codex-cli 0.151.0-alpha.7.2; references/platform-codex.md was rechecked and no verified child-only hard block was found; no forward run of this fixture has been performed."
     },
     {
       "id": "claude-dynamic-unnamed-child-block",
@@ -919,7 +919,7 @@
         "Claim a behavior result without a forward run"
       ],
       "status": "missing evidence",
-      "evidence": "Claude Code 2.1.236 local CLI surface was inspected, but no forward run of this fixture has been performed."
+      "evidence": "On 2026-08-30 local claude --version returned 2.1.236 and claude --help was inspected; references/platform-claude-code.md was rechecked, but active child-tool exposure and behavior were not run; no forward run of this fixture has been performed."
     },
     {
       "id": "agy-dynamic-unnamed-child-block",
@@ -942,7 +942,7 @@
         "Claim a behavior result without a forward run"
       ],
       "status": "missing evidence",
-      "evidence": "Local Agy 1.1.22 schema and tool availability were not run through a complete child-boundary fixture; no forward run of this fixture has been performed."
+      "evidence": "On 2026-08-30 local agy --version returned 1.1.22 and agy --help was inspected; references/platform-agy-cli.md was rechecked, but complete child-tool schema and runtime enforcement were not run; no forward run of this fixture has been performed."
     },
     {
       "id": "opencode-dynamic-unnamed-child-block",
@@ -965,7 +965,7 @@
         "Claim a behavior result without a forward run"
       ],
       "status": "missing evidence",
-      "evidence": "Local OpenCode 1.18.20 configuration resolution was not behaviorally run for this boundary; no forward run of this fixture has been performed."
+      "evidence": "On 2026-08-30 local opencode --version returned 1.18.20 and opencode debug paths was inspected; references/platform-opencode.md was rechecked, but effective depth/permission resolution and nested behavior were not run; no forward run of this fixture has been performed."
     }
   ]
 }

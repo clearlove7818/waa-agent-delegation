@@ -2,7 +2,7 @@
 
 Use this mapping only when the active harness is Codex.
 
-Evidence reviewed: 2026-08-16. Current Codex releases expose subagents by default, but the detailed orchestration behavior below is bound to the collaboration tool contracts exposed by the active session and must be rechecked when those contracts change.
+Use the active session's collaboration tool contracts; product versions and transport details may change.
 
 ## Before dispatch
 
@@ -13,9 +13,9 @@ Evidence reviewed: 2026-08-16. Current Codex releases expose subagents by defaul
 
 ## Dynamic unnamed-subagent child block
 
-The current Codex surface exposes a global multi-agent switch, but no documented child-only deny, per-subagent tool filter, or nesting-depth control. Disabling the global switch would also remove waa's ability to create and continue subagents, so it does not satisfy this Skill's parent/child split.
+Codex documents a global multi-agent switch and a global `agents.max_depth`, but no child-only deny or per-subagent tool filter. A global switch or depth cap does not prove the required parent/child split; disabling the switch would also remove waa's delegation surface.
 
-For a dynamic unnamed subagent that requires a native hard block, verify a platform-provided child-only control before dispatch. It must cover every native child-delegation route exposed to that subagent: create or invoke, define, manage, fork, background, and parallel start. A Skill, prompt, task packet, or custom-agent file is not that control. If the active Codex surface has no such control, return `MISSING_CAPABILITY`; if the control exists but the platform denies the requested child route, return `PLATFORM_PERMISSION_BLOCKED`. Keep waa's parent multi-agent surface enabled.
+For a dynamic unnamed subagent that requires a native hard block, verify a platform-provided child-only control before dispatch. It must cover every native child-delegation or collaboration route exposed to that subagent: create or invoke, define, manage or interrupt, message/send, fork, background, and parallel start, plus any other exposed equivalent route. A Skill, prompt, task packet, or custom-agent file is not that control. If the active Codex surface has no such control, return `MISSING_CAPABILITY`; if the control exists but the platform denies the requested child route, return `PLATFORM_PERMISSION_BLOCKED`. Keep waa's parent multi-agent surface enabled.
 
 ## Map semantic actions
 
@@ -29,19 +29,9 @@ For a dynamic unnamed subagent that requires a native hard block, verify a platf
 | Wait for results | Use the current wait/status mechanism and retain primary-agent responsibility. A non-final `MESSAGE` is information, not proof that the executor has stopped; the handshake gate requires a completed turn and its `FINAL_ANSWER`. |
 | Stop unsafe work | Use `interrupt_agent` when authority, scope, or the core contract is violated. Interruption ends the current turn and leaves the target reusable, but it is not acceptance of the handshake. |
 
-A final answer ends that executor turn, not the reusable target. A later `followup_task` can continue the same target only while the original target still exists; creating a replacement does not restore the prior target's complete context. Context compaction can summarize older history, so restate any binding decision added after the handshake in the follow-up task and keep protocol-critical state in the message or an authorized artifact instead of assuming unstated history remains verbatim.
+A final answer ends that executor turn, not the reusable target. Continue only the same live target; restate any material binding added after the handshake because compaction may summarize older context.
 
 Codex transport does not impose the governance protocol's response-body prefixes or status tokens. Those requirements come from the applicable runtime rules and task packet. Do not hard-code a tool JSON schema in the shared protocol: tool names, parameters, and delivery behavior can vary by Codex surface and release.
-
-## Evidence sources
-
-Accessed 2026-08-16:
-
-- <https://developers.openai.com/codex/multi-agent/>
-- <https://github.com/openai/codex/blob/main/codex-rs/core/src/tools/handlers/multi_agents_spec.rs>
-- The collaboration tool contracts exposed in the active Codex session.
-- Rechecked 2026-08-30: local `codex-cli 0.151.0-alpha.7.2`; no child-only hard block was verified.
-- [User-confirmed platform-facts evidence](../evals/evidence/2026-08-16-platform-facts.md), source-report SHA-256 `09e0e116bda5502ca4ec0e10f3964f5f2d9e0bdd205e6ceb81ae062ef93d19c6`.
 
 ## Permission behavior
 
