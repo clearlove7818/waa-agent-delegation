@@ -11,6 +11,12 @@ Evidence reviewed: 2026-08-25. OpenCode 1.18.20 was installed locally and its na
 3. Select a configured named agent only when current-task authorization already exists. Visibility in `opencode agent list` is capability evidence, not authorization.
 4. Use foreground Task calls for a required handshake. Background execution is not a substitute for primary-agent inspection before work begins.
 
+## Dynamic unnamed-subagent child block
+
+Require the resolved OpenCode configuration to keep `subagent_depth` at `1` for the dispatch. The native depth guard allows waa (the primary) to launch a subagent but rejects any `task` call from that child before another child session is created, so it blocks nested create or invoke, background, and parallel launches through `task`. Keep the child's `permission.task` denied for `*` unless the active configuration proves an equivalent native deny; a prompt, Skill, task packet, or agent body cannot grant or remove this boundary.
+
+The parent retains its `task` permission and can create, continue, receive, and integrate subagents. If `subagent_depth` is unavailable, can be raised by the active configuration, or the child can reach another native agent-management or fork surface not covered by the depth/permission guard, return `MISSING_CAPABILITY`; if the resolved permission policy blocks the requested child route, return `PLATFORM_PERMISSION_BLOCKED`. Direct user `@` invocation and indirect shell or plugin routes are separate surfaces and remain unverified by this adapter.
+
 ## Map semantic actions
 
 | Delegation action | OpenCode behavior |
@@ -54,3 +60,4 @@ Accessed 2026-08-25:
 - <https://opencode.ai/docs/permissions/>
 - <https://github.com/anomalyco/opencode/blob/dev/packages/opencode/src/tool/task.ts>
 - [Local OpenCode platform evidence](../evals/evidence/2026-08-25-platform-opencode.md).
+- Rechecked 2026-08-30: local OpenCode `1.18.20`; effective `subagent_depth` and child `permission.task` resolution were not run because the local debug command could not open its log under the current sandbox.

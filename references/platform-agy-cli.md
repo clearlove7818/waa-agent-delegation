@@ -11,6 +11,12 @@ Use this mapping only when the active harness is Google Antigravity CLI (`agy`).
 3. Treat `/agents` session-agent selection and task-level `invoke_subagent` as different operations.
 4. Do not create persistent `.agents/agents` or `~/.gemini/config/agents` definitions merely to adapt this Skill. This does not prohibit selecting or using an already-existing definition that is explicitly authorized for the current task.
 
+## Dynamic unnamed-subagent child block
+
+Agy's public subagent docs expose transient `define_subagent`, per-agent tool lists, asynchronous execution, peer messaging, and a nesting limit, but do not document a child-only switch that removes every collaboration route. A `tools` allowlist is a native block only when the active tool schema exposes and excludes all child collaboration tools: `invoke_subagent`, `define_subagent`, `send_message`, `manage_subagents`, and any fork or team control.
+
+If the active `define_subagent` surface exposes an explicit child-tool disable (for example `enable_subagent_tools=false`), verify that it removes the full set before relying on it; this is not a public cross-version guarantee. If no native child-only block is exposed or enforced, return `MISSING_CAPABILITY`; if the platform rejects the requested child tool boundary, return `PLATFORM_PERMISSION_BLOCKED`. The parent keeps its own collaboration tools and can still create, continue, receive, and integrate subagents. Do not use a prompt, Skill, task packet, or Markdown body as the enforcement mechanism.
+
 ## Map semantic actions
 
 | Delegation action | Agy behavior |
@@ -33,6 +39,7 @@ Accessed or rechecked 2026-08-16:
 - <https://antigravity.google/docs/subagents>
 - <https://github.com/google-antigravity/antigravity-cli>
 - Local `agy --version` output and user-confirmed tested version: `1.1.13`.
+- Rechecked 2026-08-30: local `agy --version` reported `1.1.22`; enforcement of `enable_subagent_tools=false` was not run.
 - [User-confirmed platform-facts evidence](../evals/evidence/2026-08-16-platform-facts.md), source-report SHA-256 `09e0e116bda5502ca4ec0e10f3964f5f2d9e0bdd205e6ceb81ae062ef93d19c6`.
 
 ## Permission behavior

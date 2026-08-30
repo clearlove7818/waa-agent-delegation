@@ -11,6 +11,12 @@ Evidence reviewed: 2026-08-16. Current Codex releases expose subagents by defaul
 3. Select an existing named agent only when authorization is already established and the agent is actually available.
 4. Treat model selection, context-fork behavior, worktree use, and concurrency as platform options, not rights granted by the task packet.
 
+## Dynamic unnamed-subagent child block
+
+The current Codex surface exposes a global multi-agent switch, but no documented child-only deny, per-subagent tool filter, or nesting-depth control. Disabling the global switch would also remove waa's ability to create and continue subagents, so it does not satisfy this Skill's parent/child split.
+
+For a dynamic unnamed subagent that requires a native hard block, verify a platform-provided child-only control before dispatch. It must cover every native child-delegation route exposed to that subagent: create or invoke, define, manage, fork, background, and parallel start. A Skill, prompt, task packet, or custom-agent file is not that control. If the active Codex surface has no such control, return `MISSING_CAPABILITY`; if the control exists but the platform denies the requested child route, return `PLATFORM_PERMISSION_BLOCKED`. Keep waa's parent multi-agent surface enabled.
+
 ## Map semantic actions
 
 | Delegation action | Codex behavior |
@@ -34,6 +40,7 @@ Accessed 2026-08-16:
 - <https://developers.openai.com/codex/multi-agent/>
 - <https://github.com/openai/codex/blob/main/codex-rs/core/src/tools/handlers/multi_agents_spec.rs>
 - The collaboration tool contracts exposed in the active Codex session.
+- Rechecked 2026-08-30: local `codex-cli 0.151.0-alpha.7.2`; no child-only hard block was verified.
 - [User-confirmed platform-facts evidence](../evals/evidence/2026-08-16-platform-facts.md), source-report SHA-256 `09e0e116bda5502ca4ec0e10f3964f5f2d9e0bdd205e6ceb81ae062ef93d19c6`.
 
 ## Permission behavior
