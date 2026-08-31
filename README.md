@@ -56,6 +56,19 @@ CC Switch maintains the shared source for all supported platforms at:
 
 The repository does not create or modify that link. After switching the source, load the root `SKILL.md` and use the active runtime map under [`references/`](references/) for native delegation and continuation behavior.
 
+## Version checkpoints and rollback
+
+Git history is the iteration record. Verified stable nodes use annotated tags named `checkpoint-YYYY-MM-DD-<slug>`; this README does not duplicate the full commit log.
+
+The current post-streamlining checkpoint is `checkpoint-2026-08-31-post-streamlining`, pointing to commit `8e5c75a`. It preserves the shared delegation flow and four platform maps after the cleanup. Structural and document checks passed for this checkpoint; it does not claim a new four-platform behavioral forward run.
+
+Inspect the history or create a recovery branch without moving `main`:
+
+```bash
+git log --oneline --decorate
+git switch -c restore/<name> checkpoint-2026-08-31-post-streamlining
+```
+
 ## Contributing
 
 Maintenance rules live in [`MAINTAINING.md`](MAINTAINING.md). Contributions are welcome through [`CONTRIBUTING.md`](CONTRIBUTING.md). Report security-sensitive issues according to [`SECURITY.md`](SECURITY.md).
