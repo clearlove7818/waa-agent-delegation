@@ -10,12 +10,11 @@ Keep the packet self-contained because the executor has an independent context. 
 | --- | --- |
 | `EXECUTION_SUBAGENT` | Create one bounded executor through the active native delegation interface. |
 | `TASK_SPECIALIST_SUBAGENT` | Send the task-scoped specialist contract or select an already available suitable custom subagent. |
-| `NAMED_AGENT` | Select the exact Agent only after current-task authorization; otherwise return `CAPABILITY_OUT_OF_SCOPE`. |
-| Required handshake | When the shared protocol requires a handshake, use one foreground delegation exchange for `ACCEPTED` or a blocked return. After primary-agent inspection, continue or resume the same Agent through the active native interface. If identity and context cannot be preserved, return `MISSING_CAPABILITY`. |
-| Run independently | Start foreground or background work only after any required handshake and only when its result returns to the primary session. |
+| `NAMED_AGENT` | Create the exact authorized Agent through the active native interface. |
+| Required handshake | When the shared protocol requires a handshake, use one foreground delegation exchange for `ACCEPTED` or a blocked return. |
+| Continue original executor | Continue or resume the same Agent through the active native interface. If identity and context cannot be preserved, return `MISSING_CAPABILITY`. |
+| Receive results | Receive the native delegation result in the primary session and preserve the packet identity. |
 | Stop unsafe work | Use the active cancellation or stop control and confirm that execution stopped. |
-
-Continue the original Agent after a dependency result is verified. If the original target cannot be resumed, create a new packet rather than claim continuation.
 
 ## Runtime failures
 

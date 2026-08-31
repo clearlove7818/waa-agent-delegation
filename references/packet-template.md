@@ -5,11 +5,8 @@ Fill the slots; do not retype the blocks. This file renders the protocol's packe
 Usage:
 
 1. Copy the skeleton and fill every `<...>` slot. Risk sizing may compress detail, but never task identity, task ID, packet version, artifact ownership, or `assembly_type`.
-2. Carry input content hashes in full; a truncated hash supports only prefix matching and is labeled as such.
-3. State each output path's current state — absent, existing and empty, or existing with content.
-4. When a handshake is required, carry the acceptance-record form verbatim from the block below; always carry the completion-return form. The `required_form_defect_rule` line travels in every packet exactly as the skeleton writes it.
-5. State the packet's scratch policy: name the one permitted scratch path for temporary files, or prohibit them outright; a packet silent on scratch space makes every helper file a boundary breach.
-6. Copy every closed-set token — an `assembly_type` value, a status word, a boundary mode — from its defining source; a retyped token is how a closed set gains a misspelled member.
+2. Expand only the detail that changes scope, evidence, permissions, verification, or return behavior.
+3. When a handshake is required, carry the acceptance-record form below; always carry the completion-return form and the skeleton's `required_form_defect_rule`.
 
 ## Skeleton (byte-identical to the protocol's)
 

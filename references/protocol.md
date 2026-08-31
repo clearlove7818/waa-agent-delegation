@@ -147,21 +147,13 @@ forbidden_delegation: <no dispatch of another Agent, subagent, background task, 
 
 `NAMED_AGENT` always returns `ACCEPTED` or `BLOCKED` before execution and confirms the authorization basis. Availability, fit, and visibility are not authorization. A named Agent may not dispatch another Agent within this task; expansion requires a new packet and primary-agent decision.
 
-## Execution protocol
-
-The loop is: select one executor after the primary decision → check capability, compatibility, authority, permission, and effects → build the packet → execute → receive, verify, and integrate. Optional evaluation is a separate authorized branch. The primary agent owns coordination, verification, synthesis, and final communication; `owner` remains the packet's artifact-version owner.
-
 ## Dependency handoff
 
 If an executor discovers additional Agent work, it does not dispatch it. It returns the dependency to the primary agent with the current packet identity and the reason it is needed. The primary agent may create a separate packet for a new executor, receive and verify that result, then continue the original executor through its native continuation interface with the original identity, ownership, and boundary unchanged. The new packet is a primary-agent dispatch, not nested delegation by the executor; the original executor remains responsible only for its assigned artifact version.
 
 ## Acceptance handshake
 
-Apply the executor-specific rule:
-
-- `EXECUTION_SUBAGENT`: optional only for low-risk, reversible, unambiguous work with no external effect; otherwise require it.
-- `TASK_SPECIALIST_SUBAGENT`: always require it before execution.
-- `NAMED_AGENT`: always require it before execution and include the authorization basis. This requirement binds the named identity to current-task authorization and does not scale down merely because the work is low risk.
+Apply the rule under the selected executor type above. The forms below are authoritative for every required handshake.
 
 Accepted form:
 

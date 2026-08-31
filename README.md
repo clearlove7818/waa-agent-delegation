@@ -20,27 +20,6 @@ It helps the primary agent choose exactly one `EXECUTION_SUBAGENT`, `TASK_SPECIA
 
 `agents/openai.yaml` is Codex UI metadata only.
 
-## Runtime-facing repository map
-
-```text
-waa-agent-delegation/
-├── README.md
-├── MAINTAINING.md
-├── CONTRIBUTING.md
-├── SECURITY.md
-├── LICENSE
-├── SKILL.md
-├── agents/openai.yaml
-└── references/
-│   ├── protocol.md
-│   ├── packet-template.md
-│   ├── platform-compatibility.md
-│   ├── platform-codex.md
-│   ├── platform-claude-code.md
-│   ├── platform-agy-cli.md
-│   └── platform-opencode.md
-```
-
 ## Usage
 
 Use this Skill only after the primary agent has already decided that an actual delegation is useful and authorized.

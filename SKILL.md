@@ -1,24 +1,18 @@
 ---
 name: waa-agent-delegation
-description: Govern an actual agent delegation only after the primary agent has decided to create or invoke a subagent. Use to choose exactly one EXECUTION_SUBAGENT, TASK_SPECIALIST_SUBAGENT, or explicitly authorized NAMED_AGENT; check capability, platform, permission, and external-effect boundaries; build a risk-sized TASK-006 packet; define handshake, failure, delivery, and handoff; and support primary-agent verification. Exclude complexity alone, delegation discussion, simple direct work, multi-agent demonstrations, unauthorized named-agent activation, permission expansion, and responsibility transfer.
+description: Govern an actual agent delegation after the primary agent has chosen one. Use to select exactly one EXECUTION_SUBAGENT, TASK_SPECIALIST_SUBAGENT, or authorized NAMED_AGENT; check capability, permission, and external-effect boundaries; build a risk-sized TASK-006 packet; apply handshake, failure, delivery, and handoff rules; and support primary-agent verification. Exclude delegation discussion, direct work, unauthorized named-agent activation, permission expansion, and responsibility transfer.
 ---
 
 # Agent Delegation
 
 Govern an already-chosen delegation without taking direction, extra authority, named-agent activation rights, or final responsibility.
 
-<FAILURE-LABEL-CONTRACT>
-
-Before execution, put one exact root-cause label first: `BLOCKED`, `MISSING_CAPABILITY`, `CAPABILITY_OUT_OF_SCOPE`, or `PLATFORM_PERMISSION_BLOCKED`. Preserve the labels verbatim and use the packet-recorded mandatory-prefix rule; do not infer a prefix from unrelated instructions. Put no preamble or markup around the label. If a required handshake stops, add `Handshake: BLOCKED`; delivery states apply only after execution starts. The full mappings and prefix exceptions live in [references/protocol.md](references/protocol.md).
-
-</FAILURE-LABEL-CONTRACT>
-
 ## Run the delegation loop
 
 1. Confirm real delegation is already chosen and useful for independent work, professional judgment, parallel benefit, or independent verification; otherwise do not dispatch.
 2. Choose exactly one `EXECUTION_SUBAGENT`, `TASK_SPECIALIST_SUBAGENT`, or authorized `NAMED_AGENT`. Visibility, availability, recommendation, or fit never authorizes a named Agent.
 3. Check capability fitness, platform compatibility, Rules, task authorization, platform permission, prohibitions, exceptions, and external effects.
-4. Build one risk-sized TASK-006 packet with `task_packet_version`, `task_id`, `assembly_type`, `artifact_id`, `artifact_version`, and one `owner`; vary only the depth of its nine information classes. Read [references/protocol.md](references/protocol.md), then render the packet from [references/packet-template.md](references/packet-template.md) rather than transcribing its fenced blocks.
+4. Read [references/protocol.md](references/protocol.md), which is authoritative for the packet, handshake, return forms, and failure labels. Build one risk-sized TASK-006 packet with `task_packet_version`, `task_id`, `assembly_type`, `artifact_id`, `artifact_version`, and one `owner`; render it from [references/packet-template.md](references/packet-template.md).
 5. Load only the active map: [Codex](references/platform-codex.md), [Claude Code](references/platform-claude-code.md), [Agy](references/platform-agy-cli.md), or [OpenCode](references/platform-opencode.md). Read [platform compatibility](references/platform-compatibility.md) when certainty matters.
 6. Apply the required handshake, dispatch through the current native interface, and preserve the packet boundary.
 7. Reconcile identity and ownership, verify returned evidence, and integrate only what it supports. If independent evaluation is authorized, read [references/evaluation.md](references/evaluation.md).

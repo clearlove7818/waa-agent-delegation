@@ -64,16 +64,4 @@ Refresh platform claims only when they affect creation, handshake, continuation,
 - Fixtures remain structural records; no runner path judges model behavior.
 - No installer, hook, persistent Agent definition, credential, or real platform configuration was added.
 
-## Current regression watch
-
-Keep Cases 7A and 7B and their `trigger-cases.json` regression-watch entries. Until a reproducible run exists, keep their status as `missing evidence` and retain `no forward run of this fixture`.
-
-## Git discipline and rollback
-
-Inspect status before staging, stage explicit paths, keep commits focused, and use Git history as the rollback boundary. Do not reset, overwrite, or clean another contributor's work. Add a changelog only when versioned consumers need migration history beyond Git.
-
-## Public release checklist
-
-- Run structural, syntax, and link checks before publication.
-- Confirm no credentials, private paths, internal instructions, or confidential artifacts entered the tree.
-- Keep installation guidance manual and platform claims current; re-run affected boundary cases before claiming a fix.
+Regression evidence and its current status live only in `evals/cases.md` and `evals/trigger-cases.json`; do not mirror case numbers or evidence state here.
